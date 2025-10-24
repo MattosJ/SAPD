@@ -1,4 +1,4 @@
-# 🩺 Sistema Para Auxiliar Pessoas com Diabetes - **SAPD**
+# 🩺 Sistema Para Auxiliar Pessoas com Diabetes
 
 > Queremos oferecer uma plataforma completa para que pessoas com diabetes atinjam uma **melhor qualidade de vida** e mantenham o **controle efetivo de sua condição**.  
 > Nosso objetivo é transformar o gerenciamento da diabetes em um processo proativo, simples e empoderador.
@@ -7,18 +7,24 @@
 
 ## 🧠 Sobre o Projeto
 
-Este projeto é uma **aplicação full-stack** desenvolvida em uma **arquitetura Cliente/Servidor**, seguindo o padrão **MVC (Model-View-Controller)** e os princípios **SOLID**.  
+Este projeto é uma **aplicação full-stack** desenvolvida em uma **arquitetura Cliente/Servidor**, seguindo o padrão **Em camadas utilizando 5 camadas**  e os princípios **SOLID**.  
 O desenvolvimento é **colaborativo**, utilizando **métodos ágeis** para garantir entregas incrementais e contínuas.
-
+**Camada do cliente** conversa apenas com a camada do servidor.
+**Camada do servidor**  conversa com a camada dos dados, das api-externas e a de clientes.
+**Camada de dados** conversa apenas com a camada do servidor.
+**Camada de API-externas** conversa apenas com a camada do servidor.
+**Camada de Segurança** conversa com todas as camadas.
 ---
 
 ## 🛠️ Stack Tecnológico
 
 | Camada | Tecnologia | Framework/Biblioteca | Padrão de Projeto |
 | :--- | :--- | :--- | :--- |
-| **Front-end (Cliente)** | JavaScript / TypeScript | React | Single Page Application (SPA) |
-| **Back-end (Servidor)** | JavaScript / TypeScript (Node.js) | Express | MVC (Model-View-Controller) |
-| **Banco de Dados** | *A definir* | *A definir* (ex: PostgreSQL, MySQL ou MongoDB) | Repository Pattern |
+| **Front-end (Cliente)** | JavaScript / TypeScript | React | Camada do cliente |
+| **Back-end (Servidor)** | JavaScript / TypeScript (Node.js) | Express |  Camada do servidor|
+| **Banco de Dados** | *A definir* | *A definir* (ex: PostgreSQL, MySQL ou MongoDB) |  Camada dos dados|
+| **API-Externas** | *A definir* | *A definir*  |  Camada de Aplicações Externas|
+| **Segurança** | *A definir* | *A definir*  |  Camada de Segurança|
 
 ---
 

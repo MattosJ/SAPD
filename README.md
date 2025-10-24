@@ -20,8 +20,8 @@ O desenvolvimento é **colaborativo**, utilizando **métodos ágeis** para garan
 
 | Camada | Tecnologia | Framework/Biblioteca | Padrão de Projeto |
 | :--- | :--- | :--- | :--- |
-| **Front-end (Cliente)** | JavaScript / TypeScript | React | Camada do cliente |
-| **Back-end (Servidor)** | JavaScript / TypeScript (Node.js) | Express |  Camada do servidor|
+| **Front-end (Cliente)** | JavaScript  | React | Camada do cliente |
+| **Back-end (Servidor)** | JavaScript  (Node.js) | Express |  Camada do servidor|
 | **Banco de Dados** | *A definir* | *A definir* (ex: PostgreSQL, MySQL ou MongoDB) |  Camada dos dados|
 | **API-Externas** | *A definir* | *A definir*  |  Camada de Aplicações Externas|
 | **Segurança** | *A definir* | *A definir*  |  Camada de Segurança|

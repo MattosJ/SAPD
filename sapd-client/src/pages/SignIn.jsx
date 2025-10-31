@@ -1,8 +1,12 @@
+import FormLogin from "../components/FormLogin";
+import "../styles/loginPage.css"
 const SignIn =  () => {
   return(
-    <>
-    <h1>Página de Login</h1>
-    </>
+    <div className="container-login">
+      <FormLogin/>
+    </div>
+    
+    
   )
 }
 

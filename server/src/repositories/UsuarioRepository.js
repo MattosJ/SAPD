@@ -1,14 +1,25 @@
-const usuarios = [];
+import db from '../database/connection.js';
 
 class UsuarioRepository {
-  criar(usuario) {
-    usuario.id = usuarios.length + 1;
-    usuarios.push(usuario);
-    return usuario;
+
+  async criar(usuario) {
+    const result = await db.query(
+      `INSERT INTO usuarios (nome, email, senha)
+       VALUES ($1, $2, $3)
+       RETURNING id, nome, email`,
+      [usuario.nome, usuario.email, usuario.senha]
+    );
+
+    return result.rows[0];
   }
 
-  buscarPorEmail(email) {
-    return usuarios.find(u => u.email === email);
+  async buscarPorEmail(email) {
+    const result = await db.query(
+      `SELECT * FROM usuarios WHERE email = $1`,
+      [email]
+    );
+
+    return result.rows[0];
   }
 }
 

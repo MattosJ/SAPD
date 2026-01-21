@@ -6,7 +6,7 @@ class RegistroGlicemiaController {
     try {
       const dados = {
         ...req.body,
-        usuarioId: req.userId || 1 // temporário até JWT
+        usuarioId: req.usuarioId
       };
 
       const registro = await RegistroGlicemiaService.registrar(dados);

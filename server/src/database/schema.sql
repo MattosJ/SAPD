@@ -18,7 +18,6 @@ CREATE TABLE registros_glicemia (
   momento VARCHAR(20),
   observacao TEXT,
   usuario_id INTEGER NOT NULL,
-
   CONSTRAINT fk_usuario
     FOREIGN KEY (usuario_id)
     REFERENCES usuarios(id)

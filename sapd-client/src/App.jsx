@@ -12,6 +12,8 @@ function App() {
       <h1>SAPD, Hello World!</h1>
       <Link to ="/signin" >Tela de login</Link>
       <Link to ="/signUP" >Tela de Registro</Link>
+      <Link to="/insulinPage">Medição de Insulina</Link>
+      <Link to ="/reminderPage">Página de Lembrete</Link>
     </>
   )
 }

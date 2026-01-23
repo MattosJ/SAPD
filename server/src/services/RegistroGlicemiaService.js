@@ -1,21 +1,22 @@
 import RegistroGlicemia from '../entities/RegistroGlicemia.js';
 import RegistroGlicemiaRepository from '../repositories/RegistroGlicemiaRepository.js';
-
+import AlertaService from './AlertaService.js';
 class RegistroGlicemiaService {
 
   async registrar(dados) {
-    // Criação da entidade (validação automática)
-    const registro = new RegistroGlicemia(dados);
+    const agora = new Date();
+    const dataMedicao = new Date(dados.data_hora);
 
-    // Persistência
-    return RegistroGlicemiaRepository.salvar(registro);
+    if (dataMedicao > agora) {
+      throw new Error('Medição com data futura não é permitida');
+    }
+    await AlertaService.verificarGlicemia(usuarioId);
+    return RegistroGlicemiaRepository.salvar(dados);
+    await AlertaService.verificarGlicemia(usuarioId);
+
   }
 
   async listarPorUsuario(usuarioId) {
-    if (!usuarioId) {
-      throw new Error('Usuário não informado');
-    }
-
     return RegistroGlicemiaRepository.listarPorUsuario(usuarioId);
   }
 }

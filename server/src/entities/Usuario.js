@@ -1,9 +1,14 @@
 class Usuario {
   constructor({ id, nome, email, senha }) {
-    this.id = id;
-    this.nome = nome;
-    this.email = email;
-    this.senha = senha;
+    this.nome_completo = dados.nome_completo;
+    this.email = dados.email;
+    this.senha = dados.senha;
+    this.data_nascimento = dados.data_nascimento;
+    this.tipo_diabetes = dados.tipo_diabetes;
+    this.peso = dados.peso;
+    this.altura = dados.altura;
+    this.foto_perfil = dados.foto_perfil;
+    this.status_conta = dados.status_conta || 'ATIVA';
 
     this.validar();
   }

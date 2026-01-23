@@ -4,7 +4,7 @@ import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
-// 🔐 todas protegidas
+// todas protegidas
 router.use(authMiddleware);
 
 router.post('/', RegistroInsulinaController.registrar);

@@ -12,10 +12,14 @@ import predicoesRoutes from './src/routes/predicoes.routes.js';
 import relatoriosRoutes from './src/routes/relatorios.routes.js';
 import comparacaoRoutes from './src/routes/comparacao.routes.js';
 import alertasRoutes from './src/routes/alertas.routes.js';
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './src/docs/swagger.js';
 
 const app = express();
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 await initDatabase();
 
 

@@ -1,28 +1,13 @@
-class RegistroGlicemia {
-  constructor({ id, valor, dataHora, momento, observacao, usuarioId }) {
-    this.id = id;
-    this.valor = valor;
-    this.dataHora = new Date(dataHora);
-    this.momento = momento;
-    this.observacao = observacao;
-    this.usuarioId = usuarioId;
-
-    this.validar();
-  }
-
-  validar() {
-    if (!this.valor || this.valor <= 0) {
+export default class RegistroGlicemia {
+  constructor({ valor, data_hora, momento, observacao, usuario_id }) {
+    if (!valor || valor <= 0) {
       throw new Error('Valor de glicemia inválido');
     }
 
-    if (this.dataHora > new Date()) {
-      throw new Error('Data da medição não pode ser futura');
-    }
-
-    if (!this.usuarioId) {
-      throw new Error('Registro precisa estar associado a um usuário');
-    }
+    this.valor = valor;
+    this.data_hora = data_hora;
+    this.momento = momento;
+    this.observacao = observacao;
+    this.usuario_id = usuario_id;
   }
 }
-
-export default RegistroGlicemia;

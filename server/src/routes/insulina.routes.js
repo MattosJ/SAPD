@@ -7,8 +7,10 @@ const router = Router();
 // todas protegidas
 router.use(authMiddleware);
 
-router.post('/', RegistroInsulinaController.registrar);
+router.post('/', RegistroInsulinaController.criar);
 router.get('/', RegistroInsulinaController.listar);
+router.get('/:id', RegistroInsulinaController.buscar);
+router.put('/:id', RegistroInsulinaController.atualizar);
 router.delete('/:id', RegistroInsulinaController.excluir);
 
 export default router;

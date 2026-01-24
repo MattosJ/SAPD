@@ -1,23 +1,37 @@
-import RegistroGlicemia from '../entities/RegistroGlicemia.js';
 import RegistroGlicemiaRepository from '../repositories/RegistroGlicemiaRepository.js';
-import AlertaService from './AlertaService.js';
+import RegistroGlicemia from '../entities/RegistroGlicemia.js';
+
 class RegistroGlicemiaService {
 
-  async registrar(dados) {
-    const agora = new Date();
-    const dataMedicao = new Date(dados.data_hora);
+  async criar(dados) {
+    const registro = new RegistroGlicemia(dados);
 
-    if (dataMedicao > agora) {
-      throw new Error('Medição com data futura não é permitida');
+    const dataMedicao = new Date(registro.data_hora);
+    if (dataMedicao > new Date()) {
+      throw new Error('Medição não pode estar no futuro');
     }
-    await AlertaService.verificarGlicemia(usuarioId);
-    return RegistroGlicemiaRepository.salvar(dados);
-    await AlertaService.verificarGlicemia(usuarioId);
 
+    return RegistroGlicemiaRepository.criar(registro);
   }
 
-  async listarPorUsuario(usuarioId) {
-    return RegistroGlicemiaRepository.listarPorUsuario(usuarioId);
+  async listar(usuario_id) {
+    return RegistroGlicemiaRepository.listarPorUsuario(usuario_id);
+  }
+
+  async buscar(id, usuario_id) {
+    const registro = await RegistroGlicemiaRepository.buscarPorId(id, usuario_id);
+    if (!registro) throw new Error('Registro não encontrado');
+    return registro;
+  }
+
+  async atualizar(id, usuario_id, dados) {
+    const atualizado = await RegistroGlicemiaRepository.atualizar(id, usuario_id, dados);
+    if (!atualizado) throw new Error('Registro não encontrado');
+    return atualizado;
+  }
+
+  async excluir(id, usuario_id) {
+    await RegistroGlicemiaRepository.excluir(id, usuario_id);
   }
 }
 

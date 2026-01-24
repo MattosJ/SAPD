@@ -4,10 +4,12 @@ import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
-// 🔐 todas as rotas abaixo exigem login
+//  todas as rotas abaixo exigem login
 router.use(authMiddleware);
 
-router.post('/', RegistroGlicemiaController.registrar);
+router.post('/', RegistroGlicemiaController.criar);
 router.get('/', RegistroGlicemiaController.listar);
-
+router.get('/:id', RegistroGlicemiaController.buscar);
+router.put('/:id', RegistroGlicemiaController.atualizar);
+router.delete('/:id', RegistroGlicemiaController.excluir);
 export default router;

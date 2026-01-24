@@ -1,18 +1,14 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import UsuarioRepository from '../repositories/UsuarioRepository.js';
-import Usuario from '../entities/Usuario.js';
-import authConfig from '../config/auth.js';
 
 class UsuarioService {
 
   async cadastrar(dados) {
-
     if (dados.data_nascimento) {
       const data = new Date(dados.data_nascimento);
-      const hoje = new Date();
-
-      if (data > hoje) {
+      if (data > new Date()) {
         throw new Error('Data de nascimento inválida');
       }
     }
@@ -33,22 +29,68 @@ class UsuarioService {
 
   async login({ email, senha }) {
     const usuario = await UsuarioRepository.buscarPorEmail(email);
-    if (!usuario) {
-      throw new Error('Usuário não encontrado');
+    if (!usuario) throw new Error('Usuário não encontrado');
+
+    if (usuario.status_conta !== 'ATIVA') {
+      throw new Error('Conta inativa ou bloqueada');
     }
 
-    const senhaValida = await bcrypt.compare(senha, usuario.senha);
-    if (!senhaValida) {
-      throw new Error('Senha inválida');
-    }
+    const valido = await bcrypt.compare(senha, usuario.senha);
+    if (!valido) throw new Error('Senha inválida');
 
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email },
-      'segredo_jwt',
+      { id: usuario.id },
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    return { token };
+    return {
+      token,
+      usuario: {
+        id: usuario.id,
+        nome_completo: usuario.nome_completo,
+        email: usuario.email
+      }
+    };
+  }
+
+  async buscarPerfil(id) {
+    const usuario = await UsuarioRepository.buscarPorId(id);
+    if (!usuario) throw new Error('Usuário não encontrado');
+    return usuario;
+  }
+
+  async atualizarPerfil(id, dados) {
+    return UsuarioRepository.atualizar(id, dados);
+  }
+
+  async solicitarRecuperacao(email) {
+    const usuario = await UsuarioRepository.buscarPorEmail(email);
+    if (!usuario) throw new Error('Usuário não encontrado');
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expira = new Date(Date.now() + 60 * 60 * 1000);
+
+    await UsuarioRepository.salvarTokenRecuperacao(usuario.id, token, expira);
+
+    console.log(`🔑 Token recuperação: ${token}`);
+    return { mensagem: 'Token de recuperação gerado' };
+  }
+
+  async redefinirSenha(token, novaSenha) {
+    if (!novaSenha || novaSenha.length < 6) {
+      throw new Error('Senha deve ter no mínimo 6 caracteres');
+    }
+
+    const usuario = await UsuarioRepository.buscarPorToken(token);
+    if (!usuario) throw new Error('Token inválido ou expirado');
+
+    const senhaHash = await bcrypt.hash(novaSenha, 10);
+    await UsuarioRepository.atualizarSenha(usuario.id, senhaHash);
+  }
+
+  async inativarConta(id) {
+    await UsuarioRepository.inativar(id);
   }
 }
 

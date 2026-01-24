@@ -3,22 +3,21 @@ import RefeicaoService from '../services/RefeicaoService.js';
 class RefeicaoController {
 
   async criar(req, res) {
-    try {
-      const dados = {
-        ...req.body,
-        usuarioId: req.usuarioId
-      };
-
-      const refeicao = await RefeicaoService.criar(dados);
-      return res.status(201).json(refeicao);
-    } catch (error) {
-      return res.status(400).json({ erro: error.message });
-    }
+    const r = await RefeicaoService.criar({
+      ...req.body,
+      usuario_id: req.usuario.id
+    });
+    res.status(201).json(r);
   }
 
   async listar(req, res) {
-    const refeicoes = await RefeicaoService.listar(req.usuarioId);
-    return res.json(refeicoes);
+    const lista = await RefeicaoService.listar(req.usuario.id);
+    res.json(lista);
+  }
+
+  async excluir(req, res) {
+    await RefeicaoService.excluir(req.params.id, req.usuario.id);
+    res.status(204).send();
   }
 }
 

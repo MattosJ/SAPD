@@ -1,0 +1,87 @@
+import { useState, useEffect } from 'react';
+
+export default function Perfil() {
+  useEffect(() => {
+    const buscarDados = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/usuario');
+            const data = await response.json();
+            setUser(data.usuario);
+            console.log(data);
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+        }
+    };
+
+    buscarDados();
+  }, []);
+
+  async function salvarAlteracoes() {
+    try {
+      const response = await fetch('http://localhost:3001/usuario/atualizar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao salvar alterações');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar alterações:', error);
+    }
+  };
+
+  // Mock inicial
+  const [user, setUser] = useState({
+    nome: 'José dos Santos Vieira',
+    nascimento: '2000-04-10',
+    altura: '2.10',
+    peso: '75'
+  });
+
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <div>
+      <h2 className="page-title">Perfil</h2>
+      <div className="card" style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+        
+        {/* Avatar Mockado */}
+        <div style={{ 
+          width: '100px', height: '100px', backgroundColor: '#d0e0f5', 
+          borderRadius: '50%', margin: '0 auto 20px', display: 'flex', 
+          alignItems: 'center', justifyContent: 'center', fontSize: '30px' 
+        }}>
+          👤
+        </div>
+
+        <div className="form-group">
+          <label>Nome completo</label>
+          <input className="input-field" name="nome" value={user.nome} onChange={handleChange} style={{textAlign: 'center'}} />
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <div className="form-group" style={{flex: 1}}>
+            <label>Data Nascimento</label>
+            <input type="date" className="input-field" name="nascimento" value={user.nascimento} onChange={handleChange} style={{textAlign: 'center'}} />
+          </div>
+          <div className="form-group" style={{flex: 0.5}}>
+            <label>Altura (m)</label>
+            <input type="number" className="input-field" name="altura" value={user.altura} onChange={handleChange} style={{textAlign: 'center'}}/>
+          </div>
+          <div className="form-group" style={{flex: 0.5}}>
+            <label>Peso (Kg)</label>
+            <input type="number" className="input-field" name="peso" value={user.peso} onChange={handleChange} style={{textAlign: 'center'}}/>
+          </div>
+        </div>
+
+        <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={salvarAlteracoes}>Salvar Alterações</button>
+      </div>
+    </div>
+  );
+}

@@ -1,28 +1,37 @@
 import RegistroInsulinaRepository from '../repositories/RegistroInsulinaRepository.js';
+import RegistroInsulina from '../entities/RegistroInsulina.js';
 
 class RegistroInsulinaService {
 
-  async registrar(dados) {
-    const agora = new Date();
-    const dataAplicacao = new Date(dados.data_hora);
+  async criar(dados) {
+    const registro = new RegistroInsulina(dados);
 
-    if (dataAplicacao > agora) {
-      throw new Error('Aplicação de insulina com data futura não é permitida');
+    const dataAplicacao = new Date(registro.data_hora);
+    if (dataAplicacao > new Date()) {
+      throw new Error('Aplicação não pode estar no futuro');
     }
 
-    if (dados.quantidade_insulina <= 0) {
-      throw new Error('Quantidade de insulina inválida');
-    }
-
-    return RegistroInsulinaRepository.criar(dados);
+    return RegistroInsulinaRepository.criar(registro);
   }
 
-  async listar(usuarioId) {
-    return RegistroInsulinaRepository.listarPorUsuario(usuarioId);
+  async listar(usuario_id) {
+    return RegistroInsulinaRepository.listarPorUsuario(usuario_id);
   }
 
-  async excluir(id, usuarioId) {
-    return RegistroInsulinaRepository.excluir(id, usuarioId);
+  async buscar(id, usuario_id) {
+    const registro = await RegistroInsulinaRepository.buscarPorId(id, usuario_id);
+    if (!registro) throw new Error('Registro não encontrado');
+    return registro;
+  }
+
+  async atualizar(id, usuario_id, dados) {
+    const atualizado = await RegistroInsulinaRepository.atualizar(id, usuario_id, dados);
+    if (!atualizado) throw new Error('Registro não encontrado');
+    return atualizado;
+  }
+
+  async excluir(id, usuario_id) {
+    await RegistroInsulinaRepository.excluir(id, usuario_id);
   }
 }
 

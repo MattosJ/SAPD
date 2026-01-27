@@ -2,37 +2,51 @@ import RegistroInsulinaService from '../services/RegistroInsulinaService.js';
 
 class RegistroInsulinaController {
 
-  async registrar(req, res) {
+  async criar(req, res) {
     try {
-      const dados = {
+      const registro = await RegistroInsulinaService.criar({
         ...req.body,
-        usuarioId: req.usuarioId
-      };
-
-      const registro = await RegistroInsulinaService.registrar(dados);
-      return res.status(201).json(registro);
-    } catch (error) {
-      return res.status(400).json({ erro: error.message });
+        usuario_id: req.usuario.id
+      });
+      res.status(201).json(registro);
+    } catch (e) {
+      res.status(400).json({ erro: e.message });
     }
   }
 
   async listar(req, res) {
+    const registros = await RegistroInsulinaService.listar(req.usuario.id);
+    res.json(registros);
+  }
+
+  async buscar(req, res) {
     try {
-      const registros = await RegistroInsulinaService.listar(req.usuarioId);
-      return res.json(registros);
-    } catch (error) {
-      return res.status(400).json({ erro: error.message });
+      const registro = await RegistroInsulinaService.buscar(
+        req.params.id,
+        req.usuario.id
+      );
+      res.json(registro);
+    } catch (e) {
+      res.status(404).json({ erro: e.message });
+    }
+  }
+
+  async atualizar(req, res) {
+    try {
+      const registro = await RegistroInsulinaService.atualizar(
+        req.params.id,
+        req.usuario.id,
+        req.body
+      );
+      res.json(registro);
+    } catch (e) {
+      res.status(400).json({ erro: e.message });
     }
   }
 
   async excluir(req, res) {
-    try {
-      const { id } = req.params;
-      await RegistroInsulinaService.excluir(id, req.usuarioId);
-      return res.status(204).send();
-    } catch (error) {
-      return res.status(400).json({ erro: error.message });
-    }
+    await RegistroInsulinaService.excluir(req.params.id, req.usuario.id);
+    res.status(204).send();
   }
 }
 

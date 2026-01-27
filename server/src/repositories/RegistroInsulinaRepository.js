@@ -11,7 +11,7 @@ class RegistroInsulinaRepository {
       RETURNING *
       `,
       [
-        dados.usuarioId,
+        dados.usuario_id,
         dados.quantidade_insulina,
         dados.tipo,
         dados.data_hora,
@@ -19,31 +19,64 @@ class RegistroInsulinaRepository {
         dados.observacoes
       ]
     );
-
     return result.rows[0];
   }
 
-  async listarPorUsuario(usuarioId) {
+  async listarPorUsuario(usuario_id) {
     const result = await db.query(
       `
-      SELECT *
-      FROM registros_insulina
+      SELECT * FROM registros_insulina
       WHERE usuario_id = $1
       ORDER BY data_hora DESC
       `,
-      [usuarioId]
+      [usuario_id]
     );
-
     return result.rows;
   }
 
-  async excluir(id, usuarioId) {
+  async buscarPorId(id, usuario_id) {
+    const result = await db.query(
+      `
+      SELECT * FROM registros_insulina
+      WHERE id = $1 AND usuario_id = $2
+      `,
+      [id, usuario_id]
+    );
+    return result.rows[0];
+  }
+
+  async atualizar(id, usuario_id, dados) {
+    const result = await db.query(
+      `
+      UPDATE registros_insulina
+      SET quantidade_insulina = $1,
+          tipo = $2,
+          data_hora = $3,
+          momento = $4,
+          observacoes = $5
+      WHERE id = $6 AND usuario_id = $7
+      RETURNING *
+      `,
+      [
+        dados.quantidade_insulina,
+        dados.tipo,
+        dados.data_hora,
+        dados.momento,
+        dados.observacoes,
+        id,
+        usuario_id
+      ]
+    );
+    return result.rows[0];
+  }
+
+  async excluir(id, usuario_id) {
     await db.query(
       `
       DELETE FROM registros_insulina
       WHERE id = $1 AND usuario_id = $2
       `,
-      [id, usuarioId]
+      [id, usuario_id]
     );
   }
 }

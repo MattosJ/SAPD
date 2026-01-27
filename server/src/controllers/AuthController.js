@@ -1,6 +1,26 @@
 import UsuarioService from '../services/UsuarioService.js';
 
-class AuthController {
+/**
+ * @swagger
+ * /auth/login:
+ * post:
+ * summary: Realiza o login do usuário
+ * tags: [Autenticação]
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * email: { type: string }
+ * senha: { type: string }
+ * responses:
+ * 200:
+ * description: Login realizado com sucesso
+ * 401:
+ * description: E-mail ou senha inválidos
+ */class AuthController {
   async login(req, res) {
     try {
       const { email, senha } = req.body;

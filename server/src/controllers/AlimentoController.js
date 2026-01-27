@@ -2,18 +2,28 @@ import AlimentoService from '../services/AlimentoService.js';
 
 class AlimentoController {
 
-  async cadastrar(req, res) {
+  async criar(req, res) {
     try {
-      const alimento = await AlimentoService.cadastrar(req.body);
-      return res.status(201).json(alimento);
-    } catch (error) {
-      return res.status(400).json({ erro: error.message });
+      const a = await AlimentoService.criar(req.body);
+      res.status(201).json(a);
+    } catch (e) {
+      res.status(400).json({ erro: e.message });
     }
   }
 
   async listar(req, res) {
-    const alimentos = await AlimentoService.listar();
-    return res.json(alimentos);
+    const lista = await AlimentoService.listar();
+    res.json(lista);
+  }
+
+  async atualizar(req, res) {
+    const a = await AlimentoService.atualizar(req.params.id, req.body);
+    res.json(a);
+  }
+
+  async excluir(req, res) {
+    await AlimentoService.excluir(req.params.id);
+    res.status(204).send();
   }
 }
 

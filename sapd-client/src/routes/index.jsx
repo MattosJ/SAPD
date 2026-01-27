@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import App from '../App';
 import SignIn from "../pages/SignIn"
 import SignUP from "../pages/SignUp"
+import InsulinPage from "../pages/InsulinPage"
+import ReminderPage from '../pages/ReminderPage';
 /** 
 * Define as rotas da aplicação
 *   <Routes>
@@ -19,6 +21,8 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/signin" element={<SignIn />} />
       <Route path="signup" element={<SignUP/>} />
+      <Route path='/InsulinPage' element={<InsulinPage/>}/>
+      <Route path='/reminderPage' element={<ReminderPage/>}/>
       <Route path = "/" element = {<App/>}  />
       <Route path="*" element={<h1>404 | Página Não Encontrada</h1>} />
     </Routes>

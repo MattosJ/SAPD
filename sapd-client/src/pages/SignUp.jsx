@@ -1,7 +1,9 @@
+import FormRegister from "../components/FormRegister";
+
 const SignUp =  () => {
   return(
     <>
-    <h1>Página de Registro</h1>
+    <FormRegister/>
     </>
   )
 }

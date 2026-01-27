@@ -12,14 +12,17 @@ async function seed() {
       nome: 'Ana Souza',
       email: 'ana@sapd.com',
       senha: '123456',
+      data_nascimento: '1998-05-01',
       tipo: 'Tipo 1',
       peso: 60,
       altura: 1.65
+
     },
     {
       nome: 'Bruno Lima',
       email: 'bruno@sapd.com',
       senha: '123456',
+      data_nascimento: '1998-05-01',
       tipo: 'Tipo 2',
       peso: 85,
       altura: 1.78
@@ -28,6 +31,7 @@ async function seed() {
       nome: 'Carla Mendes',
       email: 'carla@sapd.com',
       senha: '123456',
+      data_nascimento: '1998-05-01',
       tipo: 'Gestacional',
       peso: 70,
       altura: 1.62
@@ -36,6 +40,7 @@ async function seed() {
       nome: 'Daniel Rocha',
       email: 'daniel@sapd.com',
       senha: '123456',
+      data_nascimento: '1998-05-01',
       tipo: 'Tipo 2',
       peso: 92,
       altura: 1.80
@@ -44,6 +49,7 @@ async function seed() {
       nome: 'Eduarda Alves',
       email: 'eduarda@sapd.com',
       senha: '123456',
+      data_nascimento: '1998-05-01',
       tipo: 'Tipo 1',
       peso: 55,
       altura: 1.60
@@ -55,11 +61,11 @@ async function seed() {
     await db.query(
       `
       INSERT INTO usuarios
-      (nome_completo, email, senha, tipo_diabetes, peso, altura, status_conta)
-      VALUES ($1,$2,$3,$4,$5,$6,'ATIVA')
+      (nome_completo, email, senha, data_nascimento, tipo_diabetes, peso, altura, status_conta)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, 'ATIVA')
       ON CONFLICT (email) DO NOTHING
       `,
-      [u.nome, u.email, hash, u.tipo, u.peso, u.altura]
+      [u.nome, u.email, hash, u.data_nascimento, u.tipo, u.peso, u.altura]
     );
   }
 

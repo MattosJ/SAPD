@@ -47,10 +47,10 @@ export async function initDatabase() {
       email VARCHAR(150) UNIQUE NOT NULL,
       senha VARCHAR(255) NOT NULL,
 
-      data_nascimento DATE,
-      tipo_diabetes VARCHAR(30),
-      peso NUMERIC(5,2),
-      altura NUMERIC(4,2),
+      data_nascimento DATE NOT NULL,
+      tipo_diabetes VARCHAR(30) NOT NULL,
+      peso NUMERIC(5,2) NOT NULL,
+      altura NUMERIC(4,2) NOT NULL,
       foto_perfil TEXT,
 
       status_conta VARCHAR(20) NOT NULL DEFAULT 'ATIVA',

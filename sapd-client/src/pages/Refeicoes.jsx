@@ -1,10 +1,73 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { Trash2, Plus } from 'lucide-react';
+import Selector from '../components/layout/Selector';
+import ConfirmacaoRefeicaoPopup from '../components/refeicao/ConfirmacaoRefeicaoPopup';
 
 export default function Refeicoes() {
-  const [refeicoes, setRefeicoes] = useState([
-    { id: 1, desc: 'Café da manhã: Pão e Café', carbs: '30g', hora: '08:00' },
-  ]);
+  const [refeicoes, setRefeicoes] = useState([]);
+
+  const [novaRefeicao, setNovaRefeicao] = useState([]);
+
+  const [alimentos, setAlimentos] = useState([]);
+
+  const [modalConfirmacao, setModalConfirmacao] = useState(false);
+
+  useEffect(() => {
+    const buscarAlimentos = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/alimentos');
+            const data = await response.json();
+            setAlimentos(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+        }
+    };
+
+    const buscarRefeicoes = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/refeicoes');
+            const data = await response.json();
+            setRefeicoes(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+        }
+    };
+
+    buscarRefeicoes();
+
+    buscarAlimentos();
+  }, [])
+
+
+  async function adicionarRefeicao() {
+    try {
+      const response = await fetch('http://localhost:3000/refeicoes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({refeicao: novaRefeicao}),
+      });
+
+      if (response.ok) {
+        const novaRefeicao = await response.json();
+        setRefeicoes(prev => [...prev, novaRefeicao]);
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar refeição:', error);
+    }
+  }
+
+  const handleAlimentosChange = (itensSelecionados) => {
+      setNovaRefeicao(itensSelecionados);
+  }
+
+  const handleSalvarFinal = () => {
+    setModalConfirmacao(false);
+    adicionarRefeicao();
+  };
 
   return (
     <div>
@@ -12,15 +75,25 @@ export default function Refeicoes() {
       
       <div className="card">
         <div style={{display: 'flex', gap: '10px'}}>
-          <input className="input-field" placeholder="O que você comeu?" style={{flex: 2}} />
-          <input className="input-field" placeholder="Carboidratos (g)" style={{flex: 1}} />
-          <button className="btn btn-primary"><Plus size={20}/></button>
+          <Selector 
+          alimentos={alimentos}
+          onSelectionChange={handleAlimentosChange} />
+
+          <button className="btn btn-primary" onClick={() => setModalConfirmacao(true)}><Plus size={20}/></button>
+
+          <ConfirmacaoRefeicaoPopup 
+            isOpen={modalConfirmacao}
+            onClose={() => setModalConfirmacao(false)}
+            onConfirm={handleSalvarFinal}
+            itens={novaRefeicao}
+          />
         </div>
       </div>
 
       <div className="grid-2">
         <div className="card">
-          <h3>Hoje</h3>
+          <h3>Refeições</h3>
+          {refeicoes.length > 0 ?
           <ul className="history-list">
             {refeicoes.map(ref => (
               <li key={ref.id} className="history-item">
@@ -32,6 +105,9 @@ export default function Refeicoes() {
               </li>
             ))}
           </ul>
+          :
+          <p style={{color: '#999', fontStyle: 'italic'}}>Nenhuma refeição registrada.</p>
+          }
         </div>
         
         <div className="card">

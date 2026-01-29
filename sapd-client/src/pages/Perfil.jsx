@@ -4,9 +4,17 @@ export default function Perfil() {
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await fetch('http://localhost:3001/usuario');
+            const response = await fetch('http://localhost:3000/usuarios/me');
             const data = await response.json();
-            setUser(data.usuario);
+            setUser({
+              nomeCompleto: data.nome_completo,
+              email: data.email,
+              senha: data.senha,
+              dataNascimento: data.data_nascimento,
+              tipoDiabetes: data.tipo_diabetes,
+              altura: data.altura,
+              peso: data.peso
+            });
             console.log(data);
         } catch (error) {
             console.error('Erro ao buscar dados:', error);
@@ -18,12 +26,21 @@ export default function Perfil() {
 
   async function salvarAlteracoes() {
     try {
-      const response = await fetch('http://localhost:3001/usuario/atualizar', {
+      const response = await fetch('http://localhost:3000/usuarios/me', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({
+          nome_completo: user.nomeCompleto,
+          email: user.email,
+          senha: user.senha,
+          data_nascimento: user.dataNascimento,
+          tipo_diabetes: user.tipoDiabetes,
+          altura: user.altura,
+          peso: user.peso,
+          foto_perfil: ''
+        }),
       });
 
       if (!response.ok) {
@@ -36,8 +53,11 @@ export default function Perfil() {
 
   // Mock inicial
   const [user, setUser] = useState({
-    nome: 'José dos Santos Vieira',
-    nascimento: '2000-04-10',
+    nomeCompleto: 'José dos Santos Vieira',
+    email: '',
+    senha: '',
+    dataNascimento: '2000-04-10',
+    tipoDiabetes: 'Tipo 1',
     altura: '2.10',
     peso: '75'
   });
@@ -62,13 +82,13 @@ export default function Perfil() {
 
         <div className="form-group">
           <label>Nome completo</label>
-          <input className="input-field" name="nome" value={user.nome} onChange={handleChange} style={{textAlign: 'center'}} />
+          <input className="input-field" name="nome" value={user.nomeCompleto} onChange={handleChange} style={{textAlign: 'center'}} />
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
           <div className="form-group" style={{flex: 1}}>
             <label>Data Nascimento</label>
-            <input type="date" className="input-field" name="nascimento" value={user.nascimento} onChange={handleChange} style={{textAlign: 'center'}} />
+            <input type="date" className="input-field" name="nascimento" value={user.dataNascimento} onChange={handleChange} style={{textAlign: 'center'}} />
           </div>
           <div className="form-group" style={{flex: 0.5}}>
             <label>Altura (m)</label>
@@ -77,6 +97,21 @@ export default function Perfil() {
           <div className="form-group" style={{flex: 0.5}}>
             <label>Peso (Kg)</label>
             <input type="number" className="input-field" name="peso" value={user.peso} onChange={handleChange} style={{textAlign: 'center'}}/>
+          </div>
+          <div className="form-group" style={{flex: 0.5}}>
+            <label>Tipo de Diabetes</label>
+            <input type="text" className="input-field" name="tipoDiabetes" value={user.tipoDiabetes} onChange={handleChange} style={{textAlign: 'center'}}/>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <div className="form-group" style={{flex: 1}}>
+            <label>E-mail</label>
+            <input type="email" className="input-field" name="email" value={user.email} onChange={handleChange} style={{textAlign: 'center'}} />
+          </div>
+          <div className="form-group" style={{flex: 0.5}}>
+            <label>Senha</label>
+            <input type="password" className="input-field" name="senha" value={user.senha} onChange={handleChange} style={{textAlign: 'center'}}/>
           </div>
         </div>
 

@@ -5,6 +5,9 @@
   --text: #333;
   --border: #ccc;
 }
+:root.dark {
+  --primary: #ac0081; /* Azul mais escuro pro modo dark */
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; text-decoration: none; }
 
@@ -13,9 +16,11 @@ body {
   padding: 0 !important;
 }
 /* Layout Grid */
-.app-container { display: flex; height: 100vh; }
+.app-container { 
+  display: flex; height: 100vh; 
+}
 .sidebar {
-  width: 60px;
+  width: 100px;
   background-color: var(--primary);
   display: flex;
   flex-direction: column;
@@ -23,7 +28,19 @@ body {
   padding-top: 20px;
   color: white;
 }
-.sidebar-icon { margin-bottom: 25px; cursor: pointer; opacity: 0.7; transition: 0.3s; text-decoration: none; color: white;}
+.sidebar-icon { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 25px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.3s;
+  text-decoration: none;
+  font-size: 13px;
+  color: white;
+}
 .sidebar-icon:hover, .sidebar-icon.active { opacity: 1; transform: scale(1.1); }
 .spacer { flex-grow: 1; }
 
@@ -172,3 +189,342 @@ body {
 /* Animações simples */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+
+
+/* --- Selector Component --- */
+
+.food-selector-container {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--white);
+  overflow: hidden; /* Para o border-radius funcionar nos filhos */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Caixa de Busca */
+.search-box {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  background-color: #f8f9fa;
+  gap: 10px;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+/* Lista Scrollável */
+.food-list {
+  max-height: 250px; /* Define a altura máxima do select */
+  overflow-y: auto;
+}
+
+/* Item Individual da Lista */
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.food-item:last-child {
+  border-bottom: none;
+}
+
+.food-item:hover {
+  background-color: #f7f9fc;
+}
+
+/* Quando selecionado (qtd > 0) */
+.food-item.active {
+  background-color: #eef4ff; /* Azul bem clarinho */
+  border-left: 4px solid var(--primary);
+}
+
+/* Informações do Texto */
+.food-info {
+  display: flex;
+  flex-direction: column;
+}
+.food-info small {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* Controles + e - */
+.counter-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 4px;
+  border-radius: 20px;
+  border: 1px solid #eee;
+}
+
+.count-display {
+  font-weight: bold;
+  width: 20px;
+  text-align: center;
+  color: var(--primary);
+}
+
+.btn-mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-minus {
+  background-color: #eee;
+  color: #666;
+}
+.btn-minus:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.btn-plus {
+  background-color: var(--primary);
+  color: white;
+}
+.btn-plus:hover {
+  transform: scale(1.1);
+}
+
+
+
+/* --- Confirmação de Refeição --- */
+
+.section-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Lista de revisão (menor e mais compacta) */
+.items-review-list {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.review-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+.review-item:last-child { border-bottom: none; }
+
+.review-info strong { display: block; font-size: 0.95rem; color: #333; }
+.review-details { display: flex; gap: 5px; font-size: 0.85rem; color: #666; margin-top: 2px; }
+.separator { color: #ccc; }
+
+.review-macros {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+/* Container de Totais */
+.totals-container {
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.total-main {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.icon-circle.large { width: 50px; height: 50px; background-color: var(--primary); }
+.total-main .label { font-size: 0.9rem; color: #666; }
+.total-main .value { font-size: 1.8rem; font-weight: bold; color: #333; line-height: 1; }
+
+/* Macros Grid */
+.macros-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.macro-card {
+  background: white;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.macro-card strong { font-size: 1rem; margin-top: 2px; }
+
+/* Cores específicas para os Macros */
+.macro-card.carb { color: #e67e22; border-bottom: 3px solid #e67e22; } /* Laranja */
+.macro-card.prot { color: #2980b9; border-bottom: 3px solid #2980b9; } /* Azul */
+.macro-card.fat { color: #c0392b; border-bottom: 3px solid #c0392b; }  /* Vermelho */
+
+.vitamin-box {
+  background: rgba(255,255,255,0.6);
+  border: 1px dashed #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+
+
+
+/* --- Cards de Predição --- */
+
+.predictions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsivo */
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.pred-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.pred-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+}
+
+.pred-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #eee;
+}
+
+.pred-date {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+}
+
+/* Badges de Status */
+.pred-badge {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.pred-badge.waiting { background-color: #f3e5f5; color: #8e44ad; } /* Roxo claro */
+.pred-badge.done { background-color: #e8f5e9; color: #27ae60; } /* Verde claro */
+
+/* Corpo do Card */
+.pred-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pred-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pred-divider {
+  width: 1px;
+  height: 40px;
+  background-color: #eee;
+  margin: 0 10px;
+}
+
+.pred-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.pred-value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.pred-value-group small { font-size: 0.7rem; color: #888; }
+
+.pred-value {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #8e44ad; /* Roxo para Previsão (IA) */
+  line-height: 1;
+}
+
+.pred-value.real {
+  color: #333; /* Cor neutra escura para o Real */
+}
+
+.pred-empty {
+  font-size: 1.5rem;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.pred-footer {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #f5f5f5;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+  background-color: #fafafa;
+  border-radius: 0 0 8px 8px;
+  margin-bottom: -5px; /* Ajuste visual */
+}

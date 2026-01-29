@@ -1,22 +1,85 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Trash2, Edit, Bell } from 'lucide-react';
+import AtualizarInsulinaPopup from '../components/insulina/AtualizarInsulinaPopup';
 
 export default function Insulina() {
   const [registros, setRegistros] = useState([
-    { id: 1, tipo: 'Lenta', qtd: '10ui', hora: '08:00', data: '2023-10-25' },
-    { id: 2, tipo: 'Rápida', qtd: '5ui', hora: '12:30', data: '2023-10-25' },
   ]);
   
+  const [tipoInsulina, setTipoInsulina] = useState('');
+  const [quantidadeInsulina, setQuantidadeInsulina] = useState('');
+  const [momento, setMomento] = useState('');
+  const [observacao, setObservacao] = useState('');
+
+  const [modalAtualizarInsulina, setModalAtualizarInsulina] = useState(false);
+  const [insulinaSelecionada, setInsulinaSelecionada] = useState(null);
+
   const [lembretes, setLembretes] = useState([
     { id: 1, msg: 'Aplicar Basal', hora: '22:00' }
   ]);
 
-  const handleDelete = (id) => {
-    setRegistros(registros.filter(r => r.id !== id));
-  };
+  async function deleteRegistro(id) {
+    try {
+      const response = await fetch(`http://localhost:3000/insulina/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setRegistros(registros.filter(r => r.id !== id));
+      }
+    } catch (error) {
+      console.error('Erro ao deletar registro de insulina:', error);
+    }
+  }
+
+  useEffect(() => {
+    const buscarDados = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/insulina');
+            const data = await response.json();
+            setRegistros(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+        }
+    };
+
+    buscarDados();
+  }, [])
+
+  async function handleAddRegistro() {
+    try {
+      const response = await fetch('http://localhost:3000/insulina', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tipo: tipoInsulina,
+          quantidade_insulina: quantidadeInsulina,
+          momento: momento,
+          observacoes: observacao,
+        }),
+      });
+
+      if (response.ok) {
+        const novoRegistro = await response.json();
+        setRegistros([...registros, novoRegistro]);
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar registro de insulina:', error);
+    }
+  }
 
   return (
     <div className="grid-2">
+      <AtualizarInsulinaPopup
+        isOpen={modalAtualizarInsulina}
+        onClose={() => setModalAtualizarInsulina(false)}
+        insulinaData={insulinaSelecionada}
+        atualizarInsulina={(insulina) => setRegistros(registros.map(r => r.id === insulina.id ? insulina : r))}
+      />
+
       {/* Coluna da Esquerda: Registros */}
       <div>
         <h2 className="page-title">Aplicação de Insulina</h2>
@@ -24,30 +87,52 @@ export default function Insulina() {
         {/* Formulário de Registro */}
         <div className="card">
           <h3>Nova Aplicação</h3>
+
           <div className="grid-2" style={{marginTop: '10px'}}>
-            <input className="input-field" placeholder="Tipo (ex: Basal)" />
-            <input className="input-field" placeholder="Quantidade (ui)" type="number" />
+            <input className="input-field" placeholder="Tipo (ex: Basal)" value={tipoInsulina} onChange={(e) => setTipoInsulina(e.target.value)} />
+
+            <input className="input-field" placeholder="Quantidade (unidades)" type="number" value={quantidadeInsulina} onChange={(e) => setQuantidadeInsulina(e.target.value)} />
+
+            <input className="input-field" placeholder="Momento (ex: Manhã)" value={momento} onChange={(e) => setMomento(e.target.value)} />
+
+            <input className="input-field" placeholder="Observação" type="text" value={observacao} onChange={(e) => setObservacao(e.target.value)} />
+
           </div>
-          <button className="btn btn-primary" style={{marginTop: '10px', width: '100%'}}>Registrar</button>
+          <button className="btn btn-primary" style={{marginTop: '10px', width: '100%'}} onClick={handleAddRegistro}>Registrar</button>
         </div>
 
         {/* Histórico */}
         <div className="card">
           <h3>Histórico de Aplicações</h3>
+          {registros.length > 0 ?
           <ul className="history-list">
             {registros.map(reg => (
               <li key={reg.id} className="history-item">
                 <div>
-                  <strong>{reg.tipo}</strong> - {reg.qtd}
-                  <div style={{fontSize: '0.8rem', color: '#777'}}>{reg.data} às {reg.hora}</div>
+
+                  <strong>{reg.tipo}</strong> - {reg.quantidadeInsulina}
+
+                  <div style={{fontSize: '0.8rem', color: '#777'}}>
+                    {reg.data} às {reg.hora}
+                  </div>
+
+                  <div style={{fontSize: '0.8rem', color: '#777'}}>
+                    <strong> {reg.momento} </strong> - {reg.observacao}
+                  </div>
                 </div>
+
                 <div>
-                  <button className="btn" style={{padding: '5px'}}><Edit size={16} /></button>
-                  <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => handleDelete(reg.id)}><Trash2 size={16} /></button>
+                  <button className="btn" style={{padding: '5px'}} onClick={() => {setInsulinaSelecionada(reg); setModalAtualizarInsulina(true);}}><Edit size={16} /></button>
+
+                  <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteRegistro(reg.id)}><Trash2 size={16} /></button>
+
                 </div>
               </li>
             ))}
           </ul>
+          :
+          <p style={{color: '#999', fontStyle: 'italic'}}>Nenhum registro de insulina encontrado.</p>
+          }
         </div>
       </div>
 
@@ -58,7 +143,9 @@ export default function Insulina() {
           <h3>Criar Lembrete <Bell size={16}/></h3>
           <div style={{display: 'flex', gap: '10px', marginTop: '10px'}}>
             <input className="input-field" type="time" />
+
             <input className="input-field" placeholder="Descrição" />
+
           </div>
           <button className="btn btn-primary" style={{marginTop: '10px'}}>Salvar Lembrete</button>
         </div>

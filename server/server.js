@@ -21,7 +21,11 @@ import fs from 'fs';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 await initDatabase();
@@ -38,6 +42,7 @@ app.use('/api/relatorios', relatoriosRoutes);
 app.use('/api/comparacao', comparacaoRoutes);
 app.use('/api/alertas', alertasRoutes);
 app.use('/api/refeicaoAlimentos',refeicaoAlimentosRoutes);
+
 /*try {
   fs.writeFileSync('./swagger-output.json', JSON.stringify(swaggerSpec, null, 2));
   console.log(" Arquivo swagger-output.json gerado com sucesso!");

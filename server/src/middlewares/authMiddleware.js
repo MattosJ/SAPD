@@ -1,19 +1,27 @@
-import jwt from 'jsonwebtoken';
-import authConfig from '../config/auth.js';
 import UsuarioRepository from '../repositories/UsuarioRepository.js';
 
+const DISABLE_AUTH = true; //  muda aqui quando quiser
+
 export default async function authMiddleware(req, res, next) {
+
+  //  MODO TESTE
+  if (DISABLE_AUTH) {
+    // simula usuário logado
+    req.usuario = { id: 3 };
+    return next();
+  }
+
+  //  MODO NORMAL
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ erro: 'Token não fornecido' });
   }
 
-  // Formato esperado: "Bearer TOKEN"
   const [, token] = authHeader.split(' ');
 
   try {
-    const decoded = jwt.verify(token, authConfig.secret);
+    const decoded = jwt.verify(token, 'segredo_teste');
 
     const usuario = await UsuarioRepository.buscarPorId(decoded.id);
 
@@ -25,12 +33,11 @@ export default async function authMiddleware(req, res, next) {
       return res.status(403).json({ erro: 'Conta inativa ou bloqueada' });
     }
 
-    // Disponibiliza o usuário para as próximas camadas
     req.usuario = usuario;
 
-    return next();
+    next();
 
-  } catch (error) {
+  } catch {
     return res.status(401).json({ erro: 'Token inválido' });
   }
 }

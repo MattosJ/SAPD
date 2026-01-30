@@ -22,17 +22,34 @@ class RegistroGlicemiaRepository {
     return result.rows[0];
   }
 
-  async listarPorUsuario(usuario_id) {
-    const result = await db.query(
-      `
-      SELECT * FROM registros_glicemia
+  async buscarMedicoes(usuarioId) {
+    const result = await db.query(`
+      SELECT 
+        TO_CHAR(data_hora, 'DD/MM') AS data,
+        valor
+      FROM registros_glicemia
       WHERE usuario_id = $1
-      ORDER BY data_hora DESC
-      `,
-      [usuario_id]
-    );
+      ORDER BY data_hora
+    `, [usuarioId]);
+
     return result.rows;
   }
+
+  async buscarUltimosRegistros(usuarioId) {
+    const result = await db.query(`
+      SELECT 
+        TO_CHAR(data_hora, 'DD/MM') AS data,
+        TO_CHAR(data_hora, 'HH24:MI') AS hora,
+        valor
+      FROM registros_glicemia
+      WHERE usuario_id = $1
+      ORDER BY data_hora DESC
+      LIMIT 3
+    `, [usuarioId]);
+
+    return result.rows;
+  }
+
 
   async buscarPorId(id, usuario_id) {
     const result = await db.query(

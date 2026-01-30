@@ -15,8 +15,20 @@ class RegistroGlicemiaController {
   }
 
   async listar(req, res) {
-    const registros = await RegistroGlicemiaService.listar(req.usuario.id);
-    res.json(registros);
+    try {
+
+      // pega do token ou fixa 3 para teste
+      const usuarioId = req.usuario?.id || 3;
+
+      const dados = await RegistroGlicemiaService.listar(usuarioId);
+
+      res.json(dados);
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ erro: 'Erro ao buscar glicemia' });
+    }
+  
   }
 
   async buscar(req, res) {

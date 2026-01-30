@@ -14,8 +14,15 @@ class RegistroGlicemiaService {
     return RegistroGlicemiaRepository.criar(registro);
   }
 
-  async listar(usuario_id) {
-    return RegistroGlicemiaRepository.listarPorUsuario(usuario_id);
+  async listar(usuarioId) {
+
+    const medicoes = await RegistroGlicemiaRepository.buscarMedicoes(usuarioId);
+    const ultimos = await RegistroGlicemiaRepository.buscarUltimosRegistros(usuarioId);
+
+    return {
+      medicoes,
+      ultimosRegistros: ultimos
+    };
   }
 
   async buscar(id, usuario_id) {

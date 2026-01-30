@@ -21,11 +21,16 @@ import fs from 'fs';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 await initDatabase();
-app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/usuario', usuariosRoutes);
 app.use('/api', authRoutes);
 app.use('/api/glicemia', glicemiaRoutes);
 app.use('/api/insulina', insulinaRoutes);

@@ -4,8 +4,7 @@ export default function Landing() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    // 1. Grava o token falso no armazenamento do navegador
-    
+
     // 2. Redireciona para o perfil
     navigate('/login');
   };

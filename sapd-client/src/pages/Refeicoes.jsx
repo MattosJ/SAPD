@@ -1,22 +1,30 @@
 import { useState, useEffect} from 'react';
 import { Trash2, Plus } from 'lucide-react';
+import api from "../services/api";
 import Selector from '../components/layout/Selector';
 import ConfirmacaoRefeicaoPopup from '../components/refeicao/ConfirmacaoRefeicaoPopup';
 
 export default function Refeicoes() {
-  const [refeicoes, setRefeicoes] = useState([]);
+  const [refeicoes, setRefeicoes] = useState([
+    {id: 1, desc: 'Café da Manhã', hora: '07:30', carbs: 45},
+    {id: 2, desc: 'Almoço', hora: '12:30', carbs: 70},
+  ]);
 
   const [novaRefeicao, setNovaRefeicao] = useState([]);
 
-  const [alimentos, setAlimentos] = useState([]);
+  const [alimentos, setAlimentos] = useState([
+    {id: 1, nome: 'Pão Integral', medida: '1 fatia', carboidratos: 12, proteinas: 3, gorduras: 1.5  , kcal: 70, tipo: 'Carboidrato' },
+    {id: 2, nome: 'Ovo Cozido', medida: '1 unidade', carboidratos: 1, proteinas: 6, gorduras: 5  , kcal: 78, tipo: 'Proteína' },
+  ]);
 
   const [modalConfirmacao, setModalConfirmacao] = useState(false);
 
   useEffect(() => {
     const buscarAlimentos = async () => {
         try {
-            const response = await fetch('http://localhost:3000/alimentos');
-            const data = await response.json();
+            const response = await api.get('/alimentos');
+       
+            const data = response.data;
             setAlimentos(data);
             console.log(data);
         } catch (error) {
@@ -26,8 +34,9 @@ export default function Refeicoes() {
 
     const buscarRefeicoes = async () => {
         try {
-            const response = await fetch('http://localhost:3000/refeicoes');
-            const data = await response.json();
+            const response = await api.get('/refeicoes');
+
+            const data = response.data;
             setRefeicoes(data);
             console.log(data);
         } catch (error) {
@@ -43,18 +52,13 @@ export default function Refeicoes() {
 
   async function adicionarRefeicao() {
     try {
-      const response = await fetch('http://localhost:3000/refeicoes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({refeicao: novaRefeicao}),
+      const response = await api.post('/refeicoes', {
+        refeicao: novaRefeicao
       });
 
-      if (response.ok) {
-        const novaRefeicao = await response.json();
-        setRefeicoes(prev => [...prev, novaRefeicao]);
-      }
+      const novaRefeicao = response.data;
+      setRefeicoes(prev => [...prev, novaRefeicao]);
+      
     } catch (error) {
       console.error('Erro ao adicionar refeição:', error);
     }

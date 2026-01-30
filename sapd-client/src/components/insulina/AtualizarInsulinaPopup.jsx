@@ -1,29 +1,23 @@
+import api from "../../services/api";
 export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, atualizarInsulina }) {
   // Se não estiver aberto ou não tiver dados, não renderiza nada (null)
   if (!isOpen || !insulinaData) return null;
 
   async function salvarAlteracoes() {
     try {
-      const response = await fetch(`http://localhost:3000/insulina/${insulinaData.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      await api.put(`/insulina/${insulinaData.id}`, 
+        {
             tipo: insulinaData.tipo,
             quantidade: insulinaData.quantidade,
             momento: insulinaData.momento,
             observacoes: insulinaData.observacao
-        }),
-      });
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error('Erro ao salvar alterações');
-      }
-        atualizarInsulina(insulinaData);
-        onClose();
+      atualizarInsulina(insulinaData);
+      onClose();
     } catch (error) {
-      console.error('Erro ao salvar alterações:', error);
+      console.error('Erro ao salvar alterações:', error.response);
     }
   };
 

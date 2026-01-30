@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Trash2, Edit, Bell } from 'lucide-react';
+import api from "../services/api";
 import AtualizarInsulinaPopup from '../components/insulina/AtualizarInsulinaPopup';
 
 export default function Insulina() {
   const [registros, setRegistros] = useState([
+    {id: 1, tipo: 'Basal', quantidadeInsulina: 20, data: '01/02/2026', hora: '22:00', momento: 'Noite', observacao: 'Antes de dormir' },
+    {id: 2, tipo: 'Rápida', quantidadeInsulina: 10, data: '02/02/2026', hora: '12:30', momento: 'Almoço', observacao: 'Após refeição' },
   ]);
   
   const [tipoInsulina, setTipoInsulina] = useState('');
@@ -20,27 +23,24 @@ export default function Insulina() {
 
   async function deleteRegistro(id) {
     try {
-      const response = await fetch(`http://localhost:3000/api/insulina/${id}`, {
-        method: 'DELETE',
-      });
+      await api.delete(`/insulina/${id}`);
 
-      if (response.ok) {
-        setRegistros(registros.filter(r => r.id !== id));
-      }
+      setRegistros(registros.filter(r => r.id !== id));
+      
     } catch (error) {
-      console.error('Erro ao deletar registro de insulina:', error);
+      console.error('Erro ao deletar registro de insulina:', error.response);
     }
   }
 
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/insulina');
-            const data = await response.json();
+            const response = await api.get('/insulina');
+            const data = response.data;
             setRegistros(data);
             console.log(data);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error);
+            console.error('Erro ao buscar dados:', error.response);
         }
     };
 
@@ -49,25 +49,21 @@ export default function Insulina() {
 
   async function handleAddRegistro() {
     try {
-      const response = await fetch('http://localhost:3000/api/insulina', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await api.post('/insulina', 
+        {
           tipo: tipoInsulina,
           quantidade_insulina: quantidadeInsulina,
           momento: momento,
           observacoes: observacao,
-        }),
-      });
+        }
+      );
 
       if (response.ok) {
-        const novoRegistro = await response.json();
+        const novoRegistro = response.data;
         setRegistros([...registros, novoRegistro]);
       }
     } catch (error) {
-      console.error('Erro ao adicionar registro de insulina:', error);
+      console.error('Erro ao adicionar registro de insulina:', error.response);
     }
   }
 

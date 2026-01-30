@@ -15,7 +15,7 @@ export default async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ erro: 'Token não fornecido' });
+    return res.status(301).json({ erro: 'Token não fornecido' });
   }
 
   const [, token] = authHeader.split(' ');
@@ -26,11 +26,11 @@ export default async function authMiddleware(req, res, next) {
     const usuario = await UsuarioRepository.buscarPorId(decoded.id);
 
     if (!usuario) {
-      return res.status(401).json({ erro: 'Usuário não encontrado' });
+      return res.status(301).json({ erro: 'Usuário não encontrado' });
     }
 
     if (usuario.status_conta !== 'ATIVA') {
-      return res.status(403).json({ erro: 'Conta inativa ou bloqueada' });
+      return res.status(303).json({ erro: 'Conta inativa ou bloqueada' });
     }
 
     req.usuario = usuario;
@@ -38,6 +38,6 @@ export default async function authMiddleware(req, res, next) {
     next();
 
   } catch {
-    return res.status(401).json({ erro: 'Token inválido' });
+    return res.status(301).json({ erro: 'Token inválido' });
   }
 }

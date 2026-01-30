@@ -1,0 +1,121 @@
+/* Reset e fonte */
+* {
+  box-sizing: border-box;
+  font-family: "Inter", Arial, sans-serif;
+}
+
+/* Fundo e centralização */
+.container-login {
+  min-height: 100vh;
+  background-color: #f4f6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card do formulário */
+.default-form-container {
+  background: #ffffff;
+  width: 100%;
+  max-width: 380px;
+  padding: 40px 32px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Título */
+.default-form-container h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #4f72a8;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+/* Grupos */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+/* Labels */
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+/* Inputs */
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"] {
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #4f72a8;
+  box-shadow: 0 0 0 2px rgba(79, 114, 168, 0.15);
+}
+
+/* Checkbox */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-row input {
+  accent-color: #4f72a8;
+}
+
+/* Navegação (links) */
+.form-navigation {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.form-navigation a {
+  color: #4f72a8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-navigation a:hover {
+  text-decoration: underline;
+}
+
+/* Botão */
+.default-form-container button {
+  margin-top: 25px;
+  width: 100%;
+  padding: 14px;
+  background-color: #4f72a8;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.default-form-container button:hover {
+  background-color: #3f5f91;
+}
+
+.default-form-container button:active {
+  transform: scale(0.98);
+}

@@ -61,6 +61,41 @@ class RegistroGlicemiaRepository {
     );
     return result.rows[0];
   }
+ async buscarPorPeriodo(usuarioId, dias) {
+    const result = await db.query(`
+      SELECT valor, data_hora
+      FROM registros_glicemia
+      WHERE usuario_id = $1
+      AND data_hora >= NOW() - INTERVAL '${dias} days'
+      ORDER BY data_hora
+    `, [usuarioId]);
+
+    return result.rows;
+  }
+
+  async ultimosRegistros(usuarioId) {
+    const result = await db.query(`
+      SELECT valor, data_hora
+      FROM registros_glicemia
+      WHERE usuario_id = $1
+      ORDER BY data_hora DESC
+      LIMIT 3
+    `, [usuarioId]);
+
+    return result.rows;
+  }
+
+  async predicoes(usuarioId, dias) {
+    const result = await db.query(`
+      SELECT glicemia_prevista, data_hora
+      FROM predicoes_glicemia
+      WHERE usuario_id = $1
+      AND data_hora >= NOW() - INTERVAL '${dias} days'
+      ORDER BY data_hora
+    `, [usuarioId]);
+
+    return result.rows;
+  }
 
   async atualizar(id, usuario_id, dados) {
     const result = await db.query(

@@ -20,7 +20,7 @@ export default function Insulina() {
 
   async function deleteRegistro(id) {
     try {
-      const response = await fetch(`http://localhost:3000/insulina/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/insulina/${id}`, {
         method: 'DELETE',
       });
 
@@ -35,7 +35,7 @@ export default function Insulina() {
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/insulina');
+            const response = await fetch('http://localhost:3000/api/insulina');
             const data = await response.json();
             setRegistros(data);
             console.log(data);
@@ -49,7 +49,7 @@ export default function Insulina() {
 
   async function handleAddRegistro() {
     try {
-      const response = await fetch('http://localhost:3000/insulina', {
+      const response = await fetch('http://localhost:3000/api/insulina', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

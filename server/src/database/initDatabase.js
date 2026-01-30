@@ -5,7 +5,7 @@ const { Pool } = pkg;
 const adminPool = new Pool({
   host: 'localhost',
   user: 'postgres',
-  password: 'admin',
+  password: '87654321',
   database: 'postgres',
   port: 5432
 });
@@ -32,7 +32,7 @@ export async function initDatabase() {
   const pool = new Pool({
     host: 'localhost',
     user: 'postgres',
-    password: 'admin',
+    password: '87654321',
     database: 'sapd',
     port: 5432
   });
@@ -166,10 +166,16 @@ export async function initDatabase() {
     CREATE TABLE IF NOT EXISTS lembretes (
       id SERIAL PRIMARY KEY,
       usuario_id INTEGER NOT NULL,
-      tipo VARCHAR(50) NOT NULL,
-      data_hora TIMESTAMP NOT NULL,
+
+      tipo VARCHAR(20) NOT NULL
+        CHECK (tipo IN ('refeicao','insulina','glicemia')),
+
+      data_hora TIMESTAMP WITH TIME ZONE NOT NULL,
+
       observacoes TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+      created_at TIMESTAMP WITH TIME ZONE
+        DEFAULT CURRENT_TIMESTAMP,
 
       CONSTRAINT fk_usuario_lembrete
         FOREIGN KEY (usuario_id)

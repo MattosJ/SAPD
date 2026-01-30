@@ -25,11 +25,42 @@ class RegistroGlicemiaService {
     };
   }
 
-  async buscar(id, usuario_id) {
-    const registro = await RegistroGlicemiaRepository.buscarPorId(id, usuario_id);
-    if (!registro) throw new Error('Registro não encontrado');
-    return registro;
+
+  async buscar(usuarioId, tipo) {
+
+    let dias = 30;
+
+    if (tipo === 'ano') dias = 365;
+    if (tipo === 'meses') dias = 90;
+    if (tipo === 'mes') dias = 30;
+
+    const medicoesDB = await RegistroGlicemiaRepository.buscarPorPeriodo(usuarioId, dias);
+    const ultimosDB = await RegistroGlicemiaRepository.ultimosRegistros(usuarioId);
+    const predicoesDB = await RegistroGlicemiaRepository.predicoes(usuarioId, dias);
+
+    const medicoes = medicoesDB.map(m => ({
+      data: m.data_hora.toISOString().split('T')[0],
+      valor: m.valor
+    }));
+
+    const ultimosRegistros = ultimosDB.map(m => ({
+      data: m.data_hora.toISOString().split('T')[0],
+      hora: m.data_hora.toTimeString().slice(0,5),
+      valor: m.valor
+    }));
+
+    const predicoes = predicoesDB.map(p => ({
+      data: p.data_hora.toISOString().split('T')[0],
+      valor: p.glicemia_prevista
+    }));
+    console.log(usuarioId);
+    return {
+      medicoes,
+      ultimosRegistros,
+      predicoes
+    };
   }
+
 
   async atualizar(id, usuario_id, dados) {
     const atualizado = await RegistroGlicemiaRepository.atualizar(id, usuario_id, dados);

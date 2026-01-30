@@ -25,7 +25,8 @@ export default function Medicoes() {
 
   const confirmarPredicao = (id) => async () => {
     try {
-      await fetch(`http://localhost:3000/predicoes/${id}/confirmar`, {
+      //Adionado a rota correta 
+      await fetch(`http://localhost:3000/api/predicoes/${id}/confirmar`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +60,8 @@ export default function Medicoes() {
 
   const buscarDados = async () => {
     try {
-        const response = await fetch(`http://localhost:3000/glicemia/${tipoSelecao}`);
+      //Adionado a rota correta 
+        const response = await fetch(`http://localhost:3000/api/glicemia/${tipoSelecao}`);
         const data = await response.json();
         setMedicoes(data.medicoes);
         setUltimosRegistros(data.ultimosRegistros);
@@ -78,7 +80,8 @@ export default function Medicoes() {
 
   async function deleteMedicao(id) {
     try {
-      const response = await fetch(`http://localhost:3000/glicemia/${id}`, {
+      //Adionado a rota correta 
+      const response = await fetch(`http://localhost:3000/api/glicemia/${id}`, {
         method: 'DELETE',
       });
 
@@ -90,35 +93,43 @@ export default function Medicoes() {
     }
   }
 
-  async function registrarMedicao() {
-    if (!valorMedicao) return;
-    try {
-      const novaMedicao = { 
-        data: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        valor: parseFloat(valorMedicao),
-        momento: momentoMedicao,
-        observacao: observacaoMedicao
-      };
-      setMedicoes([...medicoes, novaMedicao]);
-      setValorMedicao(null);
-      setMomentoMedicao(null);
-      setObservacaoMedicao(null);
+async function registrarMedicao() {
+  if (!valorMedicao) return;
 
-      const response = await fetch('http://localhost:3000/glicemia', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(novaMedicao),
-      });
+  try {
+    const novaMedicao = {
+      valor: parseFloat(valorMedicao),
+      // Adicionado o horario no front, mas irei migrar para o back
+      data_hora: new Date().toISOString(),
+      momento: momentoMedicao || null,
+      observacao: observacaoMedicao || null
+    };
 
-      if (!response.ok) {
-        throw new Error('Erro ao registrar medição');
-      }
-    } catch (error) {
-      console.error('Erro ao registrar medição:', error);
+    const response = await fetch('http://localhost:3000/api/glicemia', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(novaMedicao),
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao registrar medição');
     }
-  };
+
+    const salva = await response.json();
+
+    // ✅ Atualiza UI com retorno real do backend
+    setMedicoes(prev => [...prev, salva]);
+
+    setValorMedicao('');
+    setMomentoMedicao('');
+    setObservacaoMedicao('');
+
+  } catch (error) {
+    console.error('Erro ao registrar medição:', error);
+  }
+}
 
   return (
     <div>

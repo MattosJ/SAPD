@@ -9,7 +9,7 @@ router.use(authMiddleware);
 
 router.post('/', RegistroGlicemiaController.criar);
 router.get('/', RegistroGlicemiaController.listar);
-router.get('/:id', RegistroGlicemiaController.buscar);
+router.get('/:tipoSelecao', RegistroGlicemiaController.listar);
 router.put('/:id', RegistroGlicemiaController.atualizar);
 router.delete('/:id', RegistroGlicemiaController.excluir);
 export default router;

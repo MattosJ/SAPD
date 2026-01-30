@@ -22,7 +22,7 @@ export default function Relatorios() {
 
     async function buscarDadosPorTempo() {
         try {
-            const response = await fetch(`http://localhost:3000/relatorios/${tipoSelecao}`);
+            const response = await fetch(`http://localhost:3000/api/relatorios/${tipoSelecao}`);
             const data = await response.json();
             setGlicemia(data.glicemia);
             setPeso(data.peso);
@@ -35,7 +35,7 @@ export default function Relatorios() {
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/relatorios');
+            const response = await fetch('http://localhost:3000/api/relatorios');
             const data = await response.json();
             setRelatorioRefeicao(data.relatoriosRefeicao);
             setRelatorioPeso(data.relatoriosPeso);

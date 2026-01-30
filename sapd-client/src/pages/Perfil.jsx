@@ -4,7 +4,7 @@ export default function Perfil() {
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/usuarios/me');
+            const response = await fetch('http://localhost:3000/api/usuario');
             const data = await response.json();
             setUser({
               nomeCompleto: data.nome_completo,
@@ -26,8 +26,8 @@ export default function Perfil() {
 
   async function salvarAlteracoes() {
     try {
-      const response = await fetch('http://localhost:3000/usuarios/me', {
-        method: 'POST',
+      const response = await fetch('http://localhost:3000/api/usuario/me', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },

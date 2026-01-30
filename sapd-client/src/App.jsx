@@ -7,6 +7,7 @@ import Relatorios from './pages/Relatorios';
 import Insulina from './pages/Insulina';
 import Refeicoes from './pages/Refeicoes';
 import Medicoes from './pages/Medicoes';
+import PlanosAlimentares from './pages/PlanosAlimentares';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/medicoes" element={<Medicoes />} />
             <Route path="/insulina" element={<Insulina />} />
             <Route path="/refeicoes" element={<Refeicoes />} />
+            <Route path="/planos" element={<PlanosAlimentares />} />
           </Route>
         </Route>
       </Routes>

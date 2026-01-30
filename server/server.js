@@ -43,6 +43,7 @@ app.use('/api/relatorios', relatoriosRoutes);
 app.use('/api/comparacao', comparacaoRoutes);
 app.use('/api/alertas', alertasRoutes);
 app.use('/api/refeicaoAlimentos',refeicaoAlimentosRoutes);
+
 /*try {
   fs.writeFileSync('./swagger-output.json', JSON.stringify(swaggerSpec, null, 2));
   console.log(" Arquivo swagger-output.json gerado com sucesso!");

@@ -1,18 +1,51 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Trash2, Check} from 'lucide-react';
 import { useState, useEffect} from 'react';
 
 export default function Medicoes() {
 
-  const [medicoes, setMedicoes] = useState([
-    { nome: '08:00', valor: 98 }, { nome: '10:00', valor: 140 },
-    { nome: '12:00', valor: 110 }, { nome: '14:00', valor: 160 },
-  ]);
+  const [medicoes, setMedicoes] = useState([]);
 
   const [ultimosRegistros, setUltimosRegistros] = useState([
     { hora: 'Sem registros', valor: 0 }
   ]);
 
   const [valorMedicao, setValorMedicao] = useState(null);
+  const [momentoMedicao, setMomentoMedicao] = useState(null);
+  const [observacaoMedicao, setObservacaoMedicao] = useState(null);
+
+  const [predicoes, setPredicoes] = useState([
+    { data: '2024-01-01',confirmacao: false, glicemiaPrevista: 540, glicemia_real: 200 },
+    { data: '2024-01-02', confirmacao: false, glicemiaPrevista: 480, glicemia_real: 0 },
+    { data: '2024-01-03', confirmacao: false, glicemiaPrevista: 510, glicemia_real: 0 },
+    { data: '2024-01-04', confirmacao: false, glicemiaPrevista: 470, glicemia_real: 0 },
+    { data: '2024-01-05', confirmacao: false, glicemiaPrevista: 450, glicemia_real: 0 },
+  ]);
+
+
+  const confirmarPredicao = (id) => async () => {
+    try {
+      await fetch(`http://localhost:3000/predicoes/${id}/confirmar`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+
+      setPredicoes(predicoes.map(p => {
+        if (p.id === id) {
+          return { ...p, confirmacao: true };
+        }
+        return p;
+      }));
+
+    } catch (error) {
+      console.error('Erro ao registrar predição:', error);
+    }
+  };
+
+
   const definirMedicao = (e) => {
     setValorMedicao(e.target.value);
   };
@@ -24,30 +57,54 @@ export default function Medicoes() {
     setTipoSelecao(tipo);
   };
 
+  const buscarDados = async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/glicemia/${tipoSelecao}`);
+        const data = await response.json();
+        setMedicoes(data.medicoes);
+        setUltimosRegistros(data.ultimosRegistros);
+        setPredicoes(data.predicoes);
+        console.log(data);
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+    }
+  };
+
+
   useEffect(() => {
-    const buscarDados = async () => {
-        try {
-            const response = await fetch('http://localhost:3001/medicao');
-            const data = await response.json();
-            setMedicoes(data.medicoes);
-            setUltimosRegistros(data.ultimosRegistros);
-            console.log(data);
-        } catch (error) {
-            console.error('Erro ao buscar dados:', error);
-        }
-    };
 
     buscarDados();
   },[]);
 
+  async function deleteMedicao(id) {
+    try {
+      const response = await fetch(`http://localhost:3000/glicemia/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setMedicoes(medicoes.filter(m => m.id !== id));
+      }
+    } catch (error) {
+      console.error('Erro ao deletar registro de insulina:', error);
+    }
+  }
+
   async function registrarMedicao() {
     if (!valorMedicao) return;
     try {
-      const novaMedicao = { nome: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), valor: parseFloat(valorMedicao) };
+      const novaMedicao = { 
+        data: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        valor: parseFloat(valorMedicao),
+        momento: momentoMedicao,
+        observacao: observacaoMedicao
+      };
       setMedicoes([...medicoes, novaMedicao]);
       setValorMedicao(null);
+      setMomentoMedicao(null);
+      setObservacaoMedicao(null);
 
-      const response = await fetch('http://localhost:3001/medicoes/registrar', {
+      const response = await fetch('http://localhost:3000/glicemia', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,6 +128,11 @@ export default function Medicoes() {
         <div className="card">
           <h3>Nova Medição</h3>
           <input className="input-field" type="number" placeholder="Valor mg/dL" style={{fontSize: '2rem', textAlign: 'center', margin: '20px 0'}} value={valorMedicao} onChange={definirMedicao}/>
+
+          <input className="input-field" type="text" placeholder="Momento (ex: Jejum, Pós-refeição)" style={{fontSize: '1rem', textAlign: 'center'}} value={momentoMedicao} onChange={(e) => setMomentoMedicao(e.target.value)} />
+
+          <input className="input-field" type="text" placeholder="Observação (opcional)" style={{fontSize: '1rem', textAlign: 'center', margin: '20px 0'}} value={observacaoMedicao} onChange={(e) => setObservacaoMedicao(e.target.value)} />
+
           <button className="btn btn-primary" style={{width: '100%'}} onClick={registrarMedicao}>Registrar</button>
         </div>
 
@@ -80,31 +142,96 @@ export default function Medicoes() {
               {ultimosRegistros.map((item, index) => (
                 <li key={index} className="history-item">
                   <span>{item.hora}</span> <strong>{item.valor} mg/dL</strong>
+                  <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteMedicao(item.id)}><Trash2 size={16} /></button>
                 </li>
               ))}
            </ul>
         </div>
       </div>
 
-      <div className="card" style={{height: '350px', marginTop: '20px'}}>
-        <div style={{height: '50px', width: '350px',display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px'}}>
-            <button className={tipoSelecao === 'ano' ? 'btn btn-primary' : 'btn btn-secondary'} onClick={() => selecionarTipo('ano')}>Esté ano</button>
-            <button className={tipoSelecao === 'meses' ? 'btn btn-primary' : 'btn btn-secondary'} onClick={() => selecionarTipo('meses')}>Últimos meses</button>
-            <button className={tipoSelecao === 'mes' ? 'btn btn-primary' : 'btn btn-secondary'} onClick={() => selecionarTipo('mes')}>Esté meses</button>
+      <div className="card" style={{height: 'auto', marginTop: '20px'}}>
+        <div className='grid-2'>
+          <div>
+            <div style={{height: '50px', width: '350px',display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px'}}>
+                <button className={tipoSelecao === 'ano' ? 'btn btn-primary' : 'btn btn-secondary'} onClick={() => {selecionarTipo('ano'); buscarDados()}}>Esté ano</button>
+
+                <button className={tipoSelecao === 'meses' ? 'btn btn-primary' : 'btn btn-secondary'} onClick={() => {selecionarTipo('meses'); buscarDados()}}>Últimos meses</button>
+
+                <button className={tipoSelecao === 'mes' ? 'btn btn-primary' : 'btn btn-secondary'} onClick={() => {selecionarTipo('mes'); buscarDados()}}>Esté meses</button>
+            </div>
+            <h3>Curva Diária</h3>
+            {medicoes.length != 0 ? 
+            <ResponsiveContainer width="100%" height="80%">
+              <LineChart data={medicoes}>
+                <XAxis dataKey="data" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="valor" stroke="#e74c3c" strokeWidth={3} />
+              </LineChart>
+            </ResponsiveContainer> 
+            :
+            <p style={{color: '#999', fontStyle: 'italic'}}>Sem medições suficientes</p>
+            }
+          </div>
+
+
+
+          <div className="predictions-grid">
+            {predicoes.map((item, index) => (
+              <div key={index} className="pred-card" >
+                {/* Cabeçalho com a Data */}
+                <div className="pred-header">
+                  <span className="pred-date">{item.data}</span>
+                  {/* Badge indicador: Se tem valor real é 'Concluído', senão 'Estimativa' */}
+                  <span className={`pred-badge ${item.glicemia_real > 0 ? 'done' : 'waiting'}`}>
+                    {item.glicemia_real > 0 ? 'Medido' : 'Futuro'}
+                  </span>
+                  {item.confirmacao == false && item.glicemia_real > 0 && <button className='btn btn-primary' onClick={confirmarPredicao(item.id)}><Check size={16} /></button>}
+                </div>
+
+                <div className="pred-body">
+                  
+                  {/* Coluna da Previsão (Destaque) */}
+                  <div className="pred-column">
+                    <span className="pred-label" style={{color: '#8e44ad'}}>Previsto</span>
+                    <div className="pred-value-group">
+                      <span className="pred-value">{item.glicemiaPrevista.toFixed(0)}</span>
+                      <small>mg/dL</small>
+                    </div>
+                  </div>
+
+                  {/* Divisor Visual */}
+                  <div className="pred-divider"></div>
+
+                  {/* Coluna do Valor Real */}
+                  <div className="pred-column">
+                    <span className="pred-label">Real</span>
+                    {item.glicemia_real > 0 ? (
+                      <div className="pred-value-group">
+                        <span className="pred-value real">{item.glicemia_real}</span>
+                        <small>mg/dL</small>
+                      </div>
+                    ) : (
+                      <div className="pred-empty">
+                        --
+                      </div>
+                    )}
+                    
+                  </div>
+
+                </div>
+                
+                {/* Opcional: Mostra a diferença se já tiver medido */}
+                {item.glicemia_real > 0 && (
+                  <div className="pred-footer">
+                    Diferença: <strong>{Math.abs(item.glicemiaPrevista - item.glicemia_real).toFixed(0)} mg/dL</strong>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-        <h3>Curva Diária</h3>
-        {medicoes.length != 0 ? 
-        <ResponsiveContainer width="100%" height="80%">
-          <LineChart data={medicoes}>
-            <XAxis dataKey="nome" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="valor" stroke="#e74c3c" strokeWidth={3} />
-          </LineChart>
-        </ResponsiveContainer> 
-        :
-        <p>Sem medições suficientes</p>
-        }
+
       </div>
     </div>
   );

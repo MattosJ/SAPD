@@ -5,7 +5,7 @@ const { Pool } = pkg;
 const adminPool = new Pool({
   host: 'localhost',
   user: 'postgres',
-  password: '87654321',
+  password: 'admin',
   database: 'postgres',
   port: 5432
 });
@@ -32,7 +32,7 @@ export async function initDatabase() {
   const pool = new Pool({
     host: 'localhost',
     user: 'postgres',
-    password: '87654321',
+    password: 'admin',
     database: 'sapd',
     port: 5432
   });

@@ -1,6 +1,6 @@
 import FormLogin from "../components/FormLogin";
 import "../styles/loginPage.css"
-const SignIn =  () => {
+const Login =  () => {
   return(
     <div className="container-login">
       <FormLogin/>
@@ -10,4 +10,4 @@ const SignIn =  () => {
   )
 }
 
-export default SignIn;
+export default Login;

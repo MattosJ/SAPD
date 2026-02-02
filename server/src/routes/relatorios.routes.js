@@ -5,7 +5,7 @@ import authMiddleware from '../middlewares/authMiddleware.js';
 const router = Router();
 router.use(authMiddleware);
 
-router.get('/',RelatorioController.buscarGeral);
-router.get('/glicemia', RelatorioController.gerar);
+router.get('/',RelatorioController.buscarPrincipal);
+router.get('/:tipoSelecao', RelatorioController.buscarPorTempo);
 
 export default router;

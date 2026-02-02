@@ -14,18 +14,24 @@ class LembreteRepository {
     return result.rows[0];
   }
 
-  async listarPorUsuario(usuarioId) {
-    const result = await db.query(
-      `
-      SELECT *
-      FROM lembretes
-      WHERE usuario_id = $1
-      ORDER BY data_hora
-      `,
-      [usuarioId]
-    );
-    return result.rows;
-  }
+    async listarPorUsuario(usuarioId) {
+      const result = await db.query(
+        `
+        SELECT
+          id,
+          tipo,
+          observacoes,
+          TO_CHAR(data_hora, 'YYYY-MM-DD') AS data,
+          TO_CHAR(data_hora, 'HH24:MI') AS hora
+        FROM lembretes
+        WHERE usuario_id = $1
+        ORDER BY data_hora
+        `,
+        [usuarioId]
+      );
+
+      return result.rows;
+    }
 
   async atualizar(id, usuarioId, dados) {
     await db.query(

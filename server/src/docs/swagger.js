@@ -64,41 +64,28 @@ const options = {
             email: { type: 'string' },
             status_conta: { type: 'string' }
           }
-        },
-
-        // --- INSULINA ---
-        InsulinaInput: {
-          type: 'object',
-          required: ['quantidade_insulina', 'tipo', 'data_hora'],
-          properties: {
-            quantidade_insulina: { type: 'number', minimum: 0.1, example: 5, description: 'Quantidade em unidades' },
-            tipo: { type: 'string', example: 'Rápida' },
-            data_hora: { type: 'string', format: 'date-time', example: '2024-03-20T12:00:00Z' },
-            momento: { type: 'string', example: 'Antes do Almoço' },
-            observacoes: { type: 'string', example: 'Aplicação no abdômen' }
-          }
-        },
-        InsulinaOutput: {
+        },UsuarioInput: {
           type: 'object',
           properties: {
-            id: { type: 'integer' },
-            usuario_id: { type: 'integer' },
-            quantidade_insulina: { type: 'number' },
-            tipo: { type: 'string' },
-            data_hora: { type: 'string', format: 'date-time' },
-            momento: { type: 'string' },
-            observacoes: { type: 'string' }
+            nome_completo: { type: 'string' },
+            email: { type: 'string' },
+            senha: { type: 'string' },
+            data_nascimento: { type: 'string', format: 'date' },
+            tipo_diabetes: { type: 'string' },
+            peso: { type: 'number' },
+            altura: { type: 'number' },
+            foto_perfil: { type: 'string' }
           }
-        },
+        }, 
 
-        // --- GLICEMIA ---
+// --- GLICEMIA ---
         GlicemiaInput: {
           type: 'object',
           required: ['valor', 'data_hora'],
           properties: {
-            valor: { type: 'number', minimum: 1, example: 120 },
+            valor: { type: 'number' },
             data_hora: { type: 'string', format: 'date-time' },
-            momento: { type: 'string', example: 'Pós-Prandial' },
+            momento: { type: 'string' },
             observacao: { type: 'string' }
           }
         },
@@ -106,13 +93,26 @@ const options = {
           type: 'object',
           properties: {
             id: { type: 'integer' },
-            usuario_id: { type: 'integer' },
             valor: { type: 'number' },
             data_hora: { type: 'string', format: 'date-time' },
             momento: { type: 'string' },
-            observacao: { type: 'string' }
+            observacao: { type: 'string' },
+            usuario_id: { type: 'integer' }
           }
         },
+        // --- INSULINA ---
+        InsulinaInput: {
+          type: 'object',
+          required: ['quantidade_insulina', 'tipo', 'data_hora'],
+          properties: {
+            quantidade_insulina: { type: 'number' },
+            tipo: { type: 'string' },
+            data_hora: { type: 'string', format: 'date-time' },
+            momento: { type: 'string' },
+            observacoes: { type: 'string' }
+          }
+        }
+      ,
 
         // --- GENÉRICO ---
         ErroResponse: {
@@ -336,42 +336,34 @@ const options = {
     },
     security: [{ bearerAuth: [] }],
     paths: {
-// ROTAS PÚBLICAS
-      '/usuarios': {
+'/usuarios/cadastrar': {
         post: {
           tags: ['Usuários'],
-          summary: 'Cadastra um novo usuário',
+          summary: 'Cadastro de novo usuário',
           requestBody: {
-            required: true,
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/UsuarioCadastroInput' } } }
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/UsuarioInput' } } }
           },
-          responses: {
-            201: { content: { 'application/json': { schema: { $ref: '#/components/schemas/UsuarioOutput' } } } },
-            400: { $ref: '#/components/schemas/ErroResponse' }
-          }
+          responses: { 201: { description: 'Cadastrado' } }
         }
       },
-      '/usuarios/login': {
-        post: {
-          tags: ['Autenticação'],
-          summary: 'Realiza login e retorna token JWT',
+      '/usuarios/me': {
+        get: {
+          tags: ['Perfil'],
+          summary: 'Ver dados do perfil logado',
+          responses: { 200: { description: 'Dados do perfil' } }
+        },
+        put: {
+          tags: ['Perfil'],
+          summary: 'Atualizar perfil logado',
           requestBody: {
-            required: true,
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/LoginInput' } } }
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/UsuarioInput' } } }
           },
-          responses: {
-            200: { 
-              content: { 
-                'application/json': { 
-                  schema: { 
-                    type: 'object', 
-                    properties: { token: { type: 'string' }, usuario: { $ref: '#/components/schemas/UsuarioOutput' } } 
-                  } 
-                } 
-              } 
-            },
-            401: { $ref: '#/components/schemas/ErroResponse' }
-          }
+          responses: { 200: { description: 'Atualizado' } }
+        },
+        delete: {
+          tags: ['Perfil'],
+          summary: 'Inativar conta',
+          responses: { 200: { description: 'Inativada' } }
         }
       },
       '/usuarios/recuperar-senha': {

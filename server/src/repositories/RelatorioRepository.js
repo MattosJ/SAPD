@@ -8,7 +8,7 @@ class RelatorioRepository {
   async glicemiaGrafico(usuarioId) {
     const result = await db.query(`
       SELECT
-        TO_CHAR(data_hora, 'DD/MM') AS name,
+        TO_CHAR(data_hora, 'DD/MM') AS data,
         valor
       FROM registros_glicemia
       WHERE usuario_id = $1
@@ -24,7 +24,7 @@ class RelatorioRepository {
   async pesoGrafico(usuarioId) {
     const result = await db.query(`
       SELECT
-        TO_CHAR(updated_at, 'DD/MM') AS name,
+        TO_CHAR(updated_at, 'DD/MM') AS data,
         peso AS valor
       FROM usuarios
       WHERE id = $1

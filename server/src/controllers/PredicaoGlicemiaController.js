@@ -5,7 +5,7 @@ class PredicaoGlicemiaController {
   async gerar(req, res) {
     try {
       const predicao =
-        await PredicaoService.gerar(req.usuarioId);
+        await PredicaoService.gerar(req.usuario.id);
       return res.status(201).json(predicao);
     } catch (error) {
       return res.status(400).json({ erro: error.message });
@@ -15,7 +15,7 @@ class PredicaoGlicemiaController {
   async confirmar(req, res) {
     await PredicaoService.confirmar(
       req.params.id,
-      req.usuarioId,
+      req.usuario.id,
       req.body.glicemia_real
     );
     return res.status(204).send();
@@ -23,7 +23,7 @@ class PredicaoGlicemiaController {
 
   async listar(req, res) {
     const dados =
-      await PredicaoService.listar(req.usuarioId);
+      await PredicaoService.listar(req.usuario.id);
     return res.json(dados);
   }
 }

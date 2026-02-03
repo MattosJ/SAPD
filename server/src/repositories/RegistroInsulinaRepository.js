@@ -8,7 +8,14 @@ class RegistroInsulinaRepository {
       INSERT INTO registros_insulina
       (usuario_id, quantidade_insulina, tipo, data_hora, momento, observacoes)
       VALUES ($1,$2,$3,$4,$5,$6)
-      RETURNING *
+      RETURNING 
+        id,
+        usuario_id,
+        quantidade_insulina,
+        tipo,
+        data_hora,
+        momento,
+        observacoes
       `,
       [
         dados.usuario_id,
@@ -19,29 +26,48 @@ class RegistroInsulinaRepository {
         dados.observacoes
       ]
     );
+
     return result.rows[0];
   }
 
   async listarPorUsuario(usuario_id) {
     const result = await db.query(
       `
-      SELECT * FROM registros_insulina
+      SELECT
+        id,
+        usuario_id,
+        quantidade_insulina,
+        tipo,
+        data_hora,
+        momento,
+        observacoes
+      FROM registros_insulina
       WHERE usuario_id = $1
       ORDER BY data_hora DESC
       `,
       [usuario_id]
     );
+
     return result.rows;
   }
 
   async buscarPorId(id, usuario_id) {
     const result = await db.query(
       `
-      SELECT * FROM registros_insulina
+      SELECT
+        id,
+        usuario_id,
+        quantidade_insulina,
+        tipo,
+        data_hora,
+        momento,
+        observacoes
+      FROM registros_insulina
       WHERE id = $1 AND usuario_id = $2
       `,
       [id, usuario_id]
     );
+
     return result.rows[0];
   }
 
@@ -55,7 +81,14 @@ class RegistroInsulinaRepository {
           momento = $4,
           observacoes = $5
       WHERE id = $6 AND usuario_id = $7
-      RETURNING *
+      RETURNING
+        id,
+        usuario_id,
+        quantidade_insulina,
+        tipo,
+        data_hora,
+        momento,
+        observacoes
       `,
       [
         dados.quantidade_insulina,
@@ -67,6 +100,7 @@ class RegistroInsulinaRepository {
         usuario_id
       ]
     );
+
     return result.rows[0];
   }
 

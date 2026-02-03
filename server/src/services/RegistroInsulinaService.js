@@ -6,6 +6,7 @@ class RegistroInsulinaService {
     const dataObj = new Date(insulina.data_hora);
 
     return {
+      id:insulina.id,
       tipo: insulina.tipo,
       quantidadeInsulina: Number(insulina.quantidade_insulina),
       data: dataObj.toLocaleDateString('pt-BR'),

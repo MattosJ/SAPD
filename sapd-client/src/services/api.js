@@ -10,7 +10,7 @@ const api = axios.create({
 
       // Se tiver token, adiciona no cabeçalho
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.authorization = `Bearer ${token}`;
       }
 
       return config;

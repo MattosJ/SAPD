@@ -2,20 +2,34 @@ import RegistroInsulinaRepository from '../repositories/RegistroInsulinaReposito
 import RegistroInsulina from '../entities/RegistroInsulina.js';
 
 class RegistroInsulinaService {
+  formatar(insulina) {
+    const dataObj = new Date(insulina.data_hora);
 
+    return {
+      tipo: insulina.tipo,
+      quantidadeInsulina: Number(insulina.quantidade_insulina),
+      data: dataObj.toLocaleDateString('pt-BR'),
+      hora: dataObj.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      momento: insulina.momento,
+      observacao: insulina.observacoes
+    };
+  }
   async criar(dados) {
-    const registro = new RegistroInsulina(dados);
+    const registro = new RegistroInsulina({
+      ...dados,
+      data_hora: new Date()
+  });
 
-    const dataAplicacao = new Date(registro.data_hora);
-    if (dataAplicacao > new Date()) {
-      throw new Error('Aplicação não pode estar no futuro');
-    }
-
-    return RegistroInsulinaRepository.criar(registro);
+  return RegistroInsulinaRepository.criar(registro);
   }
 
   async listar(usuario_id) {
-    return RegistroInsulinaRepository.listarPorUsuario(usuario_id);
+  
+    const registros = RegistroInsulinaRepository.listarPorUsuario(usuario_id);
+    return (await registros).map(r => this.formatar(r));
   }
 
   async buscar(id, usuario_id) {

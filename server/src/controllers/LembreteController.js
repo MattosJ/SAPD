@@ -6,7 +6,7 @@ class LembreteController {
     try {
       const lembrete = await LembreteService.criar({
         ...req.body,
-        usuarioId: req.usuarioId
+        usuarioId: req.usuario.id
       });
       return res.status(201).json(lembrete);
     } catch (error) {
@@ -15,7 +15,7 @@ class LembreteController {
   }
 
   async listar(req, res) {
-    const lembretes = await LembreteService.listar(req.usuarioId);
+    const lembretes = await LembreteService.listar(req.usuario.id);
     return res.json(lembretes);
   }
 

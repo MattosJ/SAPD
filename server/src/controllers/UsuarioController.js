@@ -22,8 +22,12 @@ class UsuarioController {
 
   async me(req, res) {
     try {
-      const usuario = await UsuarioService.buscarPerfil(req.userId);
+      const usuarioID = req.usuario.id; // <-- AQUI
+
+      const usuario = await UsuarioService.buscarPerfil(usuarioID);
+
       res.json(usuario);
+
     } catch (e) {
       res.status(404).json({ erro: e.message });
     }
@@ -31,7 +35,7 @@ class UsuarioController {
 
   async atualizar(req, res) {
     try {
-      const usuario = await UsuarioService.atualizarPerfil(req.userId, req.body);
+      const usuario = await UsuarioService.atualizarPerfil(req.usuario.id, req.body);
       res.json(usuario);
     } catch (e) {
       res.status(400).json({ erro: e.message });

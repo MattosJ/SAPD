@@ -1,6 +1,6 @@
 import FormLogin from "../components/FormLogin";
 import "../styles/loginPage.css"
-const Login =  () => {
+export default function Login() {
   return(
     <div className="container-login">
       <FormLogin/>
@@ -9,5 +9,3 @@ const Login =  () => {
     
   )
 }
-
-export default Login;

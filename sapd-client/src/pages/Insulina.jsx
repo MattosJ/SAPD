@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Trash2, Edit, Bell } from 'lucide-react';
 import api from "../services/api";
 import AtualizarInsulinaPopup from '../components/insulina/AtualizarInsulinaPopup';
 
 export default function Insulina() {
+
+  const reloadRef = useRef(false);
+
   const [registros, setRegistros] = useState([
-    {id: 1, tipo: 'Basal', quantidadeInsulina: 20, data: '01/02/2026', hora: '22:00', momento: 'Noite', observacao: 'Antes de dormir' },
-    {id: 2, tipo: 'Rápida', quantidadeInsulina: 10, data: '02/02/2026', hora: '12:30', momento: 'Almoço', observacao: 'Após refeição' },
   ]);
   
   const [tipoInsulina, setTipoInsulina] = useState('');
@@ -33,17 +34,23 @@ export default function Insulina() {
   }
 
   useEffect(() => {
+    if (reloadRef.current) return;
+    reloadRef.current = true;
+
     const buscarDados = async () => {
+        
         try {
+
             const response = await api.get('/insulina');
             const data = response.data;
             setRegistros(data);
             console.log(data);
+
         } catch (error) {
             console.error('Erro ao buscar dados:', error.response);
-        }
+        }   
     };
-
+    
     buscarDados();
   }, [])
 
@@ -103,7 +110,7 @@ export default function Insulina() {
           {registros.length > 0 ?
           <ul className="history-list">
             {registros.map(reg => (
-              <li key={reg.id} className="history-item">
+              <li key={`${reg.data}-${reg.hora}`} className="history-item">
                 <div>
 
                   <strong>{reg.tipo}</strong> - {reg.quantidadeInsulina}

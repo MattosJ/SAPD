@@ -171,6 +171,74 @@ async function seed() {
       [usuario.id]
     );
   }
+  for (const usuario of usuariosDB) {
+      await db.query(
+        `
+        INSERT INTO lembretes
+        (usuario_id, tipo, data_hora, observacoes)
+        VALUES
+        ($1,'refeicao', NOW() + INTERVAL '1 hour', 'Almoço'),
+        ($1,'glicemia', NOW() + INTERVAL '2 hours', 'Medir glicemia'),
+        ($1,'insulina', NOW() + INTERVAL '3 hours', 'Aplicar insulina')
+        `,
+        [usuario.id]
+      );
+  }
+    /* ===============================
+   8️⃣ PLANO ALIMENTAR
+=============================== */
+for (const usuario of usuariosDB) {
+    const plano = await db.query(
+      `
+      INSERT INTO planos_alimentares
+      (usuario_id, descricao, data_inicio, data_fim)
+      VALUES ($1,'Plano padrão para controle glicêmico', CURRENT_DATE, CURRENT_DATE + INTERVAL '30 days')
+      RETURNING id
+      `,
+      [usuario.id]
+    );
+
+    const planoId = plano.rows[0].id;
+
+    const refeicaoPlano = await db.query(
+      `
+      INSERT INTO plano_refeicoes
+      (plano_id, tipo, horario)
+      VALUES ($1,'Café da manhã','07:00')
+      RETURNING id
+      `,
+      [planoId]
+    );
+
+    await db.query(
+      `
+      INSERT INTO plano_refeicao_alimentos
+      (plano_refeicao_id, alimento_id, quantidade)
+      VALUES
+      ($1,$2,100),
+      ($1,$3,50)
+      `,
+      [
+        refeicaoPlano.rows[0].id,
+        alimentosDB[0].id,
+        alimentosDB[3].id
+      ]
+    );
+  }
+  /* ===============================
+   9️⃣ PREDIÇÕES DE GLICEMIA
+=============================== */
+    for (const usuario of usuariosDB) {
+      await db.query(
+        `
+        INSERT INTO predicoes_glicemia
+        (usuario_id, glicemia_prevista, data_hora)
+        VALUES ($1, 120, NOW() + INTERVAL '4 hours')
+        `,
+        [usuario.id]
+      );
+    }
+
 
   console.log('✅ SEED FINAL EXECUTADO COM SUCESSO');
   process.exit();

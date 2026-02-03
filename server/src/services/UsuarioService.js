@@ -56,6 +56,11 @@ class UsuarioService {
 
   async buscarPerfil(id) {
     const usuario = await UsuarioRepository.buscarPorId(id);
+    if (usuario.data_nascimento) {
+    usuario.data_nascimento = usuario.data_nascimento
+    .toISOString()
+    .split('T')[0];
+}
     if (!usuario) throw new Error('Usuário não encontrado');
     return usuario;
   }

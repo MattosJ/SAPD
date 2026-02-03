@@ -1,4 +1,5 @@
 import api from "../../services/api";
+import { X } from 'lucide-react';
 export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, atualizarInsulina }) {
   // Se não estiver aberto ou não tiver dados, não renderiza nada (null)
   if (!isOpen || !insulinaData) return null;
@@ -8,7 +9,7 @@ export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, 
       await api.put(`/insulina/${insulinaData.id}`, 
         {
             tipo: insulinaData.tipo,
-            quantidade: insulinaData.quantidade,
+            quantidade: insulinaData.quantidadeInsulina,
             momento: insulinaData.momento,
             observacoes: insulinaData.observacao
         }
@@ -40,7 +41,7 @@ export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, 
                 <input className="input-field" name="tipo" value={insulinaData.tipo} onChange={(e) => insulinaData.tipo = e.target.value} style={{textAlign: 'center'}} />
 
                 <label>Quantidade</label>
-                <input className="input-field" name="quantidade" value={insulinaData.quantidade} onChange={(e) => insulinaData.quantidade = e.target.value} style={{textAlign: 'center'}} type="number"/>
+                <input className="input-field" name="quantidade" value={insulinaData.quantidadeInsulina} onChange={(e) => insulinaData.quantidadeInsulina = e.target.value} style={{textAlign: 'center'}} type="number"/>
 
                 <label>Momento</label>
                 <input className="input-field" name="momento" value={insulinaData.momento} onChange={(e) => insulinaData.momento = e.target.value} style={{textAlign: 'center'}} />

@@ -3,8 +3,40 @@ import gerarRelatorioPDF from '../utils/gerarRelatorioPDF.js';
 import db from '../database/connection.js';
 
 class RelatorioController {
+    
+    async buscarPrincipal(req, res) {
+    try {
+      const usuarioId = req.usuario.id || 3; // temporário
+      
+      
+      const dados = await RelatorioService.buscarPrincipal(usuarioId);
+      console.log(usuarioId);
+      res.json(dados);
+    } catch (e) {
+      res.status(500).json({ erro: 'Erro ao gerar relatório' });
+    }
+  }
 
-  async gerar(req, res) {
+    async buscarPorTempo(req, res) {
+      try {
+        const usuarioId = req.usuario.id || 3;
+        const { tipoSelecao } = req.params;
+
+        const dados = await RelatorioService.buscarPorTempo(
+          usuarioId,
+          tipoSelecao
+        );
+
+        res.json(dados);
+      } catch (e) {
+        res.status(500).json({ erro: 'Erro ao gerar relatório' });
+      }
+    }
+  }
+
+
+
+  /*async gerar(req, res) {
     const { dataInicio, dataFim } = req.query;
 
     const dados =
@@ -50,8 +82,8 @@ class RelatorioController {
     } catch (error) {
       console.error(error);
       return res.status(500).json({ erro: 'Erro ao gerar relatório' });
-    }
-  }
-}
+    }*/
+  
+
 
 export default new RelatorioController();

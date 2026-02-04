@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import UsuarioController from '../controllers/UsuarioController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
+import AuthController from '../controllers/AuthController.js';
 
 const router = Router();
 
@@ -83,7 +84,7 @@ router.post('/cadastrar', UsuarioController.cadastrar);
  *       401:
  *         description: Credenciais inválidas
  */
-router.post('/login', UsuarioController.login);
+router.post('/login', AuthController.login);
 
 /**
  * @swagger

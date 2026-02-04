@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import { initDatabase } from './src/database/initDatabase.js';
 import usuariosRoutes from './src/routes/usuarios.routes.js';
@@ -17,8 +18,6 @@ import swaggerSpec from './src/docs/swagger.js';
 import refeicaoAlimentosRoutes from './src/routes/refeicaoAlimentos.routes.js';
 import cors from 'cors';
 import fs from 'fs';
-import 'dotenv/config';
-
 
 
 const app = express();

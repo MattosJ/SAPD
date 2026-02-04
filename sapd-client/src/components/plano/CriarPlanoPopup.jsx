@@ -71,7 +71,6 @@ export default function CriarPlanoPopup({ isOpen, onClose, onSave, alimentos }) 
 
     onSave(payload);
     onClose();
-    
   };
 
   return (
@@ -150,13 +149,11 @@ export default function CriarPlanoPopup({ isOpen, onClose, onSave, alimentos }) 
 
                 <div style={{marginTop: '10px'}}>
                   <label style={{fontSize: '0.9rem', color: '#666'}}>Selecione os alimentos:</label>
-                  {
-                  isOpen &&
+                  {/* Reutilizando seu componente FoodSelector */}
                   <Selector
                     alimentos={alimentos}
                     onSelectionChange={(novosAlimentos) => handleAlimentosChange(ref.id_temp, novosAlimentos)} 
                   />
-                  }
                 </div>
               </div>
             ))}

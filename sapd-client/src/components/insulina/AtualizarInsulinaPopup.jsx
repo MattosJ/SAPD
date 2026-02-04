@@ -1,24 +1,29 @@
-import api from "../../services/api";
-import { X } from 'lucide-react';
 export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, atualizarInsulina }) {
   // Se não estiver aberto ou não tiver dados, não renderiza nada (null)
   if (!isOpen || !insulinaData) return null;
 
   async function salvarAlteracoes() {
     try {
-      await api.put(`/insulina/${insulinaData.id}`, 
-        {
+      const response = await fetch(`http://localhost:3000/insulina/${insulinaData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             tipo: insulinaData.tipo,
-            quantidade: insulinaData.quantidadeInsulina,
+            quantidade: insulinaData.quantidade,
             momento: insulinaData.momento,
             observacoes: insulinaData.observacao
-        }
-      );
+        }),
+      });
 
-      atualizarInsulina(insulinaData);
-      onClose();
+      if (!response.ok) {
+        throw new Error('Erro ao salvar alterações');
+      }
+        atualizarInsulina(insulinaData);
+        onClose();
     } catch (error) {
-      console.error('Erro ao salvar alterações:', error.response);
+      console.error('Erro ao salvar alterações:', error);
     }
   };
 
@@ -41,7 +46,7 @@ export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, 
                 <input className="input-field" name="tipo" value={insulinaData.tipo} onChange={(e) => insulinaData.tipo = e.target.value} style={{textAlign: 'center'}} />
 
                 <label>Quantidade</label>
-                <input className="input-field" name="quantidade" value={insulinaData.quantidadeInsulina} onChange={(e) => insulinaData.quantidadeInsulina = e.target.value} style={{textAlign: 'center'}} type="number"/>
+                <input className="input-field" name="quantidade" value={insulinaData.quantidade} onChange={(e) => insulinaData.quantidade = e.target.value} style={{textAlign: 'center'}} type="number"/>
 
                 <label>Momento</label>
                 <input className="input-field" name="momento" value={insulinaData.momento} onChange={(e) => insulinaData.momento = e.target.value} style={{textAlign: 'center'}} />

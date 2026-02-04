@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, Eye, Calendar } from 'lucide-react';
-import api from "../services/api";
 import CriarPlanoPopup from '../components/plano/CriarPlanoPopup';
 import DetalhesPlanoPopup from '../components/plano/DetalhesPlanoPopup';
 
@@ -14,47 +13,62 @@ export default function PlanosAlimentares() {
   // Mock de Planos para listagem
     const [planos, setPlanos] = useState([
         {
-            id: 1,
-            descricao: "Dieta de Verão",
-            data_inicio: "2026-01-01",
-            data_fim: "2026-03-01",
-            refeicoes: [
-                {
-                tipo: "Café da Manhã",
-                horario: "07:30",
-                alimentos: [{ alimento_id: 5, quantidade: 1 }]
-                }
-            ]
+        id: 1,
+        descricao: "Dieta de Verão",
+        data_inicio: "2026-01-01",
+        data_fim: "2026-03-01",
+        refeicoes: [
+            {
+            tipo: "Café da Manhã",
+            horario: "07:30",
+            alimentos: [{ alimento_id: 5, quantidade: 1 }]
+            }
+        ]
         },
         {
-            id: 2,
-            descricao: "Dieta Hipertrofia",
-            data_inicio: "2026-04-01",
-            data_fim: "2026-06-01",
-            refeicoes: []
+        id: 2,
+        descricao: "Dieta Hipertrofia",
+        data_inicio: "2026-04-01",
+        data_fim: "2026-06-01",
+        refeicoes: []
         }
     ]);
 
     const handleSalvarPlano = async (novoPlano) => {
         try {
-            await api.post('/planos-alimentares', novoPlano);
+            const response = await fetch('http://localhost:3000/planos-alimentares', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(novoPlano),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao salvar plano');
+            }
             
             // Simulando adição na lista local
             const planoComId = { ...novoPlano, id: Date.now() };
             setPlanos([...planos, planoComId]);
         } catch (error) {
-            console.error('Erro ao salvar plano alimentar:', error.response);
+            console.error('Erro ao salvar plano alimentar:', error);
         }
     };
 
     const handleExcluir = async (id) => {
         if (confirm('Tem certeza que deseja excluir este plano?')) {
             try {
-                await api.delete(`/planos-alimentares/${id}`);
-       
+                const response = await fetch(`http://localhost:3000/planos-alimentares/${id}`, {
+                    method: 'DELETE',
+                });
+                if (!response.ok) {
+                    throw new Error('Erro ao excluir plano');
+                }
+
                 setPlanos(planos.filter(p => p.id !== id));
             } catch (error) {
-                console.error('Erro ao excluir plano alimentar:', error.response);
+                console.error('Erro ao excluir plano alimentar:', error);
             }
         }
     };
@@ -67,22 +81,22 @@ export default function PlanosAlimentares() {
     useEffect(() => {
         const buscarAlimentos = async () => {
             try {
-                const response = await api.get('/alimentos');
-                const data = response.data;
+                const response = fetch('http://localhost:3000/alimentos');
+                const data = await response.json();
                 setAlimentos(data);
                 console.log(data);
             } catch (error) {
-                console.error('Erro ao buscar dados:', error.response);
+                console.error('Erro ao buscar dados:', error);
             }
         }
         const buscarPlanos = async () => {
             try {
-                const response = await api.get('/planos-alimentares');
-                const data = response.data;
+                const response = fetch('http://localhost:3000/planos-alimentares');
+                const data = await response.json();
                 setPlanos(data);
                 console.log(data);
             } catch (error) {
-                console.error('Erro ao buscar dados:', error.response);
+                console.error('Erro ao buscar dados:', error);
             }
         };
 

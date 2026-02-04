@@ -1,32 +1,37 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Trash2, Check} from 'lucide-react';
 import { useState, useEffect} from 'react';
-import api from "../services/api";
 
 export default function Medicoes() {
 
-  const [medicoes, setMedicoes] = useState([
-    {data: '05/02/2026', valor: 50},
-    {data: '08/02/2026', valor: 78},
-  ]);
+  const [medicoes, setMedicoes] = useState([]);
 
   const [ultimosRegistros, setUltimosRegistros] = useState([
-    { hora: '05:55', data: '01/02/2026', valor: 0 }
+    { hora: 'Sem registros', valor: 0 }
   ]);
 
-  const [valorMedicao, setValorMedicao] = useState(undefined);
-  const [momentoMedicao, setMomentoMedicao] = useState(undefined);
-  const [observacaoMedicao, setObservacaoMedicao] = useState(undefined);
+  const [valorMedicao, setValorMedicao] = useState(null);
+  const [momentoMedicao, setMomentoMedicao] = useState(null);
+  const [observacaoMedicao, setObservacaoMedicao] = useState(null);
 
   const [predicoes, setPredicoes] = useState([
     { data: '2024-01-01',confirmacao: false, glicemiaPrevista: 540, glicemia_real: 200 },
     { data: '2024-01-02', confirmacao: false, glicemiaPrevista: 480, glicemia_real: 0 },
+    { data: '2024-01-03', confirmacao: false, glicemiaPrevista: 510, glicemia_real: 0 },
+    { data: '2024-01-04', confirmacao: false, glicemiaPrevista: 470, glicemia_real: 0 },
+    { data: '2024-01-05', confirmacao: false, glicemiaPrevista: 450, glicemia_real: 0 },
   ]);
 
 
   const confirmarPredicao = (id) => async () => {
     try {
-      await api.put(`/predicoes/${id}/confirmar`, {});
+      await fetch(`http://localhost:3000/predicoes/${id}/confirmar`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
 
       setPredicoes(predicoes.map(p => {
         if (p.id === id) {
@@ -36,7 +41,7 @@ export default function Medicoes() {
       }));
 
     } catch (error) {
-      console.error('Erro ao registrar predição:', error.response);
+      console.error('Erro ao registrar predição:', error);
     }
   };
 
@@ -54,15 +59,14 @@ export default function Medicoes() {
 
   const buscarDados = async () => {
     try {
-        const response = await api.get(`glicemia/${tipoSelecao}`);
-        
-        const data = response.data;
+        const response = await fetch(`http://localhost:3000/glicemia/${tipoSelecao}`);
+        const data = await response.json();
         setMedicoes(data.medicoes);
         setUltimosRegistros(data.ultimosRegistros);
         setPredicoes(data.predicoes);
         console.log(data);
     } catch (error) {
-        console.error('Erro ao buscar dados:', error.response);
+        console.error('Erro ao buscar dados:', error);
     }
   };
 
@@ -74,39 +78,47 @@ export default function Medicoes() {
 
   async function deleteMedicao(id) {
     try {
-      await api.delete(`/glicemia/${id}`);
+      const response = await fetch(`http://localhost:3000/glicemia/${id}`, {
+        method: 'DELETE',
+      });
 
-      setMedicoes(medicoes.filter(m => m.id !== id));
-      
+      if (response.ok) {
+        setMedicoes(medicoes.filter(m => m.id !== id));
+      }
     } catch (error) {
-      console.error('Erro ao deletar registro de insulina:', error.response);
+      console.error('Erro ao deletar registro de insulina:', error);
     }
   }
 
-async function registrarMedicao() {
-  
-  if (!valorMedicao) return;
-  try{  
-  try{
-      await api.post('/glicemia', novaMedicao);
+  async function registrarMedicao() {
+    if (!valorMedicao) return;
+    try {
+      const novaMedicao = { 
+        data: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        valor: parseFloat(valorMedicao),
+        momento: momentoMedicao,
+        observacao: observacaoMedicao
+      };
+      setMedicoes([...medicoes, novaMedicao]);
+      setValorMedicao(null);
+      setMomentoMedicao(null);
+      setObservacaoMedicao(null);
 
-    }catch (error) {
-      console.error('Erro ao registrar medição:', error.response);
+      const response = await fetch('http://localhost:3000/glicemia', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(novaMedicao),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao registrar medição');
+      }
+    } catch (error) {
+      console.error('Erro ao registrar medição:', error);
     }
-
-    const salva = await response.json();
-
-    // ✅Atualiza UI com retorno real do backend
-    setMedicoes(prev => [...prev, salva]);
-
-    setValorMedicao('');
-    setMomentoMedicao('');
-    setObservacaoMedicao('');
-
-  } catch (error) {
-    console.error('Erro ao registrar medição:', error);
-  }
-}
+  };
 
   return (
     <div>
@@ -129,7 +141,7 @@ async function registrarMedicao() {
            <ul className="history-list">
               {ultimosRegistros.map((item, index) => (
                 <li key={index} className="history-item">
-                  <span>{item.hora} - {item.data}</span> <strong>{item.valor} mg/dL</strong>
+                  <span>{item.hora}</span> <strong>{item.valor} mg/dL</strong>
                   <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteMedicao(item.id)}><Trash2 size={16} /></button>
                 </li>
               ))}

@@ -1,45 +1,17 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
-import api from "../services/api";
 import RelatorioRefeicaoPopup from '../components/relatorios/RelatorioRefeicaoPopup';
 import RelatorioPesoPopup from '../components/relatorios/RelatorioPesoPopup';
 
 
-
 export default function Relatorios() {
   
-    const [glicemia, setGlicemia] = useState([
-        {data: '05/02/2026', valor: 50},
-        {data: '08/02/2026', valor: 78},
-    ]);
-    const [peso, setPeso] = useState([
-        {data: '05/02/2026', valor: 70},
-        {data: '08/02/2026', valor: 65},
-    ]);
-    const [relatorioRefeicao, setRelatorioRefeicao] = useState([
-        {id: 1, nome: 'Refeição 1', dataInicio: '01/02/2026', dataFim: '02/02/2026',totalCalorias: 120, medicoes: [{calorias: 120, data: '01/02/2026'}]},
-        {id: 2, nome: 'Refeição 2', dataInicio: '02/02/2026', dataFim: '03/02/2026',totalCalorias: 150, medicoes: [{calorias: 150, data: '02/02/2026'}]},
-    ]);
-    const [relatorioPeso, setRelatorioPeso] = useState([
-        {id: 1, nome: 'Peso 1', dataInicio: '01/02/2026', dataFim: '02/02/2026', medicoes: [{peso: 70, data: '01/02/2026'}, {peso: 68, data: '02/02/2026'}]},
-    ]);
-    const [planoConsumo, setPlanoConsumo] = useState(
-        {
-            "kcal": {
-                "planejado": "2000.00",
-                "consumido": "1850.50",
-                "diferenca": "-149.50",
-                "status": "abaixo"
-            },
-            "carboidratos": {
-                "planejado": "3500.00",
-                "consumido": "800.50",
-                "diferenca": "-149.50",
-                "status": "abaixo"
-            }
-        }
-    );
-    
+    const [glicemia, setGlicemia] = useState([]);
+    const [peso, setPeso] = useState([]);
+    const [relatorioRefeicao, setRelatorioRefeicao] = useState([]);
+    const [relatorioPeso, setRelatorioPeso] = useState([]);
+    const [planoConsumo, setPlanoConsumo] = useState([]);
+
     const [modalRefeicao, setModalRefeicao] = useState(false);
     const [relatorioRefeicaoSelecionado, setRelatorioRefeicaoSelecionado] = useState(null);
 
@@ -50,44 +22,38 @@ export default function Relatorios() {
 
     async function buscarDadosPorTempo() {
         try {
-            const response = await api.get(`/relatorios/${tipoSelecao}`);
-
-            const data = response.data;
+            const response = await fetch(`http://localhost:3000/relatorios/${tipoSelecao}`);
+            const data = await response.json();
             setGlicemia(data.glicemia);
             setPeso(data.peso);
             console.log(data);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error.response);
+            console.error('Erro ao buscar dados:', error);
         }
     }
 
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await api.get('/relatorios');
-
-            const data = response.data;
-            setRelatorioRefeicao(data.relatoriosRefeicao ? data.relatoriosRefeicao : []);
-            setRelatorioPeso(data.relatoriosPeso ? data.relatoriosPeso : []);
-            setGlicemia(data.glicemia ? data.glicemia : []);
-            setPeso(data.peso ? data.peso : []);
+            const response = await fetch('http://localhost:3000/relatorios');
+            const data = await response.json();
+            setRelatorioRefeicao(data.relatoriosRefeicao);
+            setRelatorioPeso(data.relatoriosPeso);
+            setGlicemia(data.glicemia);
+            setPeso(data.peso);
             console.log(data);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error.response);
+            console.error('Erro ao buscar dados:', error);
         }
     };
     const buscarPlanoConsumo = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/comparacao/plano-consumo');
-            if (!response.ok) {
-                console.log(response);
-                throw new Error('Erro ao buscar dados');
-            }
+            const response = await fetch('http://localhost:3000/comparacao/plano-consumo');
             const data = await response.json();
             setPlanoConsumo(data);
             console.log(data);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error.response);
+            console.error('Erro ao buscar dados:', error);
         }
     };
 
@@ -115,7 +81,7 @@ export default function Relatorios() {
     };
 
     const abrirModalRefeicao = (index) => {
-        setRelatorioRefeicaoSelecionado(relatorioRefeicao[index]); 
+        setRelatorioRefeicaoSelecionado(relatorioRefeicao[index]); // Aqui você passaria o item clicado real
         setModalRefeicao(true);
     };
 
@@ -132,20 +98,14 @@ export default function Relatorios() {
 
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <h2 className="page-title">Relatório Geral</h2>
+                <button className="btn btn-primary">Emitir Relatório</button>
             </div>
 
             <div className="card">
                 <h3>Relatórios de refeição</h3>
                 {relatorioRefeicao.length > 0 ? 
                 <div className="number-badges">
-                    {
-                        relatorioRefeicao.map(
-                            (relatorio, i) => 
-                            <div key={i} className="badge" onClick={() => abrirModalRefeicao(i)}>
-                                {relatorio.nome} - {i + 1}°
-                            </div>
-                        )
-                    }
+                {relatorioRefeicao.map((relatorio, i) => <div key={i} className="badge" onClick={abrirModalRefeicao(i)}>{relatorio.nome} - {i + 1}°</div>)}
                 </div>
                 :
                 <p style={{color: '#999', fontStyle: 'italic'}}>Sem relatorios</p>}
@@ -156,7 +116,7 @@ export default function Relatorios() {
                 <h3>Relatórios de medições</h3>
                 {relatorioPeso.length > 0 ?
                 <div className="number-badges">
-                {relatorioPeso.map((relatorio, i) => <div key={i} className="badge" onClick={() => abrirModalPeso(i)}>{relatorio.nome} - {i + 1}°</div>)}
+                {relatorioPeso.map((relatorio, i) => <div key={i} className="badge">{relatorio.nome} - {i + 1}°</div>)}
                 </div>
                 :
                 <p style={{color: '#999', fontStyle: 'italic'}}>Sem relatorios</p>}
@@ -178,7 +138,7 @@ export default function Relatorios() {
                         {glicemia.length != 0 ? 
                         <ResponsiveContainer width="100%" height="100%" style={{visibility: 'visible'}}>
                             <LineChart data={glicemia} >
-                                <XAxis dataKey="data" />
+                                <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Line type="monotone" dataKey="valor" stroke="#4a6fa5" strokeWidth={3} dot={{r:6}} />
@@ -194,7 +154,7 @@ export default function Relatorios() {
                         {peso.length != 0 ? 
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={peso}>
-                                <XAxis dataKey="data" />
+                                <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Line type="monotone" dataKey="valor" stroke="#814aa5" strokeWidth={3} dot={{r:6}} />
@@ -219,11 +179,21 @@ export default function Relatorios() {
                                 <YAxis />
                                 <Tooltip />
                                 <Line type="step" dataKey="planejado" stroke="#814aa5" strokeWidth={3} dot={false} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div style={{height: '250px', width: 'auto', minWidth: '48%', maxWidth: '100%',margin: '10px', position: 'absolute'}}>
+                        <h4></h4>
+                        
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={transformaEspectativaArray()}>
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
                                 <Line type="step" dataKey="consumido" stroke="#4a79a5" strokeWidth={3} dot={false} />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
-                    
                 </div>
                 :
                 <p style={{color: '#999', fontStyle: 'italic'}}>Sem dados de plano de consumo</p>

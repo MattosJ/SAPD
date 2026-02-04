@@ -39,7 +39,7 @@ export default function RelatorioPesoPopup({ isOpen, onClose, relatorio }) {
           <div className="medicoes-grid">
             {relatorio.medicoes.map((item, index) => (
               <div key={index} className="medicao-card">
-                <span className="medicao-valor">{item.valor} kg</span>
+                <span className="medicao-valor">{item.peso} kg</span>
                 <span className="medicao-data">{item.data}</span>
               </div>
             ))}
@@ -56,11 +56,11 @@ export default function RelatorioPesoPopup({ isOpen, onClose, relatorio }) {
                 <div>
                     <span style={{fontSize: '0.9rem', color: '#666'}}>Média de peso da semana</span>
                     <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#333'}}>
-                        {(relatorio.medicoes.reduce((acc, item) => acc + item.valor, 0) / relatorio.medicoes.length).toFixed(2)} kg
+                        {(relatorio.medicoes.reduce((acc, item) => acc + item.peso, 0) / relatorio.medicoes.length).toFixed(2)} kg
                     </div>
-                    <span style={{fontSize: '0.9rem', color: '#666'}}>{relatorio.medicoes[relatorio.medicoes.length - 1].valor > relatorio.medicoes[0].valor ? 'Ganho de peso' : 'Perda de peso'}</span>
+                    <span style={{fontSize: '0.9rem', color: '#666'}}>{relatorio.medicoes[relatorio.medicoes.length - 1].peso ? 'Ganho de peso' : 'Perda de peso'}</span>
                     <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#333'}}>
-                        {relatorio.medicoes[relatorio.medicoes.length - 1].valor - relatorio.medicoes[0].valor} kg
+                        {relatorio.medicoes[relatorio.medicoes.length - 1].peso - relatorio.medicoes[0].peso} kg
                     </div>
                 </div>
              </div>

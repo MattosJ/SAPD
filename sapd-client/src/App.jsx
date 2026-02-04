@@ -7,19 +7,13 @@ import Relatorios from './pages/Relatorios';
 import Insulina from './pages/Insulina';
 import Refeicoes from './pages/Refeicoes';
 import Medicoes from './pages/Medicoes';
-import Login from './pages/Login';
-import Registro from './pages/Registro';
 import PlanosAlimentares from './pages/PlanosAlimentares';
 import './App.css';
 
 function App() {
   return (
       <Routes>
-        <Route path="/login" element={<Login/>} />
         <Route path="/" element={<Landing />} />
-        <Route path="*" element={<h1>404 | Página Não Encontrada</h1>} />
-        
-        <Route path="/registro" element={<Registro/>} />
         
         {/* Rotas Protegidas (Layout aparece aqui) */}
         <Route element={<PrivateRoute />}>

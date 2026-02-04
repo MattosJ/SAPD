@@ -1,12 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Trash2, Edit, Bell } from 'lucide-react';
-import api from "../services/api";
 import AtualizarInsulinaPopup from '../components/insulina/AtualizarInsulinaPopup';
 
 export default function Insulina() {
-
-  const reloadRef = useRef(false);
-
   const [registros, setRegistros] = useState([
   ]);
   
@@ -24,53 +20,54 @@ export default function Insulina() {
 
   async function deleteRegistro(id) {
     try {
-      await api.delete(`/insulina/${id}`);
+      const response = await fetch(`http://localhost:3000/insulina/${id}`, {
+        method: 'DELETE',
+      });
 
-      setRegistros(registros.filter(r => r.id !== id));
-      
+      if (response.ok) {
+        setRegistros(registros.filter(r => r.id !== id));
+      }
     } catch (error) {
-      console.error('Erro ao deletar registro de insulina:', error.response);
+      console.error('Erro ao deletar registro de insulina:', error);
     }
   }
 
   useEffect(() => {
-    if (reloadRef.current) return;
-    reloadRef.current = true;
-
     const buscarDados = async () => {
-        
         try {
-
-            const response = await api.get('/insulina');
-            const data = response.data;
+            const response = await fetch('http://localhost:3000/insulina');
+            const data = await response.json();
             setRegistros(data);
             console.log(data);
-
         } catch (error) {
-            console.error('Erro ao buscar dados:', error.response);
-        }   
+            console.error('Erro ao buscar dados:', error);
+        }
     };
-    
+
     buscarDados();
   }, [])
 
   async function handleAddRegistro() {
     try {
-      const response = await api.post('/insulina', 
-        {
+      const response = await fetch('http://localhost:3000/insulina', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           tipo: tipoInsulina,
           quantidade_insulina: quantidadeInsulina,
           momento: momento,
           observacoes: observacao,
-        }
-      );
+        }),
+      });
 
       if (response.ok) {
-        const novoRegistro = response.data;
+        const novoRegistro = await response.json();
         setRegistros([...registros, novoRegistro]);
       }
     } catch (error) {
-      console.error('Erro ao adicionar registro de insulina:', error.response);
+      console.error('Erro ao adicionar registro de insulina:', error);
     }
   }
 
@@ -110,7 +107,7 @@ export default function Insulina() {
           {registros.length > 0 ?
           <ul className="history-list">
             {registros.map(reg => (
-              <li key={`${reg.data}-${reg.hora}`} className="history-item">
+              <li key={reg.id} className="history-item">
                 <div>
 
                   <strong>{reg.tipo}</strong> - {reg.quantidadeInsulina}

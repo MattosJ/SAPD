@@ -26,12 +26,9 @@ export default function Selector({ onSelectionChange, alimentos}) {
       }
 
       // Envia para o componente pai (se a função existir)
-      setTimeout(() => {
-        if (onSelectionChange) {
-          onSelectionChange(novoEstado);
-        }
-      }, 0);
-      
+      if (onSelectionChange) {
+        onSelectionChange(novoEstado);
+      }
 
       return novoEstado;
     });

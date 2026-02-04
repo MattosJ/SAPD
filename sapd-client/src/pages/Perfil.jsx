@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
+import api from "../services/api";
 
 export default function Perfil() {
   useEffect(() => {
     const buscarDados = async () => {
         try {
-            const response = await fetch('http://localhost:3000/usuarios/me');
-            const data = await response.json();
+            const response = await api.get('/usuario');
+            console.log(response);
+          
+            const data = response.data;
             setUser({
               nomeCompleto: data.nome_completo,
               email: data.email,
@@ -17,7 +20,7 @@ export default function Perfil() {
             });
             console.log(data);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error);
+            console.log('Erro ao buscar dados:', error.response);
         }
     };
 
@@ -26,12 +29,8 @@ export default function Perfil() {
 
   async function salvarAlteracoes() {
     try {
-      const response = await fetch('http://localhost:3000/usuarios/me', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      await api.post('/usuario',
+        {
           nome_completo: user.nomeCompleto,
           email: user.email,
           senha: user.senha,
@@ -40,22 +39,18 @@ export default function Perfil() {
           altura: user.altura,
           peso: user.peso,
           foto_perfil: ''
-        }),
-      });
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error('Erro ao salvar alterações');
-      }
     } catch (error) {
-      console.error('Erro ao salvar alterações:', error);
+      console.error('Erro ao salvar alterações:', error.response);
     }
   };
 
   // Mock inicial
   const [user, setUser] = useState({
     nomeCompleto: 'José dos Santos Vieira',
-    email: '',
-    senha: '',
+    email: 'jozezinho@gmail.com',
     dataNascimento: '2000-04-10',
     tipoDiabetes: 'Tipo 1',
     altura: '2.10',
@@ -82,7 +77,7 @@ export default function Perfil() {
 
         <div className="form-group">
           <label>Nome completo</label>
-          <input className="input-field" name="nome" value={user.nomeCompleto} onChange={handleChange} style={{textAlign: 'center'}} />
+          <input className="input-field" name="nomeCompleto" value={user.nomeCompleto} onChange={handleChange} style={{textAlign: 'center'}} />
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
@@ -99,7 +94,7 @@ export default function Perfil() {
             <input type="number" className="input-field" name="peso" value={user.peso} onChange={handleChange} style={{textAlign: 'center'}}/>
           </div>
           <div className="form-group" style={{flex: 0.5}}>
-            <label>Tipo de Diabetes</label>
+            <label>Diabetes</label>
             <input type="text" className="input-field" name="tipoDiabetes" value={user.tipoDiabetes} onChange={handleChange} style={{textAlign: 'center'}}/>
           </div>
         </div>
@@ -108,10 +103,6 @@ export default function Perfil() {
           <div className="form-group" style={{flex: 1}}>
             <label>E-mail</label>
             <input type="email" className="input-field" name="email" value={user.email} onChange={handleChange} style={{textAlign: 'center'}} />
-          </div>
-          <div className="form-group" style={{flex: 0.5}}>
-            <label>Senha</label>
-            <input type="password" className="input-field" name="senha" value={user.senha} onChange={handleChange} style={{textAlign: 'center'}}/>
           </div>
         </div>
 

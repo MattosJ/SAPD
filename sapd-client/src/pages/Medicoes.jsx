@@ -84,17 +84,19 @@ export default function Medicoes() {
   }
 
 async function registrarMedicao() {
+  
   if (!valorMedicao) return;
-
+  try{  
+  try{
       await api.post('/glicemia', novaMedicao);
 
-    } catch (error) {
+    }catch (error) {
       console.error('Erro ao registrar medição:', error.response);
     }
 
     const salva = await response.json();
 
-    // ✅ Atualiza UI com retorno real do backend
+    // ✅Atualiza UI com retorno real do backend
     setMedicoes(prev => [...prev, salva]);
 
     setValorMedicao('');

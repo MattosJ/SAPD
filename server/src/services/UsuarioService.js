@@ -28,31 +28,41 @@ class UsuarioService {
   }
 
   async login({ email, senha }) {
-    const usuario = await UsuarioRepository.buscarPorEmail(email);
-    if (!usuario) throw new Error('Usuário não encontrado');
 
-    if (usuario.status_conta !== 'ATIVA') {
-      throw new Error('Conta inativa ou bloqueada');
+    const usuario = await UsuarioRepository.buscarPorEmail(email);
+
+    if (!usuario) {
+      throw new Error('Usuário não encontrado');
     }
 
-    const valido = await bcrypt.compare(senha, usuario.senha);
-    if (!valido) throw new Error('Senha inválida');
+    if (usuario.status_conta !== 'ATIVA') {
+      throw new Error('Conta inativa');
+    }
 
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+
+    if (!senhaValida) {
+      throw new Error('Senha inválida');
+    }
+
+    // GERA TOKEN
     const token = jwt.sign(
       { id: usuario.id },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: process.env.JWT_EXPIRES }
     );
 
     return {
       token,
       usuario: {
         id: usuario.id,
-        nome_completo: usuario.nome_completo,
+        nome: usuario.nome_completo,
         email: usuario.email
       }
     };
   }
+
+
 
   async buscarPerfil(id) {
     const usuario = await UsuarioRepository.buscarPorId(id);

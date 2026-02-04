@@ -17,6 +17,8 @@ import swaggerSpec from './src/docs/swagger.js';
 import refeicaoAlimentosRoutes from './src/routes/refeicaoAlimentos.routes.js';
 import cors from 'cors';
 import fs from 'fs';
+import 'dotenv/config';
+
 
 
 const app = express();

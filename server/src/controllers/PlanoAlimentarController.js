@@ -6,7 +6,7 @@ class PlanoAlimentarController {
     try {
       const plano = await PlanoAlimentarService.criar({
         ...req.body,
-        usuarioId: req.usuarioId
+        usuarioId: req.usuario.id
       });
       return res.status(201).json(plano);
     } catch (error) {
@@ -15,7 +15,7 @@ class PlanoAlimentarController {
   }
 
   async listar(req, res) {
-    const planos = await PlanoAlimentarService.listar(req.usuarioId);
+    const planos = await PlanoAlimentarService.listar(req.usuario.id);
     return res.json(planos);
   }
 }

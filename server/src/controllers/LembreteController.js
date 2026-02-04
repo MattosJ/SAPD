@@ -23,7 +23,7 @@ class LembreteController {
     try {
       await LembreteService.atualizar(
         req.params.id,
-        req.usuarioId,
+        req.usuario.id,
         req.body
       );
       return res.status(204).send();
@@ -33,7 +33,7 @@ class LembreteController {
   }
 
   async excluir(req, res) {
-    await LembreteService.excluir(req.params.id, req.usuarioId);
+    await LembreteService.excluir(req.params.id, req.usuario.id);
     return res.status(204).send();
   }
 }

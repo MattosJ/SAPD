@@ -7,12 +7,12 @@ class ComparacaoController {
 
     const resultado =
       await ComparacaoService.comparar(
-        req.usuarioId,
+        req.usuario.id,
         dataInicio,
         dataFim
       );
       await AlertaService.verificarPlanoConsumo(
-        req.usuarioId,
+        req.usuario.id,
         dataInicio,
         dataFim
 );

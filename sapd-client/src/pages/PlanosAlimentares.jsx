@@ -80,6 +80,7 @@ export default function PlanosAlimentares() {
                 const response = await api.get('/planos-alimentares');
                 const data = response.data;
                 setPlanos(data);
+                console.log('planos');
                 console.log(data);
             } catch (error) {
                 console.error('Erro ao buscar dados:', error.response);

@@ -56,15 +56,28 @@ export default function Refeicoes() {
         refeicao: novaRefeicao
       });
 
-      const novaRefeicao = response.data;
-      setRefeicoes(prev => [...prev, novaRefeicao]);
+      const novaRefeicaoReturn = response.data;
+      setRefeicoes(prev => [...prev, novaRefeicaoReturn]);
       
     } catch (error) {
-      console.error('Erro ao adicionar refeição:', error);
+      console.error('Erro ao adicionar refeição:', error.response);
+    }
+  }
+
+  async function removerRefeicao(id) {
+    try {
+      await api.delete(`/refeicoes/${id}`);
+
+      setRefeicoes(refeicoes.filter(r => r.id !== id));
+      
+    } catch (error) {
+      console.error('Erro ao remover refeição:', error.response);
     }
   }
 
   const handleAlimentosChange = (itensSelecionados) => {
+    console.log('Itens selecionados:');
+      console.log(itensSelecionados)
       setNovaRefeicao(itensSelecionados);
   }
 
@@ -100,6 +113,7 @@ export default function Refeicoes() {
             onClose={() => setModalConfirmacao(false)}
             onConfirm={handleSalvarFinal}
             itens={novaRefeicao}
+            alimentos={alimentos}
           />
         </div>
       </div>
@@ -119,7 +133,7 @@ export default function Refeicoes() {
                   <strong>{ref.tipo}</strong>
                   <br/><small>{transformarHora(ref.data_hora)}</small>
                 </div>
-                <Trash2 size={18} color="red" style={{cursor: 'pointer'}} />
+                <Trash2 onClick={() => removerRefeicao(ref.id)} size={18} color="red" style={{cursor: 'pointer'}} />
               </li>
             ))}
           </ul>

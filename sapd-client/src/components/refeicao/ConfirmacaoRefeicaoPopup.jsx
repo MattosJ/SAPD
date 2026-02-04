@@ -1,32 +1,55 @@
 import { X, Check, Flame, Droplet, Wheat, Dumbbell } from 'lucide-react';
 
-export default function ConfirmacaoRefeicaoPopup({ isOpen, onClose, onConfirm, itens }) {
-  if (!isOpen || !itens || itens.length === 0) return null;
+export default function ConfirmacaoRefeicaoPopup({ isOpen, onClose, onConfirm, itens, alimentos }) {
+  if (!isOpen || !itens || itens.length === 0 || alimentos.length === 0) return null;
 
   // 1. Lógica de Totalização
-  const totais = itens.reduce((acc, item) => {
+  console.log(itens);
+
+  const informacoes = Object
+  .entries(itens)
+  .map(([key, value]) => {
+    const alimento = alimentos.find(a => a.id === parseInt(key));
+    return {
+      nome: alimento.nome,
+      kcal: alimento.kcal,
+      carboidratos: alimento.carboidratos,
+      proteinas: alimento.proteinas,
+      gorduras: alimento.gorduras,
+      vitaminas: alimento.vitaminas,
+      quantidade: value
+    }
+  });
+
+
+  const totais = Object
+  .entries(itens)
+  .map(([key, value]) => ({index: key, quantidade: value}))
+  .reduce((acc, item) => {
     // Multiplica o valor nutricional pela quantidade de itens/porções selecionadas
     const qtd = item.quantidade;
-    
+    let arrayVitaminas = alimentos.find(a => a.id === parseInt(item.index)).vitaminas.split(' ');
+    let stringVitaminas = acc.vitaminasRaw;
+    arrayVitaminas.forEach(v => {
+      if(stringVitaminas.includes(v) === false){
+        stringVitaminas += (stringVitaminas ? ', ' : '') + v;
+      }
+    });
+    const alimento = alimentos.find(a => a.id === parseInt(item.index));
     return {
-      kcal: acc.kcal + (item.kcal * qtd),
-      carb: acc.carb + (item.carboidratos * qtd),
-      prot: acc.prot + (item.proteinas * qtd),
-      gord: acc.gord + (item.gorduras * qtd),
+      kcal: acc.kcal + (alimento.kcal * qtd),
+      carb: acc.carb + (alimento.carboidratos * qtd),
+      prot: acc.prot + (alimento.proteinas * qtd),
+      gord: acc.gord + (alimento.gorduras * qtd),
       // Coleta as strings de vitaminas para tratar depois
-      vitaminasRaw: item.vitaminas ? [...acc.vitaminasRaw, item.vitaminas] : acc.vitaminasRaw
+      
+      vitaminasRaw: stringVitaminas
     };
-  }, { kcal: 0, carb: 0, prot: 0, gord: 0, vitaminasRaw: [] });
+  }, { kcal: 0, carb: 0, prot: 0, gord: 0, vitaminasRaw: "" });
 
   // 2. Lógica para unir e remover vitaminas duplicadas
   // Ex: ["A, B1", "C, A"] vira ["A", "B1", "C"]
-  const listaVitaminas = [...new Set(
-    totais.vitaminasRaw
-      .join(',') // Junta tudo numa string só: "A, B1,C, A"
-      .split(',') // Separa por virgula: ["A", " B1", "C", " A"]
-      .map(v => v.trim()) // Remove espaços: ["A", "B1", "C", "A"]
-      .filter(v => v !== "") // Remove vazios
-  )].sort().join(', ');
+  const listaVitaminas = totais.vitaminasRaw;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -43,9 +66,9 @@ export default function ConfirmacaoRefeicaoPopup({ isOpen, onClose, onConfirm, i
         <div className="modal-body">
           
           {/* Lista de Itens Selecionados */}
-          <h4 className="section-title">Itens Selecionados ({itens.length})</h4>
+          <h4 className="section-title">Itens Selecionados ({informacoes.length})</h4>
           <div className="items-review-list">
-            {itens.map((item, index) => (
+            {informacoes.map((item, index) => (
               <div key={index} className="review-item">
                 <div className="review-info">
                   <strong>{item.nome}</strong>

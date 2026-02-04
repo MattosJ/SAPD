@@ -3,13 +3,15 @@ import db from '../database/connection.js';
 class RefeicaoRepository {
 
   async criar(dados) {
+    const date = new Date();
+    console.log(date);
     const r = await db.query(
       `
       INSERT INTO refeicoes (usuario_id, tipo, data_hora)
       VALUES ($1,$2,$3)
       RETURNING *
       `,
-      [dados.usuario_id, dados.tipo, dados.data_hora]
+      [dados.usuario_id, dados.tipo, date]
     );
     return r.rows[0];
   }

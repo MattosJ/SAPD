@@ -179,7 +179,7 @@ export default function Medicoes() {
                   <div className="pred-column">
                     <span className="pred-label" style={{color: '#8e44ad'}}>Previsto</span>
                     <div className="pred-value-group">
-                      <span className="pred-value">{item.glicemiaPrevista.toFixed(0)}</span>
+                      <span className="pred-value">{item.glicemiaPrevista}</span>
                       <small>mg/dL</small>
                     </div>
                   </div>

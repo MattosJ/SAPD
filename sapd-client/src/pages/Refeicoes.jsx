@@ -6,11 +6,11 @@ import ConfirmacaoRefeicaoPopup from '../components/refeicao/ConfirmacaoRefeicao
 
 export default function Refeicoes() {
   const [refeicoes, setRefeicoes] = useState([
-    {id: 1, desc: 'Café da Manhã', hora: '07:30', carbs: 45},
-    {id: 2, desc: 'Almoço', hora: '12:30', carbs: 70},
+    {id: 1, tipo: 'Café da Manhã', hora: '07:30', carbs: 45},
+    {id: 2, tipo: 'Almoço', hora: '12:30', carbs: 70},
   ]);
 
-  const [novaRefeicao, setNovaRefeicao] = useState([]);
+  const [novaRefeicao, setNovaRefeicao] = useState({tipo: '', alimentos: []});
 
   const [alimentos, setAlimentos] = useState([
     {id: 1, nome: 'Pão Integral', medida: '1 fatia', carboidratos: 12, proteinas: 3, gorduras: 1.5  , kcal: 70, tipo: 'Carboidrato' },
@@ -75,13 +75,12 @@ export default function Refeicoes() {
     }
   }
 
-  const handleAlimentosChange = (itensSelecionados) => {
-    console.log('Itens selecionados:');
-      console.log(itensSelecionados)
-      setNovaRefeicao(itensSelecionados);
+  const handleAlimentosChange = (value, tipo) => {
+      setNovaRefeicao(refeicao => (tipo == 'a' ? { ...refeicao, alimentos: value } : {...refeicao, tipo: value}));
   }
 
   const handleSalvarFinal = () => {
+    console.log(novaRefeicao);
     setModalConfirmacao(false);
     adicionarRefeicao();
   };
@@ -102,9 +101,15 @@ export default function Refeicoes() {
       
       <div className="card">
         <div style={{display: 'flex', gap: '10px'}}>
-          <Selector 
-          alimentos={alimentos}
-          onSelectionChange={handleAlimentosChange} />
+          
+
+          <div style={{width: '100%'}}>
+            <input className="input-field" type="text" placeholder="Descrição" style={{fontSize: '2rem', textAlign: 'center', margin: '20px 0'}} value={novaRefeicao.tipo} onChange={(e) => handleAlimentosChange(e.target.value, 'b')}/>
+
+            <Selector 
+            alimentos={alimentos}
+            onSelectionChange={(value) => handleAlimentosChange(value, 'a')} />
+          </div>
 
           <button className="btn btn-primary" onClick={() => setModalConfirmacao(true)}><Plus size={20}/></button>
 

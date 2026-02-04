@@ -20,7 +20,7 @@ class RegistroInsulinaService {
     };
   }
       async criar(dados) {
-
+  
         const registro = await RegistroInsulinaRepository.criar(dados);
 
         const { data, hora } = formatarDataHora(registro.data_hora);
@@ -50,6 +50,7 @@ class RegistroInsulinaService {
   }
 
   async atualizar(id, usuario_id, dados) {
+    console.log(dados);
     const atualizado = await RegistroInsulinaRepository.atualizar(id, usuario_id, dados);
     if (!atualizado) throw new Error('Registro não encontrado');
     return atualizado;

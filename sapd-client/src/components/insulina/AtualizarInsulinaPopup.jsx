@@ -1,21 +1,25 @@
 import api from "../../services/api";
+import { useState } from 'react';
 import { X } from 'lucide-react';
 export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, atualizarInsulina }) {
   // Se não estiver aberto ou não tiver dados, não renderiza nada (null)
   if (!isOpen || !insulinaData) return null;
 
+  const [insulina, setInsulina] = useState(insulinaData);
+
   async function salvarAlteracoes() {
     try {
+      console.log(insulina);
       await api.put(`/insulina/${insulinaData.id}`, 
         {
-            tipo: insulinaData.tipo,
-            quantidade: insulinaData.quantidadeInsulina,
-            momento: insulinaData.momento,
-            observacoes: insulinaData.observacao
+            tipo: insulina.tipo,
+            quantidade_insulina: insulina.quantidadeInsulina,
+            momento: insulina.momento,
+            observacoes: insulina.observacao
         }
       );
 
-      atualizarInsulina(insulinaData);
+      atualizarInsulina(insulina);
       onClose();
     } catch (error) {
       console.error('Erro ao salvar alterações:', error.response);
@@ -38,16 +42,53 @@ export default function AtualizarInsulinaPopup({ isOpen, onClose, insulinaData, 
         <div className="modal-body">
             <div className="total-box">
                 <label>Tipo</label>
-                <input className="input-field" name="tipo" value={insulinaData.tipo} onChange={(e) => insulinaData.tipo = e.target.value} style={{textAlign: 'center'}} />
+                <input className="input-field" name="tipo" value={insulina.tipo} onChange={
+                  (e) => 
+                    setInsulina(
+                      prev => (
+                        { ...prev, tipo: e.target.value }
+                    )
+                  )
+                }
+
+                 style={{textAlign: 'center'}} />
 
                 <label>Quantidade</label>
-                <input className="input-field" name="quantidade" value={insulinaData.quantidadeInsulina} onChange={(e) => insulinaData.quantidadeInsulina = e.target.value} style={{textAlign: 'center'}} type="number"/>
+                <input className="input-field" name="quantidade" value={insulina.quantidadeInsulina}
+                onChange={
+                  (e) => 
+                    setInsulina(
+                      prev => (
+                        { ...prev, quantidadeInsulina: e.target.value }
+                    )
+                  )
+                } 
+                style={{textAlign: 'center'}} type="number"/>
 
                 <label>Momento</label>
-                <input className="input-field" name="momento" value={insulinaData.momento} onChange={(e) => insulinaData.momento = e.target.value} style={{textAlign: 'center'}} />
+                <input className="input-field" name="momento"
+                value={insulina.momento}
+                onChange={
+                  (e) => 
+                    setInsulina(
+                      prev => (
+                        { ...prev, momento: e.target.value }
+                    )
+                  )
+                }
+                style={{textAlign: 'center'}} />
 
                 <label>Observação</label>
-                <input className="input-field" name="observacao" value={insulinaData.observacao} onChange={(e) => insulinaData.observacao = e.target.value} style={{textAlign: 'center'}} />
+                <input className="input-field" name="observacao" value={insulina.observacao}
+                onChange={
+                  (e) => 
+                    setInsulina(
+                      prev => (
+                        { ...prev, observacao: e.target.value }
+                    )
+                  )
+                }
+                style={{textAlign: 'center'}} />
             </div>
             <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={salvarAlteracoes}>Salvar Alterações</button>
         </div>

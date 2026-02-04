@@ -10,7 +10,7 @@ class RelatorioController {
       
       
       const dados = await RelatorioService.buscarPrincipal(usuarioId);
-      console.log(usuarioId);
+      
       res.json(dados);
     } catch (e) {
       res.status(500).json({ erro: 'Erro ao gerar relatório' });

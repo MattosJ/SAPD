@@ -67,7 +67,7 @@ export default function Insulina() {
 
       
       const novoRegistro = response.data;
-      console.log(response);
+      console.log(response.data);
       setRegistros([...registros, novoRegistro]);
       
     } catch (error) {

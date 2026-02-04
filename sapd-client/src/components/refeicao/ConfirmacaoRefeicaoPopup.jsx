@@ -1,13 +1,13 @@
 import { X, Check, Flame, Droplet, Wheat, Dumbbell } from 'lucide-react';
 
 export default function ConfirmacaoRefeicaoPopup({ isOpen, onClose, onConfirm, itens, alimentos }) {
-  if (!isOpen || !itens || itens.length === 0 || alimentos.length === 0) return null;
+  if (!isOpen || !itens || itens.alimentos.length === 0 || alimentos.length === 0) return null;
 
   // 1. Lógica de Totalização
   console.log(itens);
 
   const informacoes = Object
-  .entries(itens)
+  .entries(itens.alimentos)
   .map(([key, value]) => {
     const alimento = alimentos.find(a => a.id === parseInt(key));
     return {
@@ -23,7 +23,7 @@ export default function ConfirmacaoRefeicaoPopup({ isOpen, onClose, onConfirm, i
 
 
   const totais = Object
-  .entries(itens)
+  .entries(itens.alimentos)
   .map(([key, value]) => ({index: key, quantidade: value}))
   .reduce((acc, item) => {
     // Multiplica o valor nutricional pela quantidade de itens/porções selecionadas

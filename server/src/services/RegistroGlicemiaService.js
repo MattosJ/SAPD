@@ -6,11 +6,6 @@ class RegistroGlicemiaService {
   async criar(dados) {
     const registro = new RegistroGlicemia(dados);
 
-    const dataMedicao = new Date(registro.data_hora);
-    if (dataMedicao > new Date()) {
-      throw new Error('Medição não pode estar no futuro');
-    }
-
     return RegistroGlicemiaRepository.criar(registro);
   }
 
@@ -61,7 +56,7 @@ class RegistroGlicemiaService {
           data_hora: undefined
         };
       });
-    console.log(usuarioId);
+
     return {
       medicoes,
       ultimosRegistros,

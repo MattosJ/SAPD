@@ -4,14 +4,14 @@ class RefeicaoRepository {
 
   async criar(dados) {
     const date = new Date();
-    console.log(date);
+    console.log(dados);
     const r = await db.query(
       `
       INSERT INTO refeicoes (usuario_id, tipo, data_hora)
       VALUES ($1,$2,$3)
       RETURNING *
       `,
-      [dados.usuario_id, dados.tipo, date]
+      [dados.usuario_id, dados.refeicao.tipo, date]
     );
     return r.rows[0];
   }

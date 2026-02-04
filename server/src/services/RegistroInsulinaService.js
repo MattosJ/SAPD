@@ -1,5 +1,6 @@
 import RegistroInsulinaRepository from '../repositories/RegistroInsulinaRepository.js';
 import RegistroInsulina from '../entities/RegistroInsulina.js';
+import { formatarDataHora } from '../utils/formatarDataHora.js';
 
 class RegistroInsulinaService {
   formatar(insulina) {
@@ -18,15 +19,24 @@ class RegistroInsulinaService {
       observacao: insulina.observacoes
     };
   }
-  async criar(dados) {
-    const registro = new RegistroInsulina({
-      ...dados,
-      data_hora: new Date()
-  });
+      async criar(dados) {
 
-  return RegistroInsulinaRepository.criar(registro);
-  }
+        const registro = await RegistroInsulinaRepository.criar(dados);
 
+        const { data, hora } = formatarDataHora(registro.data_hora);
+
+        return {
+          id: registro.id,
+          usuario_id: registro.usuario_id,
+          quantidade_insulina: registro.quantidade_insulina,
+          tipo: registro.tipo,
+          data,
+          hora,
+          momento: registro.momento,
+          observacoes: registro.observacoes
+        };
+
+      }
   async listar(usuario_id) {
   
     const registros = RegistroInsulinaRepository.listarPorUsuario(usuario_id);

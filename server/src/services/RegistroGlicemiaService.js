@@ -1,6 +1,6 @@
 import RegistroGlicemiaRepository from '../repositories/RegistroGlicemiaRepository.js';
 import RegistroGlicemia from '../entities/RegistroGlicemia.js';
-
+import {formatarDataHora} from '../utils/formatarDataHora.js'
 class RegistroGlicemiaService {
 
   async criar(dados) {
@@ -49,10 +49,18 @@ class RegistroGlicemiaService {
       valor: m.valor
     }));
 
-    const predicoes = predicoesDB.map(p => ({
-      data: p.data_hora.toISOString().split('T')[0],
-      valor: p.glicemia_prevista
-    }));
+      const predicoes = predicoesDB.map(p => {
+
+        const { data, hora } = formatarDataHora(p.data_hora);
+
+        return {
+          ...p,
+          data,
+          hora,
+          created_at:undefined,
+          data_hora: undefined
+        };
+      });
     console.log(usuarioId);
     return {
       medicoes,

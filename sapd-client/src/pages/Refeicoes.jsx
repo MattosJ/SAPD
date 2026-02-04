@@ -73,6 +73,16 @@ export default function Refeicoes() {
     adicionarRefeicao();
   };
 
+  function transformarHora(dataHora) {
+    const data = new Date(dataHora);
+    const horas = data.getHours().toString().padStart(2, '0');
+    const minutos = data.getMinutes().toString().padStart(2, '0');
+    const dia = data.getDay().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${horas}:${minutos} - ${dia}/${mes}/${ano}`;
+  }
+
   return (
     <div>
       <h2 className="page-title">Registro de Refeições</h2>
@@ -102,8 +112,12 @@ export default function Refeicoes() {
             {refeicoes.map(ref => (
               <li key={ref.id} className="history-item">
                 <div>
-                  <strong>{ref.desc}</strong>
-                  <br/><small>{ref.hora} - {ref.carbs} Carbs</small>
+                  {
+                  //<strong>{ref.desc}</strong>
+                  //<br/><small>{ref.hora} - {ref.carbs} Carbs</small>
+                  }
+                  <strong>{ref.tipo}</strong>
+                  <br/><small>{transformarHora(ref.data_hora)}</small>
                 </div>
                 <Trash2 size={18} color="red" style={{cursor: 'pointer'}} />
               </li>

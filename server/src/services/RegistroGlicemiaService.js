@@ -44,6 +44,7 @@ class RegistroGlicemiaService {
     }));
 
     const ultimosRegistros = ultimosDB.map(m => ({
+      id: m.id, 
       data: m.data_hora.toISOString().split('T')[0],
       hora: m.data_hora.toTimeString().slice(0,5),
       valor: m.valor

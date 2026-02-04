@@ -1,6 +1,7 @@
 import PredicaoRepository from '../repositories/PredicaoGlicemiaRepository.js';
 import RegistroGlicemiaRepository from '../repositories/RegistroGlicemiaRepository.js';
 import RefeicaoRepository from '../repositories/RefeicaoRepository.js';
+import { formatarDataHora } from '../utils/formatarDataHora.js';
 
 class PredicaoGlicemiaService {
 
@@ -40,7 +41,20 @@ class PredicaoGlicemiaService {
   }
 
   async listar(usuarioId) {
-    return PredicaoRepository.listarPorUsuario(usuarioId);
+    const predicoes = await PredicaoRepository.listarPorUsuario(usuarioId);
+    return predicoes.map(predicao => {
+      const { data, hora } = formatarDataHora(predicao.data_hora);
+
+      return {
+        id: predicao.id,
+        glicemiaPrevista: Number(predicao.glicemia_prevista),
+        data,
+        hora,
+        confirmada: predicao.confirmada,
+        glicemiaReal: predicao.glicemia_real
+      };
+    });
+  
   }
 }
 

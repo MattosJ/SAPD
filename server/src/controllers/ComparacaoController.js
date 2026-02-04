@@ -1,5 +1,5 @@
 import ComparacaoService from '../services/ComparacaoService.js';
-
+import AlertaService from '../services/AlertaService.js';
 class ComparacaoController {
 
   async comparar(req, res) {

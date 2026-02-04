@@ -87,7 +87,7 @@ class RegistroGlicemiaRepository {
 
   async predicoes(usuarioId, dias) {
     const result = await db.query(`
-      SELECT glicemia_prevista, data_hora
+      SELECT *
       FROM predicoes_glicemia
       WHERE usuario_id = $1
       AND data_hora >= NOW() - INTERVAL '${dias} days'

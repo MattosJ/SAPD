@@ -8,4 +8,9 @@ export function formatarDataHora(dataHoraISO) {
       minute: '2-digit'
     })
   };
+  
+}
+
+export function formatarData(data){
+   return new Date(data).toLocaleDateString('pt-BR');
 }

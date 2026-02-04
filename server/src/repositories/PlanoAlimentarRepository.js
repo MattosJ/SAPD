@@ -49,6 +49,17 @@ class PlanoAlimentarRepository {
     );
     return result.rows;
   }
+  async listarRefeicoes(plano_id){
+      const result = await db.query(`
+          SELECT *
+          FROM refeicoes
+          WHERE id = $1
+          ORDER BY data_hora
+      `,[plano_id]);
+
+      return result.rows;
+    }
+
 }
 
 export default new PlanoAlimentarRepository();

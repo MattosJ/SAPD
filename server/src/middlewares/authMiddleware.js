@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import UsuarioRepository from '../repositories/UsuarioRepository.js';
 
 // teste
-const DISABLE_AUTH = false;
+const DISABLE_AUTH = true;
 
 export default async function authMiddleware(req, res, next) {
 

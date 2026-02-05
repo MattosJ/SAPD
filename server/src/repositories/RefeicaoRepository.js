@@ -3,17 +3,42 @@ import db from '../database/connection.js';
 class RefeicaoRepository {
 
   async criar(dados) {
-    const date = new Date();
-    console.log(dados);
-    const r = await db.query(
-      `
-      INSERT INTO refeicoes (usuario_id, tipo, data_hora)
-      VALUES ($1,$2,$3)
-      RETURNING *
-      `,
-      [dados.usuario_id, dados.refeicao.tipo, date]
-    );
-    return r.rows[0];
+        const data = new Date();
+        // cria refeição
+        const refeicao = await db.query(
+          `
+          INSERT INTO refeicoes (usuario_id, tipo, data_hora)
+          VALUES ($1,$2,$3)
+          RETURNING *
+          `,
+          [dados.usuario_id, dados.refeicao.tipo, data]
+        );
+
+        const refeicaoCriada = refeicao.rows[0];
+
+
+        if (dados.refeicao.alimentos && dados.refeicao.alimentos.length > 0) {
+          Object.entries(dados.refeicao.alimentos).forEach(async ([key, value]) => {
+            
+
+              await db.query(
+                `
+                INSERT INTO refeicao_alimentos
+                (refeicao_id, alimento_id, quantidade)
+                VALUES ($1,$2,$3)
+                `,
+                [
+                  refeicaoCriada.id,
+                  key,
+                  value
+                ]
+              );
+
+            }
+          );
+        }
+
+        return refeicaoCriada;
   }
 
   async listarPorUsuario(usuario_id) {

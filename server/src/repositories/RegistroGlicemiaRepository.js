@@ -75,7 +75,7 @@ class RegistroGlicemiaRepository {
 
   async ultimosRegistros(usuarioId) {
     const result = await db.query(`
-      SELECT valor, data_hora
+      SELECT id ,valor, data_hora
       FROM registros_glicemia
       WHERE usuario_id = $1
       ORDER BY data_hora DESC

@@ -7,5 +7,6 @@ router.use(authMiddleware);
 
 router.post('/', PlanoAlimentarController.criar);
 router.get('/', PlanoAlimentarController.listar);
+router.delete('/:id',PlanoAlimentarController.excluir);
 
 export default router;

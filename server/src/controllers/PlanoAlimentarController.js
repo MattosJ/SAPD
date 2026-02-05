@@ -15,9 +15,26 @@ class PlanoAlimentarController {
   }
 
   async listar(req, res) {
-    const planos = await PlanoAlimentarService.listar(req.usuario.id);
-    return res.json(planos);
-  }
+        const planos = await PlanoAlimentarService.listar(req.usuario.id);
+        return res.json(planos);
+      }
+      async excluir(req, res) {
+      try {
+
+        const { id } = req.params;
+
+        const resposta = await PlanoAlimentarService.excluir(
+          id,
+          req.usuario.id
+        );
+
+        res.json(resposta);
+
+      } catch (e) {
+        res.status(400).json({ erro: e.message });
+      }
+    }
+
 }
 
 export default new PlanoAlimentarController();

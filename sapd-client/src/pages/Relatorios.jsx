@@ -78,12 +78,10 @@ export default function Relatorios() {
     };
     const buscarPlanoConsumo = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/comparacao/plano-consumo');
-            if (!response.ok) {
-                console.log(response);
-                throw new Error('Erro ao buscar dados');
-            }
-            const data = await response.json();
+            
+            const response = await api.get('/comparacao/plano-consumo');
+            
+            const data = response.data;
             setPlanoConsumo(data);
             console.log(data);
         } catch (error) {

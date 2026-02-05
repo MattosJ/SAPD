@@ -33,6 +33,7 @@ class RegistroInsulinaController {
 
   async atualizar(req, res) {
     try {
+      console.log(req.body);
       const registro = await RegistroInsulinaService.atualizar(
         req.params.id,
         req.usuario.id,

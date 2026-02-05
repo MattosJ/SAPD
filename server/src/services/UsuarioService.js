@@ -88,7 +88,7 @@ class UsuarioService {
 
     await UsuarioRepository.salvarTokenRecuperacao(usuario.id, token, expira);
 
-    console.log(`🔑 Token recuperação: ${token}`);
+   
     return { mensagem: 'Token de recuperação gerado' };
   }
 

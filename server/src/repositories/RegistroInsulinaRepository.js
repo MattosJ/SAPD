@@ -21,7 +21,7 @@ class RegistroInsulinaRepository {
         dados.usuario_id,
         dados.quantidade_insulina,
         dados.tipo,
-        dados.data_hora,
+        new Date(),
         dados.momento,
         dados.observacoes
       ]
@@ -72,15 +72,15 @@ class RegistroInsulinaRepository {
   }
 
   async atualizar(id, usuario_id, dados) {
+    
     const result = await db.query(
       `
       UPDATE registros_insulina
       SET quantidade_insulina = $1,
           tipo = $2,
-          data_hora = $3,
-          momento = $4,
-          observacoes = $5
-      WHERE id = $6 AND usuario_id = $7
+          momento = $3,
+          observacoes = $4
+      WHERE id = $5 AND usuario_id = $6
       RETURNING
         id,
         usuario_id,
@@ -93,7 +93,6 @@ class RegistroInsulinaRepository {
       [
         dados.quantidade_insulina,
         dados.tipo,
-        dados.data_hora,
         dados.momento,
         dados.observacoes,
         id,

@@ -65,10 +65,11 @@ export default function Insulina() {
         }
       );
 
-      if (response.ok) {
-        const novoRegistro = response.data;
-        setRegistros([...registros, novoRegistro]);
-      }
+      
+      const novoRegistro = response.data;
+      console.log(response.data);
+      setRegistros([...registros, novoRegistro]);
+      
     } catch (error) {
       console.error('Erro ao adicionar registro de insulina:', error.response);
     }

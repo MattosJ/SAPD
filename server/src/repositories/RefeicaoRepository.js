@@ -3,7 +3,7 @@ import db from '../database/connection.js';
 class RefeicaoRepository {
 
   async criar(dados) {
-
+        const data = new Date();
         // cria refeição
         const refeicao = await db.query(
           `
@@ -11,30 +11,31 @@ class RefeicaoRepository {
           VALUES ($1,$2,$3)
           RETURNING *
           `,
-          [dados.usuario_id, dados.tipo, dados.data_hora]
+          [dados.usuario_id, dados.refeicao.tipo, data]
         );
 
         const refeicaoCriada = refeicao.rows[0];
 
 
-        if (dados.alimentos && dados.alimentos.length > 0) {
-          for (const alimento of dados.alimentos) {
+        if (dados.refeicao.alimentos && dados.refeicao.alimentos.length > 0) {
+          Object.entries(dados.refeicao.alimentos).forEach(async ([key, value]) => {
+            
 
-            await db.query(
-              `
-              INSERT INTO refeicao_alimentos
-              (refeicao_id, alimento_id, quantidade)
-              VALUES ($1,$2,$3)
-              `,
-              [
-                refeicaoCriada.id,
-                alimento.id,
-                alimento.quantidade
-              ]
-            );
+              await db.query(
+                `
+                INSERT INTO refeicao_alimentos
+                (refeicao_id, alimento_id, quantidade)
+                VALUES ($1,$2,$3)
+                `,
+                [
+                  refeicaoCriada.id,
+                  key,
+                  value
+                ]
+              );
 
-          }
-
+            }
+          );
         }
 
         return refeicaoCriada;

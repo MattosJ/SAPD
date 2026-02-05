@@ -26,7 +26,7 @@ export default function FormLogin() {
         keepLogin,
       });
 
-      const data = await response.json();
+      const data = await response.data;
       localStorage.setItem('token_usuario', data.token);
 
       navigate('/perfil');

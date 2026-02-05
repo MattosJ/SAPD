@@ -14,9 +14,9 @@ export default function Medicoes() {
     { hora: '05:55', data: '01/02/2026', valor: 0 }
   ]);
 
-  const [valorMedicao, setValorMedicao] = useState(undefined);
-  const [momentoMedicao, setMomentoMedicao] = useState(undefined);
-  const [observacaoMedicao, setObservacaoMedicao] = useState(undefined);
+  const [valorMedicao, setValorMedicao] = useState('');
+  const [momentoMedicao, setMomentoMedicao] = useState('');
+  const [observacaoMedicao, setObservacaoMedicao] = useState('');
 
   const [predicoes, setPredicoes] = useState([
     { data: '2024-01-01',confirmacao: false, glicemiaPrevista: 540, glicemia_real: 200 },
@@ -38,11 +38,6 @@ export default function Medicoes() {
     } catch (error) {
       console.error('Erro ao registrar predição:', error.response);
     }
-  };
-
-
-  const definirMedicao = (e) => {
-    setValorMedicao(e.target.value);
   };
 
 
@@ -111,7 +106,7 @@ export default function Medicoes() {
       <div className="grid-2">
         <div className="card">
           <h3>Nova Medição</h3>
-          <input className="input-field" type="number" placeholder="Valor mg/dL" style={{fontSize: '2rem', textAlign: 'center', margin: '20px 0'}} value={valorMedicao} onChange={definirMedicao}/>
+          <input className="input-field" type="number" placeholder="Valor mg/dL" style={{fontSize: '2rem', textAlign: 'center', margin: '20px 0'}} value={valorMedicao} onChange={(e) => setValorMedicao(e.target.value)}/>
 
           <input className="input-field" type="text" placeholder="Momento (ex: Jejum, Pós-refeição)" style={{fontSize: '1rem', textAlign: 'center'}} value={momentoMedicao} onChange={(e) => setMomentoMedicao(e.target.value)} />
 
@@ -125,7 +120,7 @@ export default function Medicoes() {
            <ul className="history-list">
               {ultimosRegistros.map((item, index) => (
                 <li key={index} className="history-item">
-                  <span>{item.hora} - {item.data}</span> <strong>{item.valor} mg/dL</strong>
+                  <span>{item.data.split('-').reverse().join('/')} | {item.hora}</span> <strong>{item.valor} mg/dL</strong>
                   <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteMedicao(item.id)}><Trash2 size={16} /></button>
                 </li>
               ))}
@@ -179,7 +174,7 @@ export default function Medicoes() {
                   <div className="pred-column">
                     <span className="pred-label" style={{color: '#8e44ad'}}>Previsto</span>
                     <div className="pred-value-group">
-                      <span className="pred-value">{item.glicemiaPrevista.toFixed(0)}</span>
+                      <span className="pred-value">{item.glicemia_prevista}</span>
                       <small>mg/dL</small>
                     </div>
                   </div>

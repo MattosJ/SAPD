@@ -5,23 +5,15 @@ import api from "../services/api";
 
 export default function Medicoes() {
 
-  const [medicoes, setMedicoes] = useState([
-    {data: '05/02/2026', valor: 50},
-    {data: '08/02/2026', valor: 78},
-  ]);
+  const [medicoes, setMedicoes] = useState([]);
 
-  const [ultimosRegistros, setUltimosRegistros] = useState([
-    { hora: '05:55', data: '01/02/2026', valor: 0 }
-  ]);
+  const [ultimosRegistros, setUltimosRegistros] = useState([]);
 
   const [valorMedicao, setValorMedicao] = useState('');
   const [momentoMedicao, setMomentoMedicao] = useState('');
   const [observacaoMedicao, setObservacaoMedicao] = useState('');
 
-  const [predicoes, setPredicoes] = useState([
-    { data: '2024-01-01',confirmacao: false, glicemiaPrevista: 540, glicemia_real: 200 },
-    { data: '2024-01-02', confirmacao: false, glicemiaPrevista: 480, glicemia_real: 0 },
-  ]);
+  const [predicoes, setPredicoes] = useState([]);
 
 
   const confirmarPredicao = (id) => async () => {

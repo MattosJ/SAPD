@@ -3,11 +3,15 @@ import {formatarData, formatarDataHora} from '../utils/formatarDataHora.js';
 class PlanoAlimentarService {
 
   async criar(dados) {
+    console.log(dados);
     const plano = await PlanoAlimentarRepository.criarPlano(dados);
 
     for (const refeicao of dados.refeicoes) {
       const refeicaoCriada =
         await PlanoAlimentarRepository.criarRefeicao(plano.id, refeicao);
+
+        console.log(refeicaoCriada);
+
 
       for (const alimento of refeicao.alimentos) {
         await PlanoAlimentarRepository.adicionarAlimento(

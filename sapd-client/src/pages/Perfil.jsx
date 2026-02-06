@@ -29,11 +29,10 @@ export default function Perfil() {
 
   async function salvarAlteracoes() {
     try {
-      await api.post('/usuario',
+      await api.put('/usuario/me',
         {
           nome_completo: user.nomeCompleto,
           email: user.email,
-          senha: user.senha,
           data_nascimento: user.dataNascimento,
           tipo_diabetes: user.tipoDiabetes,
           altura: user.altura,
@@ -57,9 +56,7 @@ export default function Perfil() {
     peso: '75'
   });
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+ 
 
   return (
     <div>
@@ -77,32 +74,71 @@ export default function Perfil() {
 
         <div className="form-group">
           <label>Nome completo</label>
-          <input className="input-field" name="nomeCompleto" value={user.nomeCompleto} onChange={handleChange} style={{textAlign: 'center'}} />
+          <input className="input-field" name="nomeCompleto"
+          value={user.nomeCompleto}
+          onChange={
+            (e) => setUser(
+              antigo => (
+                {...antigo, nomeCompleto: e.target.value}
+              )
+            )
+          }
+          style={{textAlign: 'center'}} />
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
           <div className="form-group" style={{flex: 1}}>
             <label>Data Nascimento</label>
-            <input type="date" className="input-field" name="nascimento" value={user.dataNascimento} onChange={handleChange} style={{textAlign: 'center'}} />
+            <input type="date" className="input-field" name="nascimento" value={user.dataNascimento} onChange={
+            (e) => setUser(
+              antigo => (
+                {...antigo, dataNascimento: e.target.value}
+              )
+            )
+          } style={{textAlign: 'center'}} />
           </div>
           <div className="form-group" style={{flex: 0.5}}>
             <label>Altura (m)</label>
-            <input type="number" className="input-field" name="altura" value={user.altura} onChange={handleChange} style={{textAlign: 'center'}}/>
+            <input type="number" className="input-field" name="altura" value={user.altura} onChange={
+            (e) => setUser(
+              antigo => (
+                {...antigo, altura: e.target.value}
+              )
+            )
+          } style={{textAlign: 'center'}}/>
           </div>
           <div className="form-group" style={{flex: 0.5}}>
             <label>Peso (Kg)</label>
-            <input type="number" className="input-field" name="peso" value={user.peso} onChange={handleChange} style={{textAlign: 'center'}}/>
+            <input type="number" className="input-field" name="peso" value={user.peso} onChange={
+            (e) => setUser(
+              antigo => (
+                {...antigo, peso: e.target.value}
+              )
+            )
+          } style={{textAlign: 'center'}}/>
           </div>
           <div className="form-group" style={{flex: 0.5}}>
             <label>Diabetes</label>
-            <input type="text" className="input-field" name="tipoDiabetes" value={user.tipoDiabetes} onChange={handleChange} style={{textAlign: 'center'}}/>
+            <input type="text" className="input-field" name="tipoDiabetes" value={user.tipoDiabetes} onChange={
+            (e) => setUser(
+              antigo => (
+                {...antigo, tipoDiabetes: e.target.value}
+              )
+            )
+          } style={{textAlign: 'center'}}/>
           </div>
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
           <div className="form-group" style={{flex: 1}}>
             <label>E-mail</label>
-            <input type="email" className="input-field" name="email" value={user.email} onChange={handleChange} style={{textAlign: 'center'}} />
+            <input type="email" className="input-field" name="email" value={user.email} onChange={
+            (e) => setUser(
+              antigo => (
+                {...antigo, email: e.target.value}
+              )
+            )
+          } style={{textAlign: 'center'}} />
           </div>
         </div>
 

@@ -37,6 +37,7 @@ export default function PlanosAlimentares() {
 
     const handleSalvarPlano = async (novoPlano) => {
         try {
+            console.log(novoPlano);
             await api.post('/planos-alimentares', novoPlano);
             
             // Simulando adição na lista local

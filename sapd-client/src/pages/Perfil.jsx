@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import api from "../services/api";
+import ConfirmPopup from '../components/layout/ConfirmPopup';
 
 export default function Perfil() {
+  const [modalConfirmacao, setModalConfirmacao] = useState(false);
+
   useEffect(() => {
     const buscarDados = async () => {
         try {
@@ -46,20 +49,27 @@ export default function Perfil() {
     }
   };
 
-  // Mock inicial
+  
   const [user, setUser] = useState({
-    nomeCompleto: 'José dos Santos Vieira',
-    email: 'jozezinho@gmail.com',
-    dataNascimento: '2000-04-10',
-    tipoDiabetes: 'Tipo 1',
-    altura: '2.10',
-    peso: '75'
+    nomeCompleto: '',
+    email: '',
+    dataNascimento: '',
+    tipoDiabetes: '',
+    altura: '',
+    peso: ''
   });
 
  
 
   return (
     <div>
+      <ConfirmPopup
+        isOpen={modalConfirmacao}
+        onClose={() => setModalConfirmacao(false)}
+        onConfirm={() => salvarAlteracoes}
+        msg={'Foram modificados dados importantes do seu perfil, realmente deseja fazer essa alteração?'}
+        titulo={'Alterar Dados de perfil'}
+      />
       <h2 className="page-title">Perfil</h2>
       <div className="card" style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
         
@@ -142,7 +152,7 @@ export default function Perfil() {
           </div>
         </div>
 
-        <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={salvarAlteracoes}>Salvar Alterações</button>
+        <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={() => setModalConfirmacao(true)}>Salvar Alterações</button>
       </div>
     </div>
   );

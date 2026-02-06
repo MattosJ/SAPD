@@ -146,12 +146,6 @@ export default function Refeicoes() {
           <p style={{color: '#999', fontStyle: 'italic'}}>Nenhuma refeição registrada.</p>
           }
         </div>
-        
-        <div className="card">
-          <h3>Lembretes de Alimentação</h3>
-          <p style={{color: '#999', fontStyle: 'italic'}}>Nenhum lembrete ativo.</p>
-          <button className="btn btn-primary" style={{marginTop: '10px'}}>+ Novo Lembrete</button>
-        </div>
       </div>
     </div>
   );

@@ -15,6 +15,13 @@ body, html, #root { height: 100%; width: 100%; background-color: var(--bg-light)
 body {
   padding: 0 !important;
 }
+
+.container-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 10px;
+}
 /* Layout Grid */
 .app-container { 
   display: flex; height: 100vh; 

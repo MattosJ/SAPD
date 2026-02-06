@@ -2,6 +2,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { Trash2, Check} from 'lucide-react';
 import { useState, useEffect} from 'react';
 import api from "../services/api";
+import ConfirmPopup from '../components/layout/ConfirmPopup';
 
 export default function Medicoes() {
 
@@ -14,6 +15,8 @@ export default function Medicoes() {
   const [observacaoMedicao, setObservacaoMedicao] = useState('');
 
   const [predicoes, setPredicoes] = useState([]);
+
+  const [modalConfirmacao, setModalConfirmacao] = useState(false);
 
 
   const confirmarPredicao = (id) => async () => {
@@ -34,6 +37,7 @@ export default function Medicoes() {
 
 
   const [tipoSelecao, setTipoSelecao] = useState('ano');
+  const [itemSelecionado, setItemSelecionado] = useState(null);
 
   function selecionarTipo(tipo) {
     setTipoSelecao(tipo);
@@ -52,6 +56,11 @@ export default function Medicoes() {
         console.error('Erro ao buscar dados:', error.response);
     }
   };
+
+  const confirmacaoDeletarItem = (id) => {
+    setItemSelecionado(id);
+    setModalConfirmacao(true);
+  }
 
 
   useEffect(() => {
@@ -93,6 +102,14 @@ export default function Medicoes() {
 
   return (
     <div>
+      <ConfirmPopup
+        isOpen={modalConfirmacao}
+        onClose={() => setModalConfirmacao(false)}
+        onConfirm={() => deleteMedicao(itemSelecionado)}
+        msg={'Tem certeza que deseja excluir essa medição?\nEssa ação não poderá ser desfeita.'}
+        titulo={'Excluir Medição Glicônica'}
+      />
+
       <h2 className="page-title">Medição de Glicose</h2>
       
       <div className="grid-2">
@@ -113,7 +130,7 @@ export default function Medicoes() {
               {ultimosRegistros.map((item, index) => (
                 <li key={index} className="history-item">
                   <span>{item.data.split('-').reverse().join('/')} | {item.hora}</span> <strong>{item.valor} mg/dL</strong>
-                  <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteMedicao(item.id)}><Trash2 size={16} /></button>
+                  <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => confirmacaoDeletarItem(item.id)}><Trash2 size={16} /></button>
                 </li>
               ))}
            </ul>

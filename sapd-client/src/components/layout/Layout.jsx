@@ -15,7 +15,14 @@ export default function Layout() {
   const [tema, setTema] = useState(true);
 
   function toggleTema() {
-    setTema(!tema);
+    if(localStorage.getItem('tema') == true){
+      setTema(false);
+      localStorage.setItem('tema', false);
+    } else {
+      setTema(true);
+      localStorage.setItem('tema', true);
+    }
+
     if (tema) {
       document.documentElement.classList.add('dark');
     } else {

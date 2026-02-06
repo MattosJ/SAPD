@@ -18,9 +18,6 @@ export default function Insulina() {
   const [modalAtualizarInsulina, setModalAtualizarInsulina] = useState(false);
   const [insulinaSelecionada, setInsulinaSelecionada] = useState(null);
 
-  const [lembretes, setLembretes] = useState([
-    { id: 1, msg: 'Aplicar Basal', hora: '22:00' }
-  ]);
 
   async function deleteRegistro(id) {
     try {
@@ -76,7 +73,7 @@ export default function Insulina() {
   }
 
   return (
-    <div className="grid-2">
+    <div className="container-flex">
       <AtualizarInsulinaPopup
         isOpen={modalAtualizarInsulina}
         onClose={() => setModalAtualizarInsulina(false)}
@@ -85,87 +82,65 @@ export default function Insulina() {
       />
 
       {/* Coluna da Esquerda: Registros */}
-      <div>
+      <div style={{height: '100%', width: '100%'}}>
         <h2 className="page-title">Aplicação de Insulina</h2>
         
         {/* Formulário de Registro */}
-        <div className="card">
-          <h3>Nova Aplicação</h3>
+        <div className='grid-2' style={{gridTemplateColumns: '0.5fr 1fr'}}>
+          
+          <div className="card" >
+            <h3>Nova Aplicação</h3>
 
-          <div className="grid-2" style={{marginTop: '10px'}}>
-            <input className="input-field" placeholder="Tipo (ex: Basal)" value={tipoInsulina} onChange={(e) => setTipoInsulina(e.target.value)} />
+            <div style={{marginTop: '10px', gap: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              <input className="input-field" placeholder="Tipo (ex: Basal)" value={tipoInsulina} onChange={(e) => setTipoInsulina(e.target.value)} />
 
-            <input className="input-field" placeholder="Quantidade (unidades)" type="number" value={quantidadeInsulina} onChange={(e) => setQuantidadeInsulina(e.target.value)} />
+              <input className="input-field" placeholder="Quantidade (unidades)" type="number" value={quantidadeInsulina} onChange={(e) => setQuantidadeInsulina(e.target.value)} />
 
-            <input className="input-field" placeholder="Momento (ex: Manhã)" value={momento} onChange={(e) => setMomento(e.target.value)} />
+              <input className="input-field" placeholder="Momento (ex: Manhã)" value={momento} onChange={(e) => setMomento(e.target.value)} />
 
-            <input className="input-field" placeholder="Observação" type="text" value={observacao} onChange={(e) => setObservacao(e.target.value)} />
+              <input className="input-field" placeholder="Observação" type="text" value={observacao} onChange={(e) => setObservacao(e.target.value)} />
 
+            </div>
+            <button className="btn btn-primary" style={{marginTop: '10px', width: '100%'}} onClick={handleAddRegistro}>Registrar</button>
           </div>
-          <button className="btn btn-primary" style={{marginTop: '10px', width: '100%'}} onClick={handleAddRegistro}>Registrar</button>
-        </div>
+          
 
-        {/* Histórico */}
-        <div className="card">
-          <h3>Histórico de Aplicações</h3>
-          {registros.length > 0 ?
-          <ul className="history-list">
-            {registros.map(reg => (
-              <li key={`${reg.data}-${reg.hora}`} className="history-item">
-                <div>
+          {/* Histórico */}
+          <div className="card">
+            <h3>Histórico de Aplicações</h3>
+            {registros.length > 0 ?
+            <ul className="history-list">
+              {registros.map(reg => (
+                <li key={`${reg.data}-${reg.hora}`} className="history-item">
+                  <div>
 
-                  <strong>{reg.tipo}</strong> - {reg.quantidadeInsulina}
+                    <strong>{reg.tipo}</strong> - {reg.quantidadeInsulina}
 
-                  <div style={{fontSize: '0.8rem', color: '#777'}}>
-                    {reg.data} às {reg.hora}
+                    <div style={{fontSize: '0.8rem', color: '#777'}}>
+                      {reg.data} às {reg.hora}
+                    </div>
+
+                    <div style={{fontSize: '0.8rem', color: '#777'}}>
+                      <strong> {reg.momento} </strong> - {reg.observacao}
+                    </div>
                   </div>
 
-                  <div style={{fontSize: '0.8rem', color: '#777'}}>
-                    <strong> {reg.momento} </strong> - {reg.observacao}
+                  <div>
+                    <button className="btn" style={{padding: '5px'}} onClick={() => {setInsulinaSelecionada(reg); setModalAtualizarInsulina(true);}}><Edit size={16} /></button>
+
+                    <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteRegistro(reg.id)}><Trash2 size={16} /></button>
+
                   </div>
-                </div>
-
-                <div>
-                  <button className="btn" style={{padding: '5px'}} onClick={() => {setInsulinaSelecionada(reg); setModalAtualizarInsulina(true);}}><Edit size={16} /></button>
-
-                  <button className="btn" style={{padding: '5px', color: 'red'}} onClick={() => deleteRegistro(reg.id)}><Trash2 size={16} /></button>
-
-                </div>
-              </li>
-            ))}
-          </ul>
-          :
-          <p style={{color: '#999', fontStyle: 'italic'}}>Nenhum registro de insulina encontrado.</p>
-          }
+                </li>
+              ))}
+            </ul>
+            :
+            <p style={{color: '#999', fontStyle: 'italic'}}>Nenhum registro de insulina encontrado.</p>
+            }
+          </div>
         </div>
       </div>
 
-      {/* Coluna da Direita: Lembretes */}
-      <div>
-        <h2 className="page-title">Lembretes</h2>
-        <div className="card" style={{borderLeft: '5px solid #f39c12'}}>
-          <h3>Criar Lembrete <Bell size={16}/></h3>
-          <div style={{display: 'flex', gap: '10px', marginTop: '10px'}}>
-            <input className="input-field" type="time" />
-
-            <input className="input-field" placeholder="Descrição" />
-
-          </div>
-          <button className="btn btn-primary" style={{marginTop: '10px'}}>Salvar Lembrete</button>
-        </div>
-
-        <div className="card">
-          <h3>Meus Lembretes</h3>
-          <ul className="history-list">
-            {lembretes.map(lem => (
-              <li key={lem.id} className="history-item">
-                <span>⏰ {lem.hora} - {lem.msg}</span>
-                <Trash2 size={16} style={{cursor: 'pointer', color: '#888'}} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
     </div>
   );
 }

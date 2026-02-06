@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import UsuarioRepository from '../repositories/UsuarioRepository.js';
 
 class UsuarioService {
-
+  //Cadastra o usuario
   async cadastrar(dados) {
     if (dados.data_nascimento) {
       const data = new Date(dados.data_nascimento);
@@ -13,11 +13,13 @@ class UsuarioService {
       }
     }
 
+    //Tipos de diabetes
     const tiposValidos = ['Tipo 1', 'Tipo 2', 'Gestacional'];
     if (dados.tipo_diabetes && !tiposValidos.includes(dados.tipo_diabetes)) {
       throw new Error('Tipo de diabetes inválido');
     }
 
+    //Criptografa a senha
     const senhaHash = await bcrypt.hash(dados.senha, 10);
 
     return UsuarioRepository.criar({
@@ -27,6 +29,7 @@ class UsuarioService {
     });
   }
 
+  
   async login({ email, senha }) {
 
     const usuario = await UsuarioRepository.buscarPorEmail(email);

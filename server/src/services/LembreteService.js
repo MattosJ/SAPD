@@ -3,6 +3,7 @@ import LembreteRepository from '../repositories/LembreteRepository.js';
 
 class LembreteService {
 
+  //Cria o lembrete
   async criar(dados) {
     const agora = new Date();
     const dataLembrete = new Date(dados.data_hora);
@@ -20,10 +21,12 @@ class LembreteService {
     return LembreteRepository.criar(dados);
   }
 
+  //Lista todos lembretes do usuario
   async listar(usuarioId) {
     return LembreteRepository.listarPorUsuario(usuarioId);
   }
 
+  //Atualiza o lembre do usuário
   async atualizar(id, usuarioId, dados) {
 
     if (dados.tipo && !TIPOS_VALIDOS.includes(dados.tipo)) {

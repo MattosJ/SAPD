@@ -208,7 +208,7 @@ export async function initDatabase() {
       id SERIAL PRIMARY KEY,
       plano_id INTEGER NOT NULL,
       tipo VARCHAR(50),
-      horario TIME,
+      horario TIME NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
       CONSTRAINT fk_plano_refeicao

@@ -4,7 +4,8 @@ import RefeicaoRepository from '../repositories/RefeicaoRepository.js';
 import { formatarDataHora } from '../utils/formatarDataHora.js';
 
 class PredicaoGlicemiaService {
-
+  
+  //Busca ás 5 ultimas medições de glicemia 
   async gerar(usuarioId) {
 
     // Últimas 5 medições
@@ -40,6 +41,7 @@ class PredicaoGlicemiaService {
     return PredicaoRepository.confirmar(id, usuarioId, glicemiaReal);
   }
 
+  // Mostra todas ás predições
   async listar(usuarioId) {
     const predicoes = await PredicaoRepository.listarPorUsuario(usuarioId);
     return predicoes.map(predicao => {

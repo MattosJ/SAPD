@@ -2,6 +2,7 @@ import db from '../database/connection.js';
 
 class AlimentoRepository {
 
+  //Adiciona o nomo alimento ao banco de dados
   async criar(dados) {
     const r = await db.query(
       `
@@ -23,11 +24,13 @@ class AlimentoRepository {
     return r.rows[0];
   }
 
+  //Lista todos alimentos por ordem 
   async listar() {
     const r = await db.query('SELECT * FROM alimentos ORDER BY nome');
     return r.rows;
   }
 
+  //Atualiza um alimento específico no banco de dados 
   async atualizar(id, dados) {
     const r = await db.query(
       `

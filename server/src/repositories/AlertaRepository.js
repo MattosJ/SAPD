@@ -2,6 +2,7 @@ import db from '../database/connection.js';
 
 class AlertaRepository {
 
+  //Adiciona um novo alerta ao banco
   async criar(alerta) {
     const result = await db.query(
       `
@@ -19,6 +20,7 @@ class AlertaRepository {
     return result.rows[0];
   }
 
+  //Busca todos alertas de um usuario no banco de dados
   async listar(usuarioId) {
     const result = await db.query(
       `
@@ -32,6 +34,7 @@ class AlertaRepository {
     return result.rows;
   }
 
+  //Marca um alerta especifico como lido
   async marcarComoLido(id, usuarioId) {
     await db.query(
       `

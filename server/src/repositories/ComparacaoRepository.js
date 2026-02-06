@@ -2,6 +2,7 @@ import db from '../database/connection.js';
 
 class ComparacaoRepository {
 
+  //Retorna todos planos calculando o plano 
   async plano(usuarioId, dataInicio, dataFim) {
     const result = await db.query(
       `
@@ -24,6 +25,7 @@ class ComparacaoRepository {
     return result.rows[0];
   }
 
+  // Retorna o consumo calculando o consumo
   async consumo(usuarioId, dataInicio, dataFim) {
     const result = await db.query(
       `

@@ -21,17 +21,19 @@ class RelatorioRepository {
   /* ======================
      PESO – GRÁFICO
   ====================== */
-  async pesoGrafico(usuarioId) {
-    const result = await db.query(`
-      SELECT
-        TO_CHAR(updated_at, 'DD/MM') AS data,
-        peso AS valor
-      FROM usuarios
-      WHERE id = $1
-    `, [usuarioId]);
+async pesoGrafico(usuarioId) {
+  const result = await db.query(`
+    SELECT
+      TO_CHAR(data_hora, 'DD/MM') AS data,
+      peso AS valor
+    FROM registros_peso
+    WHERE usuario_id = $1
+    ORDER BY data_hora
+  `, [usuarioId]);
 
-    return result.rows;
-  }
+  return result.rows;
+}
+
 
   /* ======================
      RELATÓRIO DE REFEIÇÕES
@@ -69,31 +71,34 @@ class RelatorioRepository {
   /* ======================
      RELATÓRIO DE PESO
   ====================== */
-  async relatorioPeso(usuarioId) {
-    const result = await db.query(`
-      SELECT
-        DATE_TRUNC('week', created_at) AS semana,
+async relatorioPeso(usuarioId) {
+  const result = await db.query(`
+    SELECT
+      DATE_TRUNC('week', data_hora) AS semana,
+      COALESCE(
         JSON_AGG(
           JSON_BUILD_OBJECT(
             'valor', peso,
-            'data', TO_CHAR(created_at, 'DD/MM')
+            'data', TO_CHAR(data_hora, 'DD/MM')
           )
-        ) AS medicoes
-      FROM usuarios
-      WHERE id = $1
-      GROUP BY semana
-      ORDER BY semana DESC
-    `, [usuarioId]);
+        ),
+        '[]'
+      ) AS medicoes
+    FROM registros_peso
+    WHERE usuario_id = $1
+    GROUP BY semana
+    ORDER BY semana DESC
+  `, [usuarioId]);
 
-    return result.rows.map((row, index) => ({
-      nome: `Semana ${index + 1}`,
-      dataInicio: row.semana,
-      dataFim: new Date(
-        new Date(row.semana).setDate(new Date(row.semana).getDate() + 6)
-      ),
-      medicoes: row.medicoes
-    }));
-  }
+  return result.rows.map((row, index) => ({
+    nome: `Semana ${index + 1}`,
+    dataInicio: row.semana,
+    dataFim: new Date(
+      new Date(row.semana).setDate(new Date(row.semana).getDate() + 6)
+    ),
+    medicoes: row.medicoes
+  }));
+}
 
   /* ======================
      FILTRO POR TEMPO
@@ -116,21 +121,23 @@ class RelatorioRepository {
     return result.rows;
   }
 
-  async pesoPorTempo(usuarioId, tipo) {
-    let intervalo = '1 year';
-    if (tipo === 'mes') intervalo = '1 month';
-    if (tipo === 'meses') intervalo = '3 months';
+async pesoPorTempo(usuarioId, tipo) {
+  let intervalo = '1 year';
+  if (tipo === 'mes') intervalo = '1 month';
+  if (tipo === 'meses') intervalo = '3 months';
 
-    const result = await db.query(`
-      SELECT
-        TO_CHAR(updated_at, 'DD/MM') AS name,
-        peso AS valor
-      FROM usuarios
-      WHERE id = $1
-    `, [usuarioId]);
+  const result = await db.query(`
+    SELECT
+      TO_CHAR(data_hora, 'DD/MM') AS name,
+      peso AS valor
+    FROM registros_peso
+    WHERE usuario_id = $1
+      AND data_hora >= NOW() - INTERVAL '${intervalo}'
+    ORDER BY data_hora
+  `, [usuarioId]);
 
-    return result.rows;
-  }
+  return result.rows;
+}
 
 
 

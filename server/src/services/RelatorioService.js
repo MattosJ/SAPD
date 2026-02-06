@@ -17,7 +17,7 @@ function separarDataHora(dataHora) {
 }
 
 class RelatorioService {
-
+  //Busca todos dados necessarios para o relatorio, glicemia, refeicoes e peso
   async buscarPrincipal(usuarioId) {
     const glicemia =
       await RelatorioRepository.glicemiaGrafico(usuarioId);
@@ -64,7 +64,7 @@ class RelatorioService {
       relatoriosPeso,
     };
   }
-
+  //Busca insulina por tipo de selção {dia}, {mê}, {ano}
   async buscarPorTempo(usuarioId, tipoSelecao) {
     const glicemia =
       await RelatorioRepository.glicemiaPorTempo(usuarioId, tipoSelecao);

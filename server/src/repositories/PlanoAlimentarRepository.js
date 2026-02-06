@@ -49,13 +49,13 @@ class PlanoAlimentarRepository {
     );
     return result.rows;
   }
-  async listarRefeicoes(plano_id){
+    async listarRefeicoes(planoId){
       const result = await db.query(`
-          SELECT *
-          FROM refeicoes
-          WHERE id = $1
-          ORDER BY data_hora
-      `,[plano_id]);
+          SELECT id, plano_id, tipo, horario 
+          FROM plano_refeicoes
+          WHERE plano_id = $1
+          ORDER BY horario
+      `, [planoId]);
 
       return result.rows;
     }

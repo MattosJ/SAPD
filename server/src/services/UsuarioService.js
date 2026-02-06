@@ -2,9 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import UsuarioRepository from '../repositories/UsuarioRepository.js';
+import PesoRepository from '../repositories/PesoRepository.js';
 
 class UsuarioService {
-
+  //Cadastra o usuario
   async cadastrar(dados) {
     if (dados.data_nascimento) {
       const data = new Date(dados.data_nascimento);
@@ -13,20 +14,30 @@ class UsuarioService {
       }
     }
 
+    //Tipos de diabetes
     const tiposValidos = ['Tipo 1', 'Tipo 2', 'Gestacional'];
     if (dados.tipo_diabetes && !tiposValidos.includes(dados.tipo_diabetes)) {
       throw new Error('Tipo de diabetes inválido');
     }
 
+    //Criptografa a senha
     const senhaHash = await bcrypt.hash(dados.senha, 10);
-
-    return UsuarioRepository.criar({
+    // 🔥 cria usuário
+    const usuario = await UsuarioRepository.criar({
       ...dados,
       senha: senhaHash,
       status_conta: 'ATIVA'
     });
-  }
 
+    
+    if (dados.peso) {
+      await PesoRepository.criar(usuario.id, dados.peso);
+    }
+
+    return usuario;
+    }
+
+  
   async login({ email, senha }) {
 
     const usuario = await UsuarioRepository.buscarPorEmail(email);
@@ -76,7 +87,11 @@ class UsuarioService {
   }
 
   async atualizarPerfil(id, dados) {
-    return UsuarioRepository.atualizar(id, dados);
+    const usuario = await UsuarioRepository.atualizar(id,dados);
+    if (dados.peso) {
+      await PesoRepository.criar(id,dados.peso);
+    }
+    return usuario;
   }
 
   async solicitarRecuperacao(email) {

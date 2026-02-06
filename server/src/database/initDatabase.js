@@ -269,7 +269,7 @@ export async function initDatabase() {
       mensagem TEXT NOT NULL,
       nivel VARCHAR(20) DEFAULT 'info',
       lido BOOLEAN DEFAULT FALSE,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
       CONSTRAINT fk_usuario_alerta
         FOREIGN KEY (usuario_id)
@@ -277,6 +277,20 @@ export async function initDatabase() {
         ON DELETE CASCADE
     );
   `);
+
+  await pool.query(`
+  CREATE TABLE IF NOT EXISTS registros_peso (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER NOT NULL,
+    peso DECIMAL(5,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_peso_usuario
+      FOREIGN KEY (usuario_id)
+      REFERENCES usuarios(id)
+      ON DELETE CASCADE
+  );
+`);
 
   console.log('Tabelas verificadas/criadas com sucesso');
   await pool.end();

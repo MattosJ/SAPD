@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import UsuarioRepository from '../repositories/UsuarioRepository.js';
+import PesoRepository from '../repositories/PesoRepository.js';
 
 class UsuarioService {
   //Cadastra o usuario
@@ -21,13 +22,20 @@ class UsuarioService {
 
     //Criptografa a senha
     const senhaHash = await bcrypt.hash(dados.senha, 10);
-
-    return UsuarioRepository.criar({
+    // 🔥 cria usuário
+    const usuario = await UsuarioRepository.criar({
       ...dados,
       senha: senhaHash,
       status_conta: 'ATIVA'
     });
-  }
+
+    
+    if (dados.peso) {
+      await PesoRepository.criar(usuario.id, dados.peso);
+    }
+
+    return usuario;
+    }
 
   
   async login({ email, senha }) {
@@ -79,7 +87,11 @@ class UsuarioService {
   }
 
   async atualizarPerfil(id, dados) {
-    return UsuarioRepository.atualizar(id, dados);
+    const usuario = await UsuarioRepository.atualizar(id,dados);
+    if (dados.peso) {
+      await PesoRepository.criar(id,dados.peso);
+    }
+    return usuario;
   }
 
   async solicitarRecuperacao(email) {

@@ -2,27 +2,45 @@ import PlanoAlimentarRepository from '../repositories/PlanoAlimentarRepository.j
 import {formatarData, formatarDataHora} from '../utils/formatarDataHora.js';
 class PlanoAlimentarService {
 
-  async criar(dados) {
-    console.log(dados);
-    const plano = await PlanoAlimentarRepository.criarPlano(dados);
+async criar(dados) {
 
-    for (const refeicao of dados.refeicoes) {
-      const refeicaoCriada =
-        await PlanoAlimentarRepository.criarRefeicao(plano.id, refeicao);
+      const plano = await PlanoAlimentarRepository.criarPlano(dados);
 
-        console.log(refeicaoCriada);
+      const refeicoesFormatadas = [];
 
+      for (const refeicao of dados.refeicoes) {
 
-      for (const alimento of refeicao.alimentos) {
-        await PlanoAlimentarRepository.adicionarAlimento(
-          refeicaoCriada.id,
-          alimento
-        );
+        const refeicaoCriada =
+          await PlanoAlimentarRepository.criarRefeicao(plano.id, refeicao);
+
+        // salvar alimentos
+        for (const alimento of refeicao.alimentos) {
+          await PlanoAlimentarRepository.adicionarAlimento(
+            refeicaoCriada.id,
+            alimento
+          );
+        }
+
+        // buscar alimentos já vinculados
+        const alimentosSalvos =
+          await PlanoAlimentarRepository.listarAlimentos(refeicaoCriada.id);
+
+        refeicoesFormatadas.push({
+          id: refeicaoCriada.id,
+          tipo: refeicaoCriada.tipo,
+          horario: refeicaoCriada.horario,
+          alimentos: alimentosSalvos
+        });
       }
-    }
 
-    return plano;
-  }
+      return {
+        id: plano.id,
+        descricao: plano.descricao,
+        data_inicio: formatarData(plano.data_inicio), // usa sua função
+        data_fim: formatarData(plano.data_fim),       // usa sua função
+        refeicoes: refeicoesFormatadas
+      };
+    }
 
 async listar(usuario_id){
 
@@ -60,6 +78,12 @@ async listar(usuario_id){
 
    return resultado;
 }
+    async excluir(planoId, usuarioId) {
+
+      await PlanoAlimentarRepository.excluir(planoId, usuarioId);
+
+      return { mensagem: 'Plano excluído com sucesso' };
+    }
 
 }
 

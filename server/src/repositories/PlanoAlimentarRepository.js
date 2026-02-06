@@ -59,6 +59,43 @@ class PlanoAlimentarRepository {
 
       return result.rows;
     }
+  
+    async listarAlimentos(planoRefeicaoId) {
+        const result = await db.query(`
+              SELECT 
+                a.id,
+                a.nome,
+                pra.quantidade
+              FROM plano_refeicao_alimentos pra
+              JOIN alimentos a ON a.id = pra.alimento_id
+              WHERE pra.plano_refeicao_id = $1
+            `, [planoRefeicaoId]);
+
+            return result.rows;
+          }
+      async excluir(id, usuario_id) {
+
+        await db.query(
+          `DELETE FROM plano_refeicao_alimentos
+          WHERE plano_refeicao_id IN (
+              SELECT id FROM plano_refeicoes WHERE plano_id = $1
+          )`,
+          [id]
+        );
+
+        await db.query(
+          `DELETE FROM plano_refeicoes
+          WHERE plano_id = $1`,
+          [id]
+        );
+
+        await db.query(
+          `DELETE FROM planos_alimentares
+          WHERE id = $1 AND usuario_id = $2`,
+          [id, usuario_id]
+        );
+      }
+
 
 }
 

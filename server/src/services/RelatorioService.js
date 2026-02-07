@@ -1,6 +1,11 @@
 import RelatorioRepository from '../repositories/RelatorioRepository.js';
 
-
+/**
+ * Separa uma data/hora em objetos formatados para exibição.
+ *
+ * @param {Date|string} dataHora - Data e hora original
+ * @returns {{data: string, hora: string}}
+ */
 function separarDataHora(dataHora) {
   const d = new Date(dataHora);
 
@@ -17,8 +22,28 @@ function separarDataHora(dataHora) {
 }
 
 class RelatorioService {
-  //Busca todos dados necessarios para o relatorio, glicemia, refeicoes e peso
+
+  /**
+   * Busca todos os dados principais para montagem do dashboard de relatórios.
+   *
+   * Reúne:
+   * - Dados de glicemia para gráfico
+   * - Dados de peso para gráfico
+   * - Relatórios semanais de refeições
+   * - Relatórios semanais de evolução do peso
+   *
+   * Também realiza formatação de datas para exibição.
+   *
+   * @param {number} usuarioId - ID do usuário autenticado
+   * @returns {Promise<{
+   *   glicemia: Array<{data: string, valor: number}>,
+   *   peso: Array<{data: string, valor: number}>,
+   *   relatoriosRefeicao: Array<Object>,
+   *   relatoriosPeso: Array<Object>
+   * }>}
+   */
   async buscarPrincipal(usuarioId) {
+
     const glicemia =
       await RelatorioRepository.glicemiaGrafico(usuarioId);
 
@@ -64,8 +89,25 @@ class RelatorioService {
       relatoriosPeso,
     };
   }
-  //Busca insulina por tipo de selção {dia}, {mê}, {ano}
+
+  /**
+   * Busca dados de glicemia e peso filtrados por intervalo de tempo.
+   *
+   * Intervalos disponíveis:
+   * - dia
+   * - mes
+   * - meses (últimos 3 meses)
+   * - ano
+   *
+   * @param {number} usuarioId - ID do usuário autenticado
+   * @param {'dia'|'mes'|'meses'|'ano'} tipoSelecao - Tipo de filtro temporal
+   * @returns {Promise<{
+   *   glicemia: Array<{name: string, valor: number}>,
+   *   peso: Array<{name: string, valor: number}>
+   * }>}
+   */
   async buscarPorTempo(usuarioId, tipoSelecao) {
+
     const glicemia =
       await RelatorioRepository.glicemiaPorTempo(usuarioId, tipoSelecao);
 

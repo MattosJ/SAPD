@@ -2,9 +2,12 @@ import db from '../database/connection.js';
 
 class RelatorioRepository {
 
-  /* ======================
-     GLICEMIA – GRÁFICO
-  ====================== */
+  /**
+   * Obtém dados de glicemia para construção de gráfico.
+   *
+   * @param {number} usuarioId - ID do usuário
+   * @returns {Promise<Array<{data: string, valor: number}>>}
+   */
   async glicemiaGrafico(usuarioId) {
     const result = await db.query(`
       SELECT
@@ -18,26 +21,31 @@ class RelatorioRepository {
     return result.rows;
   }
 
-  /* ======================
-     PESO – GRÁFICO
-  ====================== */
-async pesoGrafico(usuarioId) {
-  const result = await db.query(`
-    SELECT
-      TO_CHAR(data_hora, 'DD/MM') AS data,
-      peso AS valor
-    FROM registros_peso
-    WHERE usuario_id = $1
-    ORDER BY data_hora
-  `, [usuarioId]);
+  /**
+   * Obtém dados de peso para construção de gráfico.
+   *
+   * @param {number} usuarioId - ID do usuário
+   * @returns {Promise<Array<{data: string, valor: number}>>}
+   */
+  async pesoGrafico(usuarioId) {
+    const result = await db.query(`
+      SELECT
+        TO_CHAR(data_hora, 'DD/MM') AS data,
+        peso AS valor
+      FROM registros_peso
+      WHERE usuario_id = $1
+      ORDER BY data_hora
+    `, [usuarioId]);
 
-  return result.rows;
-}
+    return result.rows;
+  }
 
-
-  /* ======================
-     RELATÓRIO DE REFEIÇÕES
-  ====================== */
+  /**
+   * Retorna relatório semanal de calorias consumidas nas refeições.
+   *
+   * @param {number} usuarioId - ID do usuário
+   * @returns {Promise<Array<Object>>} Lista de relatórios semanais
+   */
   async relatorioRefeicoes(usuarioId) {
     const result = await db.query(`
       SELECT
@@ -68,41 +76,48 @@ async pesoGrafico(usuarioId) {
     }));
   }
 
-  /* ======================
-     RELATÓRIO DE PESO
-  ====================== */
-async relatorioPeso(usuarioId) {
-  const result = await db.query(`
-    SELECT
-      DATE_TRUNC('week', data_hora) AS semana,
-      COALESCE(
-        JSON_AGG(
-          JSON_BUILD_OBJECT(
-            'valor', peso,
-            'data', TO_CHAR(data_hora, 'DD/MM')
-          )
-        ),
-        '[]'
-      ) AS medicoes
-    FROM registros_peso
-    WHERE usuario_id = $1
-    GROUP BY semana
-    ORDER BY semana DESC
-  `, [usuarioId]);
+  /**
+   * Retorna relatório semanal de evolução do peso.
+   *
+   * @param {number} usuarioId - ID do usuário
+   * @returns {Promise<Array<Object>>} Lista de relatórios semanais
+   */
+  async relatorioPeso(usuarioId) {
+    const result = await db.query(`
+      SELECT
+        DATE_TRUNC('week', data_hora) AS semana,
+        COALESCE(
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'valor', peso,
+              'data', TO_CHAR(data_hora, 'DD/MM')
+            )
+          ),
+          '[]'
+        ) AS medicoes
+      FROM registros_peso
+      WHERE usuario_id = $1
+      GROUP BY semana
+      ORDER BY semana DESC
+    `, [usuarioId]);
 
-  return result.rows.map((row, index) => ({
-    nome: `Semana ${index + 1}`,
-    dataInicio: row.semana,
-    dataFim: new Date(
-      new Date(row.semana).setDate(new Date(row.semana).getDate() + 6)
-    ),
-    medicoes: row.medicoes
-  }));
-}
+    return result.rows.map((row, index) => ({
+      nome: `Semana ${index + 1}`,
+      dataInicio: row.semana,
+      dataFim: new Date(
+        new Date(row.semana).setDate(new Date(row.semana).getDate() + 6)
+      ),
+      medicoes: row.medicoes
+    }));
+  }
 
-  /* ======================
-     FILTRO POR TEMPO
-  ====================== */
+  /**
+   * Obtém registros de glicemia filtrados por período.
+   *
+   * @param {number} usuarioId - ID do usuário
+   * @param {'mes'|'meses'|'ano'} tipo - Intervalo de tempo
+   * @returns {Promise<Array<{name: string, valor: number}>>}
+   */
   async glicemiaPorTempo(usuarioId, tipo) {
     let intervalo = '1 year';
     if (tipo === 'mes') intervalo = '1 month';
@@ -121,59 +136,30 @@ async relatorioPeso(usuarioId) {
     return result.rows;
   }
 
-async pesoPorTempo(usuarioId, tipo) {
-  let intervalo = '1 year';
-  if (tipo === 'mes') intervalo = '1 month';
-  if (tipo === 'meses') intervalo = '3 months';
+  /**
+   * Obtém registros de peso filtrados por período.
+   *
+   * @param {number} usuarioId - ID do usuário
+   * @param {'mes'|'meses'|'ano'} tipo - Intervalo de tempo
+   * @returns {Promise<Array<{name: string, valor: number}>>}
+   */
+  async pesoPorTempo(usuarioId, tipo) {
+    let intervalo = '1 year';
+    if (tipo === 'mes') intervalo = '1 month';
+    if (tipo === 'meses') intervalo = '3 months';
 
-  const result = await db.query(`
-    SELECT
-      TO_CHAR(data_hora, 'DD/MM') AS name,
-      peso AS valor
-    FROM registros_peso
-    WHERE usuario_id = $1
-      AND data_hora >= NOW() - INTERVAL '${intervalo}'
-    ORDER BY data_hora
-  `, [usuarioId]);
-
-  return result.rows;
-}
-
-
-
-
- /*sync resumoGlicemia(usuarioId, dataInicio, dataFim) {
-    const result = await db.query(
-      `
+    const result = await db.query(`
       SELECT
-        COUNT(*) AS total_medicoes,
-        AVG(valor) AS media,
-        MIN(valor) AS minimo,
-        MAX(valor) AS maximo
-      FROM registros_glicemia
+        TO_CHAR(data_hora, 'DD/MM') AS name,
+        peso AS valor
+      FROM registros_peso
       WHERE usuario_id = $1
-        AND data_hora BETWEEN $2 AND $3
-      `,
-      [usuarioId, dataInicio, dataFim]
-    );
-
-    return result.rows[0];
-  }
-
-  async listarMedicoes(usuarioId, dataInicio, dataFim) {
-    const result = await db.query(
-      `
-      SELECT valor, data_hora
-      FROM registros_glicemia
-      WHERE usuario_id = $1
-        AND data_hora BETWEEN $2 AND $3
+        AND data_hora >= NOW() - INTERVAL '${intervalo}'
       ORDER BY data_hora
-      `,
-      [usuarioId, dataInicio, dataFim]
-    );
+    `, [usuarioId]);
 
     return result.rows;
-  }*/
+  }
 }
 
 export default new RelatorioRepository();

@@ -32,7 +32,7 @@ class RegistroInsulinaService {
         return {
           id: registro.id,
           usuario_id: registro.usuario_id,
-          quantidade_insulina: registro.quantidade_insulina,
+          quantidadeInsulina: registro.quantidade_insulina,
           tipo: registro.tipo,
           data,
           hora,

@@ -24,7 +24,7 @@ class PlanoAlimentarService {
 
           // buscar alimentos já vinculados
           const alimentosSalvos =
-            await PlanoAlimentarRepository.listarAlimentos(refeicaoCriada.id);
+            await PlanoAlimentarRepository.listarAlimentosDaRefeicao(refeicaoCriada.id);
 
           refeicoesFormatadas.push({
             id: refeicaoCriada.id,
@@ -49,34 +49,39 @@ class PlanoAlimentarService {
 
       const resultado = [];
 
-      for(const plano of planos){
-          //Busca ás refeições
-          const refeicoes = await PlanoAlimentarRepository.listarRefeicoes(plano.id);
+for (const plano of planos) {
 
-          const dataInicio = formatarData(plano.data_inicio);
-          const dataFim = formatarData(plano.data_fim);
-          /*
-          const refeicoesFormatadas = refeicoes.map(refeicao=>{
-            const { data, hora } = formatarDataHora(refeicao.data_hora);
+  const refeicoes = await PlanoAlimentarRepository.listarRefeicoes(plano.id);
 
-            return {
-                id:refeicao.id,
-                usuario_id: refeicao.usuario_id,
-                tipo: refeicao.tipo,
-                data,
-                hora
-            };
-          });*/
-          resultado.push({
-            id: plano.id,
-            nome: plano.nome,
-            descricao: plano.descricao,
-            data_inicio: dataInicio,
-            data_fim: dataFim,
-            refeicoes: refeicoes
-            
-          });
-      }
+  const dataInicio = formatarData(plano.data_inicio);
+  const dataFim = formatarData(plano.data_fim);
+
+  const refeicoesComAlimentos = [];
+
+  for (const refeicao of refeicoes) {
+
+    // 🔥 busca alimentos da refeição
+    const alimentos =
+      await PlanoAlimentarRepository.listarAlimentosDaRefeicao(refeicao.id);
+
+    refeicoesComAlimentos.push({
+      id: refeicao.id,
+      tipo: refeicao.tipo,
+      horario: refeicao.horario,
+      alimentos
+    });
+  }
+
+  resultado.push({
+    id: plano.id,
+    nome: plano.nome,
+    descricao: plano.descricao,
+    data_inicio: dataInicio,
+    data_fim: dataFim,
+    refeicoes: refeicoesComAlimentos
+  });
+}
+
 
       return resultado;
     }

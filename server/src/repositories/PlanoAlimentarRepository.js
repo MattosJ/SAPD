@@ -60,19 +60,20 @@ class PlanoAlimentarRepository {
       return result.rows;
     }
   
-    async listarAlimentos(planoRefeicaoId) {
-        const result = await db.query(`
-              SELECT 
-                a.id,
-                a.nome,
-                pra.quantidade
-              FROM plano_refeicao_alimentos pra
-              JOIN alimentos a ON a.id = pra.alimento_id
-              WHERE pra.plano_refeicao_id = $1
-            `, [planoRefeicaoId]);
+async listarAlimentosDaRefeicao(refeicaoId) {
+  const result = await db.query(`
+    SELECT
+      a.id,
+      a.nome,
+      a.kcal,
+      pra.quantidade
+    FROM plano_refeicao_alimentos pra
+    JOIN alimentos a ON a.id = pra.alimento_id
+    WHERE pra.plano_refeicao_id = $1
+  `, [refeicaoId]);
 
-            return result.rows;
-          }
+  return result.rows;
+}
       async excluir(id, usuario_id) {
 
         await db.query(

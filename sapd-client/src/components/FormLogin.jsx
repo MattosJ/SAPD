@@ -1,39 +1,57 @@
 import { useState } from "react";
 import DynamicForm from "./FormGenerator";
-import { useNavigate } from 'react-router-dom';
-
-import "../styles/loginForm.css";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "../styles/loginForm.css";
 
 export default function FormLogin() {
   const navigate = useNavigate();
 
-  
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [keepLogin, setKeepLogin] = useState(false);
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async () => {
+    setError("");
+
+    if (!email || !senha) {
+      setError("Preencha todos os campos.");
+      return;
+    }
+
     try {
-      if(!email || !senha) {
-        alert("Por favor, preencha todos os campos.");
-        return;
-      }
-      console.log('chegou aqui');
+      setLoading(true);
+
       const response = await api.post("/usuario/login", {
         email,
         senha,
-        keepLogin,
       });
 
-      const data = await response.data;
-      localStorage.setItem('token_usuario', data.token);
+      const data = response.data;
 
-      navigate('/perfil');
-    } catch (error) {
-      console.error('Erro ao fazer login:', error.response);
+      if (keepLogin) {
+        localStorage.setItem("token_usuario", data.token);
+      } else {
+        sessionStorage.setItem("token_usuario", data.token);
+      }
+
+      navigate("/perfil");
+
+    } catch (err) {
+      // 🔐 Mensagem padrão de credenciais inválidas
+      if (err.response?.status === 401) {
+        setError("E-mail ou senha incorretos.");
+      } else {
+        setError("Erro ao realizar login. Tente novamente.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <DynamicForm
       config={{
@@ -73,8 +91,20 @@ export default function FormLogin() {
             to: "/recuperar-acesso",
           },
         ],
-        onSubmit: () => handleLogin()
+        onSubmit: handleLogin,
       }}
-    />
+    >
+      {error && (
+        <p style={{ color: "red", marginTop: 10 }}>
+          {error}
+        </p>
+      )}
+
+      {loading && (
+        <p style={{ marginTop: 10 }}>
+          Entrando...
+        </p>
+      )}
+    </DynamicForm>
   );
-};
+}

@@ -6,7 +6,7 @@ const adminPool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  database: process.env.DB_NAME_P,
   port: process.env.DB_PORT
 });
 
@@ -283,7 +283,7 @@ export async function initDatabase() {
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER NOT NULL,
     peso DECIMAL(5,2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_peso_usuario
       FOREIGN KEY (usuario_id)

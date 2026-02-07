@@ -3,6 +3,7 @@ import { Plus, Trash2, Eye, Calendar } from 'lucide-react';
 import api from "../services/api";
 import CriarPlanoPopup from '../components/plano/CriarPlanoPopup';
 import DetalhesPlanoPopup from '../components/plano/DetalhesPlanoPopup';
+import ConfirmPopup from '../components/layout/ConfirmPopup';
 
 export default function PlanosAlimentares() {
     const [modalCriarAberto, setModalCriarAberto] = useState(false);
@@ -10,30 +11,16 @@ export default function PlanosAlimentares() {
     const [planoSelecionado, setPlanoSelecionado] = useState(null);
     const [alimentos, setAlimentos] = useState([]);
 
+    const [modalConfirmacao, setModalConfirmacao] = useState(false);
+    const [itemSelecionado, setItemSelecionado] = useState(null);
 
-  // Mock de Planos para listagem
-    const [planos, setPlanos] = useState([
-        {
-            id: 1,
-            descricao: "Dieta de Verão",
-            data_inicio: "2026-01-01",
-            data_fim: "2026-03-01",
-            refeicoes: [
-                {
-                tipo: "Café da Manhã",
-                horario: "07:30",
-                alimentos: [{ alimento_id: 5, quantidade: 1 }]
-                }
-            ]
-        },
-        {
-            id: 2,
-            descricao: "Dieta Hipertrofia",
-            data_inicio: "2026-04-01",
-            data_fim: "2026-06-01",
-            refeicoes: []
-        }
-    ]);
+
+    const [planos, setPlanos] = useState([]);
+
+    const confirmacaoItem = (id) => {
+        setItemSelecionado(id);
+        setModalConfirmacao(true);
+    }
 
     const handleSalvarPlano = async (novoPlano) => {
         try {
@@ -49,15 +36,15 @@ export default function PlanosAlimentares() {
     };
 
     const handleExcluir = async (id) => {
-        if (confirm('Tem certeza que deseja excluir este plano?')) {
-            try {
-                await api.delete(`/planos-alimentares/${id}`);
-       
-                setPlanos(planos.filter(p => p.id !== id));
-            } catch (error) {
-                console.error('Erro ao excluir plano alimentar:', error.response);
-            }
+
+        try {
+            await api.delete(`/planos-alimentares/${id}`);
+    
+            setPlanos(planos.filter(p => p.id !== id));
+        } catch (error) {
+            console.error('Erro ao excluir plano alimentar:', error.response);
         }
+        
     };
 
     const abrirDetalhes = (plano) => {
@@ -95,6 +82,13 @@ export default function PlanosAlimentares() {
 
     return (
         <div>
+            <ConfirmPopup
+                isOpen={modalConfirmacao}
+                onClose={() => setModalConfirmacao(false)}
+                onConfirm={() => handleExcluir(itemSelecionado)}
+                msg={'Tem certeza que deseja excluir esse plano?\nEssa ação não poderá ser desfeita.'}
+                titulo={'Excluir Plano Alimentar'}
+            />
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
             <h2 className="page-title">Meus Planos Alimentares</h2>
             <button className="btn btn-primary" onClick={() => setModalCriarAberto(true)}>
@@ -122,7 +116,7 @@ export default function PlanosAlimentares() {
                     <button className="btn" style={{padding: '8px', color: '#4a6fa5'}} onClick={() => abrirDetalhes(plano)}>
                     <Eye size={20} />
                     </button>
-                    <button className="btn" style={{padding: '8px', color: '#e74c3c'}} onClick={() => handleExcluir(plano.id)}>
+                    <button className="btn" style={{padding: '8px', color: '#e74c3c'}} onClick={() => confirmacaoItem(plano.id)}>
                     <Trash2 size={20} />
                     </button>
                 </div>
@@ -133,7 +127,7 @@ export default function PlanosAlimentares() {
             {planos.length === 0 && <p style={{color: '#888'}}>Nenhum plano cadastrado.</p>}
         </div>
 
-        {/* Modals */}
+
         <CriarPlanoPopup 
             isOpen={modalCriarAberto}
             onClose={() => setModalCriarAberto(false)}

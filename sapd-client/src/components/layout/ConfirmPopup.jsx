@@ -31,7 +31,7 @@ export default function ConfirmPopup({ isOpen, onClose, onConfirm, msg, titulo})
             <button className="btn btn-secondary" onClick={onClose} style={{marginRight: '10px'}}>
               Voltar
             </button>
-            <button className="btn btn-primary" onClick={onConfirm} style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <button className="btn btn-primary" onClick={() => {onConfirm(); onClose()}} style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
               <Check size={18} /> Confirmar
             </button>
           </div>

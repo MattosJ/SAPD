@@ -13,7 +13,7 @@ class RelatorioController {
       
       res.json(dados);
     } catch (e) {
-      res.status(500).json({ erro: 'Erro ao gerar relatório' });
+      res.status(500).json({ erro: e.message });
     }
   }
 

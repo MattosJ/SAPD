@@ -3,7 +3,54 @@
 > Queremos oferecer uma plataforma completa para que pessoas com diabetes atinjam uma **melhor qualidade de vida** e mantenham o **controle efetivo de sua condição**.  
 > Nosso objetivo é transformar o gerenciamento da diabetes em um processo proativo, simples e empoderador.
 
+  ## ▶️ Como rodar o projeto localmente
+
+Este guia descreve, passo a passo, como configurar e executar o projeto SAPD em ambiente local.
+
 ---
+
+## 🛠️ Pré-requisitos
+
+Antes de iniciar, certifique-se de que sua máquina possui os seguintes softwares instalados:
+
+- **Node.js** (versão LTS)
+- **npm** (instalado junto com o Node.js)
+- **Git**
+- **PostgreSQL 18.1**
+
+### Configuração do PostgreSQL
+
+O projeto espera a seguinte configuração padrão:
+
+- **Usuário:** `admin`
+- **Senha:** `admin`
+ou modifique no .env
+> ⚠️ Certifique-se de que o serviço do PostgreSQL esteja **em execução** antes de iniciar o backend.
+
+---
+
+## 📦 Clonando o repositório
+
+Abra um terminal e execute:
+
+
+git clone `https://github.com/MattosJ/SAPD.git`
+
+## Rodando o front
+cd SAPD
+npm install
+cd sapd-client
+npm run dev
+
+## Rodando o back
+cd server
+npm install
+npm start
+
+## Populando o banco de dados
+node seed.js
+
+
 
 ## 🧠 Sobre o Projeto
 
@@ -22,7 +69,7 @@ O desenvolvimento é **colaborativo**, utilizando **métodos ágeis** para garan
 | :--- | :--- | :--- | :--- |
 | **Front-end (Cliente)** | JavaScript  | React | Camada do cliente |
 | **Back-end (Servidor)** | JavaScript  (Node.js) | Express |  Camada do servidor|
-| **Banco de Dados** | *A definir* | *A definir* (ex: PostgreSQL, MySQL ou MongoDB) |  Camada dos dados|
+| **Banco de Dados** | *PostgreSQL 18.1* |  |  Camada dos dados|
 | **API-Externas** | *A definir* | *A definir*  |  Camada de Aplicações Externas|
 | **Segurança** | *A definir* | *A definir*  |  Camada de Segurança|
 

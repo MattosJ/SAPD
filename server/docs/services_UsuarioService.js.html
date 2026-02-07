@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>services/UsuarioService.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AlimentoRepository.html">AlimentoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AlimentoService.html">AlimentoService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AuthController.html">AuthController</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ComparacaoRepository.html">ComparacaoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="ComparacaoRepository.html#consumo">consumo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="ComparacaoRepository.html#plano">plano</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ComparacaoService.html">ComparacaoService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="ComparacaoService.html#comparar">comparar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="LembreteRepository.html">LembreteRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="LembreteService.html">LembreteService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PesoRepository.html">PesoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PesoRepository.html#criar">criar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html">PlanoAlimentarRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#adicionarAlimento">adicionarAlimento</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#criarPlano">criarPlano</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#criarRefeicao">criarRefeicao</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#listarAlimentosDaRefeicao">listarAlimentosDaRefeicao</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#listarRefeicoes">listarRefeicoes</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PlanoAlimentarService.html">PlanoAlimentarService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html">PredicaoGlicemiaRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html#confirmar">confirmar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html#salvar">salvar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html">PredicaoGlicemiaService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html#confirmar">confirmar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html#gerar">gerar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html">RefeicaoAlimentoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html#adicionar">adicionar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html#listarPorRefeicao">listarPorRefeicao</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html#remover">remover</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RefeicaoRepository.html">RefeicaoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html">RegistroGlicemiaRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarMedicoes">buscarMedicoes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarPorId">buscarPorId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarPorPeriodo">buscarPorPeriodo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarUltimosRegistros">buscarUltimosRegistros</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#predicoes">predicoes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#ultimosRegistros">ultimosRegistros</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html">RegistroGlicemiaService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#buscar">buscar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html">RegistroInsulinaRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#buscarPorId">buscarPorId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroInsulinaService.html">RegistroInsulinaService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#buscar">buscar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#listar">listar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#listarFormatado">listarFormatado</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="UsuarioRepository.html">UsuarioRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#atualizarSenha">atualizarSenha</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#buscarPorEmail">buscarPorEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#buscarPorId">buscarPorId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#buscarPorToken">buscarPorToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#inativar">inativar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#salvarTokenRecuperacao">salvarTokenRecuperacao</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="UsuarioService.html">UsuarioService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#atualizarPerfil">atualizarPerfil</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#buscarPerfil">buscarPerfil</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#cadastrar">cadastrar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#inativarConta">inativarConta</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#login">login</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#redefinirSenha">redefinirSenha</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#solicitarRecuperacao">solicitarRecuperacao</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#separarDataHora">separarDataHora</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">services/UsuarioService.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import UsuarioRepository from '../repositories/UsuarioRepository.js';
+import PesoRepository from '../repositories/PesoRepository.js';
+
+/**
+ * Serviço responsável pela lógica de negócio relacionada a usuários.
+ * Inclui cadastro, login, perfil, atualização, recuperação de senha e inativação de conta.
+ */
+class UsuarioService {
+
+  /**
+   * Cadastra um novo usuário.
+   * Valida data de nascimento e tipo de diabetes, criptografa a senha e salva o peso inicial se fornecido.
+   * @param {Object} dados - Dados do usuário.
+   * @param {string} dados.nome_completo - Nome completo do usuário.
+   * @param {string} dados.email - Email do usuário.
+   * @param {string} dados.senha - Senha em texto plano.
+   * @param {string} [dados.data_nascimento] - Data de nascimento (YYYY-MM-DD).
+   * @param {string} [dados.tipo_diabetes] - Tipo de diabetes: "Tipo 1", "Tipo 2" ou "Gestacional".
+   * @param {number} [dados.peso] - Peso inicial do usuário.
+   * @returns {Promise&lt;Object>} Usuário recém-criado.
+   * @throws {Error} Se data de nascimento ou tipo de diabetes forem inválidos.
+   */
+  async cadastrar(dados) {
+    if (dados.data_nascimento) {
+      const data = new Date(dados.data_nascimento);
+      if (data > new Date()) {
+        throw new Error('Data de nascimento inválida');
+      }
+    }
+
+    const tiposValidos = ['Tipo 1', 'Tipo 2', 'Gestacional'];
+    if (dados.tipo_diabetes &amp;&amp; !tiposValidos.includes(dados.tipo_diabetes)) {
+      throw new Error('Tipo de diabetes inválido');
+    }
+
+    const senhaHash = await bcrypt.hash(dados.senha, 10);
+
+    const usuario = await UsuarioRepository.criar({
+      ...dados,
+      senha: senhaHash,
+      status_conta: 'ATIVA'
+    });
+
+    if (dados.peso) {
+      await PesoRepository.criar(usuario.id, dados.peso);
+    }
+
+    return usuario;
+  }
+
+  /**
+   * Realiza o login do usuário.
+   * Verifica email, senha e status da conta, retornando um token JWT.
+   * @param {Object} param0
+   * @param {string} param0.email - Email do usuário.
+   * @param {string} param0.senha - Senha do usuário.
+   * @returns {Promise&lt;{token: string, usuario: {id: number, nome: string, email: string}}>} Token JWT e dados básicos do usuário.
+   * @throws {Error} Se usuário não existir, conta inativa ou senha inválida.
+   */
+  async login({ email, senha }) {
+    const usuario = await UsuarioRepository.buscarPorEmail(email);
+    if (!usuario) throw new Error('Usuário não encontrado');
+    if (usuario.status_conta !== 'ATIVA') throw new Error('Conta inativa');
+
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+    if (!senhaValida) throw new Error('Senha inválida');
+
+    const token = jwt.sign(
+      { id: usuario.id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES }
+    );
+
+    return {
+      token,
+      usuario: {
+        id: usuario.id,
+        nome: usuario.nome_completo,
+        email: usuario.email
+      }
+    };
+  }
+
+  /**
+   * Busca o perfil de um usuário pelo ID.
+   * Formata a data de nascimento para "YYYY-MM-DD" se existir.
+   * @param {number} id - ID do usuário.
+   * @returns {Promise&lt;Object>} Dados do usuário.
+   * @throws {Error} Se usuário não for encontrado.
+   */
+  async buscarPerfil(id) {
+    const usuario = await UsuarioRepository.buscarPorId(id);
+    if (!usuario) throw new Error('Usuário não encontrado');
+
+    if (usuario.data_nascimento) {
+      usuario.data_nascimento = usuario.data_nascimento
+        .toISOString()
+        .split('T')[0];
+    }
+
+    return usuario;
+  }
+
+  /**
+   * Atualiza o perfil do usuário.
+   * Se fornecido peso, cria registro de peso.
+   * @param {number} id - ID do usuário.
+   * @param {Object} dados - Dados a atualizar.
+   * @param {string} [dados.nome_completo] - Nome completo.
+   * @param {string} [dados.email] - Email.
+   * @param {string} [dados.tipo_diabetes] - Tipo de diabetes.
+   * @param {string} [dados.data_nascimento] - Data de nascimento.
+   * @param {number} [dados.peso] - Novo peso.
+   * @returns {Promise&lt;Object>} Usuário atualizado.
+   */
+  async atualizarPerfil(id, dados) {
+    const usuario = await UsuarioRepository.atualizar(id, dados);
+    if (dados.peso) {
+      await PesoRepository.criar(id, dados.peso);
+    }
+    return usuario;
+  }
+
+  /**
+   * Solicita recuperação de senha gerando um token temporário.
+   * @param {string} email - Email do usuário.
+   * @returns {Promise&lt;{mensagem: string}>} Mensagem confirmando geração do token.
+   * @throws {Error} Se usuário não for encontrado.
+   */
+  async solicitarRecuperacao(email) {
+    const usuario = await UsuarioRepository.buscarPorEmail(email);
+    if (!usuario) throw new Error('Usuário não encontrado');
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expira = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+
+    await UsuarioRepository.salvarTokenRecuperacao(usuario.id, token, expira);
+
+    return { mensagem: 'Token de recuperação gerado' };
+  }
+
+  /**
+   * Redefine a senha do usuário usando token de recuperação.
+   * @param {string} token - Token de recuperação.
+   * @param {string} novaSenha - Nova senha (mínimo 6 caracteres).
+   * @returns {Promise&lt;void>}
+   * @throws {Error} Se token inválido/expirado ou senha inválida.
+   */
+  async redefinirSenha(token, novaSenha) {
+    if (!novaSenha || novaSenha.length &lt; 6) {
+      throw new Error('Senha deve ter no mínimo 6 caracteres');
+    }
+
+    const usuario = await UsuarioRepository.buscarPorToken(token);
+    if (!usuario) throw new Error('Token inválido ou expirado');
+
+    const senhaHash = await bcrypt.hash(novaSenha, 10);
+    await UsuarioRepository.atualizarSenha(usuario.id, senhaHash);
+  }
+
+  /**
+   * Inativa a conta do usuário.
+   * @param {number} id - ID do usuário.
+   * @returns {Promise&lt;void>}
+   */
+  async inativarConta(id) {
+    await UsuarioRepository.inativar(id);
+  }
+}
+
+export default new UsuarioService();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Feb 07 2026 15:09:31 GMT-0300 (Horário Padrão de Brasília) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

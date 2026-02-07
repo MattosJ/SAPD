@@ -27,7 +27,7 @@ import UsuarioService from '../services/UsuarioService.js';
       const resultado = await UsuarioService.login({ email, senha });
       return res.json(resultado);
     } catch (error) {
-      return res.status(401).json({ erro: error.message });
+      return res.status(401).json({ erro: error.message });z
     }
   }
 }

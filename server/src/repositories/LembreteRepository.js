@@ -1,7 +1,20 @@
 import db from '../database/connection.js';
 
+/**
+ * Repository responsável por acessar e manipular
+ * os dados de lembretes no banco de dados.
+ * 
+ * Essa camada contém apenas operações SQL,
+ * sem regras de negócio.
+ */
 class LembreteRepository {
 
+  /**
+   * Insere um novo lembrete no banco de dados
+   *
+   * @param {Object} dados - Dados do lembrete
+   * @returns {Object} Lembrete criado
+   */
   async criar(dados) {
     const result = await db.query(
       `
@@ -11,28 +24,44 @@ class LembreteRepository {
       `,
       [dados.usuarioId, dados.tipo, dados.data_hora, dados.observacoes]
     );
+
+    // Retorna o lembrete recém criado
     return result.rows[0];
   }
 
-    async listarPorUsuario(usuarioId) {
-      const result = await db.query(
-        `
-        SELECT
-          id,
-          tipo,
-          observacoes,
-          TO_CHAR(data_hora, 'YYYY-MM-DD') AS data,
-          TO_CHAR(data_hora, 'HH24:MI') AS hora
-        FROM lembretes
-        WHERE usuario_id = $1
-        ORDER BY data_hora
-        `,
-        [usuarioId]
-      );
+  /**
+   * Lista todos os lembretes de um usuário
+   *
+   * @param {number} usuarioId - Identificador do usuário
+   * @returns {Array} Lista de lembretes formatados
+   */
+  async listarPorUsuario(usuarioId) {
+    const result = await db.query(
+      `
+      SELECT
+        id,
+        tipo,
+        observacoes,
+        TO_CHAR(data_hora, 'YYYY-MM-DD') AS data,
+        TO_CHAR(data_hora, 'HH24:MI') AS hora
+      FROM lembretes
+      WHERE usuario_id = $1
+      ORDER BY data_hora
+      `,
+      [usuarioId]
+    );
 
-      return result.rows;
-    }
+    // Retorna os lembretes ordenados cronologicamente
+    return result.rows;
+  }
 
+  /**
+   * Atualiza um lembrete específico do usuário
+   *
+   * @param {number} id - Identificador do lembrete
+   * @param {number} usuarioId - Identificador do usuário
+   * @param {Object} dados - Novos dados do lembrete
+   */
   async atualizar(id, usuarioId, dados) {
     await db.query(
       `
@@ -46,6 +75,12 @@ class LembreteRepository {
     );
   }
 
+  /**
+   * Remove um lembrete do banco de dados
+   *
+   * @param {number} id - Identificador do lembrete
+   * @param {number} usuarioId - Identificador do usuário
+   */
   async excluir(id, usuarioId) {
     await db.query(
       `

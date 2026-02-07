@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>repositories/PlanoAlimentarRepository.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AlimentoRepository.html">AlimentoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoRepository.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AlimentoService.html">AlimentoService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AlimentoService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AuthController.html">AuthController</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ComparacaoRepository.html">ComparacaoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="ComparacaoRepository.html#consumo">consumo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="ComparacaoRepository.html#plano">plano</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ComparacaoService.html">ComparacaoService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="ComparacaoService.html#comparar">comparar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="LembreteRepository.html">LembreteRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="LembreteService.html">LembreteService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="LembreteService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PesoRepository.html">PesoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PesoRepository.html#criar">criar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html">PlanoAlimentarRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#adicionarAlimento">adicionarAlimento</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#criarPlano">criarPlano</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#criarRefeicao">criarRefeicao</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#listarAlimentosDaRefeicao">listarAlimentosDaRefeicao</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarRepository.html#listarRefeicoes">listarRefeicoes</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PlanoAlimentarService.html">PlanoAlimentarService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PlanoAlimentarService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html">PredicaoGlicemiaRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html#confirmar">confirmar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaRepository.html#salvar">salvar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html">PredicaoGlicemiaService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html#confirmar">confirmar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html#gerar">gerar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PredicaoGlicemiaService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html">RefeicaoAlimentoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html#adicionar">adicionar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html#listarPorRefeicao">listarPorRefeicao</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoAlimentoRepository.html#remover">remover</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RefeicaoRepository.html">RefeicaoRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RefeicaoRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html">RegistroGlicemiaRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarMedicoes">buscarMedicoes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarPorId">buscarPorId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarPorPeriodo">buscarPorPeriodo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#buscarUltimosRegistros">buscarUltimosRegistros</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#predicoes">predicoes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaRepository.html#ultimosRegistros">ultimosRegistros</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html">RegistroGlicemiaService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#buscar">buscar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroGlicemiaService.html#listar">listar</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html">RegistroInsulinaRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#buscarPorId">buscarPorId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaRepository.html#listarPorUsuario">listarPorUsuario</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RegistroInsulinaService.html">RegistroInsulinaService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#buscar">buscar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#excluir">excluir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#listar">listar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RegistroInsulinaService.html#listarFormatado">listarFormatado</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="UsuarioRepository.html">UsuarioRepository</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#atualizar">atualizar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#atualizarSenha">atualizarSenha</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#buscarPorEmail">buscarPorEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#buscarPorId">buscarPorId</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#buscarPorToken">buscarPorToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#criar">criar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#inativar">inativar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioRepository.html#salvarTokenRecuperacao">salvarTokenRecuperacao</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="UsuarioService.html">UsuarioService</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#atualizarPerfil">atualizarPerfil</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#buscarPerfil">buscarPerfil</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#cadastrar">cadastrar</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#inativarConta">inativarConta</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#login">login</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#redefinirSenha">redefinirSenha</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="UsuarioService.html#solicitarRecuperacao">solicitarRecuperacao</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#separarDataHora">separarDataHora</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">repositories/PlanoAlimentarRepository.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import db from '../database/connection.js';
+/**
+ * Classe responsável pela persistência dos dados relacionados
+ * aos planos alimentares.
+ *
+ * Implementa o padrão Repository, isolando as operações de banco
+ * de dados da lógica de negócio da aplicação.
+ */
+
+class PlanoAlimentarRepository {
+
+    /**
+   * Insere um novo plano alimentar no banco de dados.
+   *
+   * @param {Object} plano Dados do plano alimentar.
+   * @param {number} plano.usuarioId ID do usuário dono do plano.
+   * @param {string} plano.descricao Descrição do plano alimentar.
+   * @param {Date} plano.data_inicio Data de início do plano.
+   * @param {Date} plano.data_fim Data de término do plano.
+   *
+   * @returns {Object} Plano alimentar criado.
+   */
+  async criarPlano(plano) {
+    const result = await db.query(
+      `
+      INSERT INTO planos_alimentares
+      (usuario_id, descricao, data_inicio, data_fim)
+      VALUES ($1,$2,$3,$4)
+      RETURNING *
+      `,
+      [plano.usuarioId, plano.descricao, plano.data_inicio, plano.data_fim]
+    );
+    return result.rows[0];
+  }
+
+
+  /**
+   * Cria uma nova refeição associada a um plano alimentar.
+   *
+   * @param {number} planoId ID do plano alimentar.
+   * @param {Object} refeicao Dados da refeição.
+   * @param {string} refeicao.tipo Tipo da refeição (ex: café da manhã, almoço).
+   * @param {string} refeicao.horario Horário da refeição.
+   *
+   * @returns {Object} Refeição criada.
+   */
+  async criarRefeicao(planoId, refeicao) {
+    const result = await db.query(
+      `
+      INSERT INTO plano_refeicoes (plano_id, tipo, horario)
+      VALUES ($1,$2,$3)
+      RETURNING *
+      `,
+      [planoId, refeicao.tipo, refeicao.horario]
+    );
+    return result.rows[0];
+  }
+
+
+  /**
+   * Adiciona um alimento a uma refeição do plano alimentar.
+   *
+   * @param {number} planoRefeicaoId ID da refeição do plano.
+   * @param {Object} alimento Dados do alimento.
+   * @param {number} alimento.alimento_id ID do alimento.
+   * @param {number} alimento.quantidade Quantidade do alimento na refeição.
+   */
+  async adicionarAlimento(planoRefeicaoId, alimento) {
+    await db.query(
+      `
+      INSERT INTO plano_refeicao_alimentos
+      (plano_refeicao_id, alimento_id, quantidade)
+      VALUES ($1,$2,$3)
+      `,
+      [planoRefeicaoId, alimento.alimento_id, alimento.quantidade]
+    );
+  }
+
+
+  /**
+   * Lista todos os planos alimentares de um usuário.
+   *
+   * Os planos são retornados ordenados pela data de início
+   * do mais recente para o mais antigo.
+   *
+   * @param {number} usuarioId ID do usuário.
+   *
+   * @returns {Array&lt;Object>} Lista de planos alimentares.
+   */
+  async listarPorUsuario(usuarioId) {
+    const result = await db.query(
+      `
+      SELECT * FROM planos_alimentares
+      WHERE usuario_id = $1
+      ORDER BY data_inicio DESC
+      `,
+      [usuarioId]
+    );
+    return result.rows;
+  }
+
+
+    /**
+    * Lista todas as refeições associadas a um plano alimentar.
+     *
+     * @param {number} planoId ID do plano alimentar.
+     *
+     * @returns {Array&lt;Object>} Lista de refeições ordenadas por horário.
+     */  
+    async listarRefeicoes(planoId){
+      const result = await db.query(`
+          SELECT id, plano_id, tipo, horario 
+          FROM plano_refeicoes
+          WHERE plano_id = $1
+          ORDER BY horario
+      `, [planoId]);
+
+      return result.rows;
+    }
+  
+
+
+   /**
+   * Lista todos os alimentos vinculados a uma refeição.
+   *
+   * Realiza uma junção (JOIN) entre as tabelas de alimentos
+   * e a tabela de relacionamento entre refeições e alimentos,
+   * retornando informações nutricionais e quantidade.
+   *
+   * @param {number} refeicaoId ID da refeição.
+   *
+   * @returns {Array&lt;Object>} Lista de alimentos da refeição.
+   */   
+async listarAlimentosDaRefeicao(refeicaoId) {
+  const result = await db.query(`
+    SELECT
+      a.id,
+      a.nome,
+      a.kcal,
+      pra.quantidade
+    FROM plano_refeicao_alimentos pra
+    JOIN alimentos a ON a.id = pra.alimento_id
+    WHERE pra.plano_refeicao_id = $1
+  `, [refeicaoId]);
+
+  return result.rows;
+}
+
+
+
+    /**
+   * Remove um plano alimentar e todos os dados relacionados.
+   *
+   * A exclusão é feita manualmente para garantir integridade referencial,
+   * seguindo a ordem:
+   *
+   * 1. Remove alimentos das refeições
+   * 2. Remove refeições do plano
+   * 3. Remove o plano alimentar
+   *
+   * @param {number} id ID do plano alimentar.
+   * @param {number} usuario_id ID do usuário dono do plano.
+   */
+   async excluir(id, usuario_id) {
+
+        await db.query(
+          `DELETE FROM plano_refeicao_alimentos
+          WHERE plano_refeicao_id IN (
+              SELECT id FROM plano_refeicoes WHERE plano_id = $1
+          )`,
+          [id]
+        );
+
+        await db.query(
+          `DELETE FROM plano_refeicoes
+          WHERE plano_id = $1`,
+          [id]
+        );
+
+        await db.query(
+          `DELETE FROM planos_alimentares
+          WHERE id = $1 AND usuario_id = $2`,
+          [id, usuario_id]
+        );
+      }
+
+
+}
+
+export default new PlanoAlimentarRepository();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Feb 07 2026 15:09:31 GMT-0300 (Horário Padrão de Brasília) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

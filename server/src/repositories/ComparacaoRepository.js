@@ -1,9 +1,24 @@
 import db from '../database/connection.js';
 
+/**
+ * Repository responsável por acessar os dados relacionados
+ * à comparação entre plano alimentar e consumo real do usuário.
+ * 
+ * Essa camada realiza consultas SQL e retorna dados já agregados.
+ */
 class ComparacaoRepository {
 
-  //Retorna todos planos calculando o plano 
+  /**
+   * Calcula os valores nutricionais previstos no plano alimentar
+   * dentro de um intervalo de datas.
+   *
+   * @param {number} usuarioId - Identificador do usuário
+   * @param {string} dataInicio - Data inicial do período
+   * @param {string} dataFim - Data final do período
+   * @returns {Object} Soma dos macronutrientes planejados
+   */
   async plano(usuarioId, dataInicio, dataFim) {
+
     const result = await db.query(
       `
       SELECT
@@ -22,11 +37,21 @@ class ComparacaoRepository {
       [usuarioId, dataInicio, dataFim]
     );
 
+    // Retorna os valores nutricionais totais do plano alimentar
     return result.rows[0];
   }
 
-  // Retorna o consumo calculando o consumo
+  /**
+   * Calcula os valores nutricionais consumidos pelo usuário
+   * com base nas refeições registradas.
+   *
+   * @param {number} usuarioId - Identificador do usuário
+   * @param {string} dataInicio - Data inicial do período
+   * @param {string} dataFim - Data final do período
+   * @returns {Object} Soma dos macronutrientes consumidos
+   */
   async consumo(usuarioId, dataInicio, dataFim) {
+
     const result = await db.query(
       `
       SELECT
@@ -43,6 +68,7 @@ class ComparacaoRepository {
       [usuarioId, dataInicio, dataFim]
     );
 
+    // Retorna os valores nutricionais totais consumidos pelo usuário
     return result.rows[0];
   }
 }

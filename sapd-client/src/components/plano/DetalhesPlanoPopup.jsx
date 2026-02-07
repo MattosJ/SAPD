@@ -3,6 +3,7 @@ import { X, Calendar, Clock } from 'lucide-react';
 export default function DetalhesPlanoPopup({ isOpen, onClose, plano }) {
   if (!isOpen || !plano) return null;
 
+  console.log(plano);
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()} style={{maxWidth: '600px'}}>
@@ -35,7 +36,7 @@ export default function DetalhesPlanoPopup({ isOpen, onClose, plano }) {
                   {ref.alimentos.map((alimento, i) => (
                     <li key={i}>
                        {/* Como o mock pode vir só com ID, simulei um nome genérico, mas no real viria do backend */}
-                       Alimento ID: {alimento.alimento_id} — Qtd: {alimento.quantidade}
+                       {alimento.nome} — Qtd: {alimento.quantidade}
                     </li>
                   ))}
                 </ul>

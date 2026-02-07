@@ -8,35 +8,13 @@ import RelatorioPesoPopup from '../components/relatorios/RelatorioPesoPopup';
 
 export default function Relatorios() {
   
-    const [glicemia, setGlicemia] = useState([
-        {data: '05/02/2026', valor: 50},
-        {data: '08/02/2026', valor: 78},
-    ]);
-    const [peso, setPeso] = useState([
-        {data: '05/02/2026', valor: 70},
-        {data: '08/02/2026', valor: 65},
-    ]);
-    const [relatorioRefeicao, setRelatorioRefeicao] = useState([
-        {id: 1, nome: 'Refeição 1', dataInicio: '01/02/2026', dataFim: '02/02/2026',totalCalorias: 120, medicoes: [{calorias: 120, data: '01/02/2026'}]},
-        {id: 2, nome: 'Refeição 2', dataInicio: '02/02/2026', dataFim: '03/02/2026',totalCalorias: 150, medicoes: [{calorias: 150, data: '02/02/2026'}]},
-    ]);
-    const [relatorioPeso, setRelatorioPeso] = useState([
-        {id: 1, nome: 'Peso 1', dataInicio: '01/02/2026', dataFim: '02/02/2026', medicoes: [{peso: 70, data: '01/02/2026'}, {peso: 68, data: '02/02/2026'}]},
-    ]);
+    const [glicemia, setGlicemia] = useState([]);
+    const [peso, setPeso] = useState([]);
+    const [relatorioRefeicao, setRelatorioRefeicao] = useState([]);
+    const [relatorioPeso, setRelatorioPeso] = useState([]);
     const [planoConsumo, setPlanoConsumo] = useState(
         {
-            "kcal": {
-                "planejado": "2000.00",
-                "consumido": "1850.50",
-                "diferenca": "-149.50",
-                "status": "abaixo"
-            },
-            "carboidratos": {
-                "planejado": "3500.00",
-                "consumido": "800.50",
-                "diferenca": "-149.50",
-                "status": "abaixo"
-            }
+            
         }
     );
     
@@ -206,7 +184,7 @@ export default function Relatorios() {
             </div>
             <div className="card" style={{height: '300px', position: 'relative'}}>
                 <h4>Plano X Consumo</h4>
-                {planoConsumo.length != 0 ? 
+                {transformaEspectativaArray().length != 0 ? 
                 <div>
                     <div style={{height: '250px', width: 'auto', minWidth: '48%', maxWidth: '100%',margin: '10px', position: 'absolute'}}>
                         

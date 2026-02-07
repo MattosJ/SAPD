@@ -1,12 +1,12 @@
 :root {
-  --primary: #4a6fa5; /* Azul do sidebar */
-  --bg-light: #f0f2f5; /* Fundo cinza */
+  --primary: #4a6fa5; 
+  --bg-light: #f0f2f5; 
   --white: #ffffff;
   --text: #333;
   --border: #ccc;
 }
 :root.dark {
-  --primary: #ac0081; /* Azul mais escuro pro modo dark */
+  --primary: #ac0081; 
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; text-decoration: none; }
@@ -14,6 +14,13 @@
 body, html, #root { height: 100%; width: 100%; background-color: var(--bg-light);  }
 body {
   padding: 0 !important;
+}
+
+.container-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 10px;
 }
 /* Layout Grid */
 .app-container { 
@@ -76,23 +83,47 @@ body {
 
 /* Landing Page */
 .landing {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; height: 100vh; text-align: center;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center; 
+  height: 100vh; 
+  text-align: center;
 }
 
 /* Grids e Listas */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-2 { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px; 
+}
 .history-list { list-style: none; }
 .history-item {
-  display: flex; justify-content: space-between; padding: 10px;
-  border-bottom: 1px solid #eee; align-items: center;
+  display: flex; 
+  justify-content: space-between; 
+  padding: 10px;
+  border-bottom: 1px solid #eee; 
+  align-items: center;
 }
-.number-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+.number-badges { 
+  display: flex;
+  gap: 5px; 
+  flex-wrap: wrap; 
+  margin-top: 10px; 
+}
 .badge {
-  width: 70px; height: 70px; background: var(--primary); color: white;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 5px; font-size: 0.8rem;
-  padding: 5px; text-align: center; cursor: pointer;
+  width: 70px;
+  height: 70px;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
   transition: 0.5s;
 }
 .badge:hover { 
@@ -141,26 +172,47 @@ body {
 
 .modal-body {
   padding: 20px;
-  max-height: 80vh; /* Se for muito grande, cria scroll */
+  max-height: 80vh; 
   overflow-y: auto;
 }
 
 .btn-icon {
-  background: none; border: none; cursor: pointer;
-  transition: 0.2s; display: flex; align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
 }
 .btn-icon:hover { transform: scale(1.1); }
 
 /* Informações de Texto */
-.info-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
-.info-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: #444; }
-.text-primary { color: var(--primary); }
-.divider { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #444;
+}
+.text-primary {
+  color: var(--primary);
+}
+.divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 15px 0;
+}
 
 /* Grid das Medições (Cards Pequenos) */
 .medicoes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsivo automático */
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -176,14 +228,25 @@ body {
   justify-content: center;
   transition: 0.2s;
 }
-.medicao-card:hover { border-color: var(--primary); background: #eef2ff; }
+.medicao-card:hover {
+  border-color: var(--primary);
+  background: #eef2ff; 
+}
 
-.medicao-valor { font-weight: bold; color: var(--primary); font-size: 1.1rem; }
-.medicao-data { font-size: 0.75rem; color: #888; margin-top: 4px; }
+.medicao-valor { 
+  font-weight: bold; 
+  color: var(--primary); 
+  font-size: 1.1rem; 
+}
+.medicao-data { 
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 4px; 
+}
 
 /* Caixa de Total */
 .total-box {
-  background-color: #eefcf6; /* Verde bem clarinho */
+  background-color: #eefcf6; 
   border: 1px solid #c3e6cb;
   border-radius: 10px;
   padding: 15px;
@@ -208,7 +271,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 8px;
   background-color: var(--white);
-  overflow: hidden; /* Para o border-radius funcionar nos filhos */
+  overflow: hidden; 
   display: flex;
   flex-direction: column;
 }
@@ -400,9 +463,9 @@ body {
 .macro-card strong { font-size: 1rem; margin-top: 2px; }
 
 /* Cores específicas para os Macros */
-.macro-card.carb { color: #e67e22; border-bottom: 3px solid #e67e22; } /* Laranja */
-.macro-card.prot { color: #2980b9; border-bottom: 3px solid #2980b9; } /* Azul */
-.macro-card.fat { color: #c0392b; border-bottom: 3px solid #c0392b; }  /* Vermelho */
+.macro-card.carb { color: #e67e22; border-bottom: 3px solid #e67e22; } 
+.macro-card.prot { color: #2980b9; border-bottom: 3px solid #2980b9; } 
+.macro-card.fat { color: #c0392b; border-bottom: 3px solid #c0392b; }  
 
 .vitamin-box {
   background: rgba(255,255,255,0.6);
@@ -426,7 +489,7 @@ body {
 
 .predictions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsivo */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
   gap: 15px;
   margin-top: 20px;
 }
@@ -470,8 +533,8 @@ body {
   text-transform: uppercase;
   font-weight: bold;
 }
-.pred-badge.waiting { background-color: #f3e5f5; color: #8e44ad; } /* Roxo claro */
-.pred-badge.done { background-color: #e8f5e9; color: #27ae60; } /* Verde claro */
+.pred-badge.waiting { background-color: #f3e5f5; color: #8e44ad; } 
+.pred-badge.done { background-color: #e8f5e9; color: #27ae60; } 
 
 /* Corpo do Card */
 .pred-body {
@@ -512,12 +575,12 @@ body {
 .pred-value {
   font-size: 1.6rem;
   font-weight: bold;
-  color: #8e44ad; /* Roxo para Previsão (IA) */
+  color: #8e44ad; 
   line-height: 1;
 }
 
 .pred-value.real {
-  color: #333; /* Cor neutra escura para o Real */
+  color: #333; 
 }
 
 .pred-empty {
@@ -535,5 +598,45 @@ body {
   text-align: center;
   background-color: #fafafa;
   border-radius: 0 0 8px 8px;
-  margin-bottom: -5px; /* Ajuste visual */
+  margin-bottom: -5px; 
+}
+
+
+
+/* Container do input precisa ser relativo para o popup se posicionar */
+.form-group {
+  position: relative; 
+}
+
+/* O Popup de erro */
+.error-popup {
+  position: absolute;
+  top: -8px; 
+  right: 0;
+  background-color: #ff4d4f;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  animation: fadeIn 0.2s;
+  z-index: 10;
+  pointer-events: none; 
+}
+
+/* Setinha do popup apontando para baixo */
+.error-popup::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: 10px;
+  border-width: 4px 4px 0;
+  border-style: solid;
+  border-color: #ff4d4f transparent transparent transparent;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

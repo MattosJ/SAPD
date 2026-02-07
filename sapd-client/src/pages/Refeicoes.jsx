@@ -3,12 +3,17 @@ import { Trash2, Plus } from 'lucide-react';
 import api from "../services/api";
 import Selector from '../components/layout/Selector';
 import ConfirmacaoRefeicaoPopup from '../components/refeicao/ConfirmacaoRefeicaoPopup';
+import ConfirmPopup from '../components/layout/ConfirmPopup';
 
 export default function Refeicoes() {
   const [refeicoes, setRefeicoes] = useState([
     {id: 1, tipo: 'Café da Manhã', hora: '07:30', carbs: 45},
     {id: 2, tipo: 'Almoço', hora: '12:30', carbs: 70},
   ]);
+
+
+  const [modalConfirmacaoItem, setModalConfirmacaoItem] = useState(false);
+  const [itemSelecionado, setItemSelecionado] = useState(null);
 
   const [novaRefeicao, setNovaRefeicao] = useState({tipo: '', alimentos: []});
 
@@ -18,6 +23,11 @@ export default function Refeicoes() {
   ]);
 
   const [modalConfirmacao, setModalConfirmacao] = useState(false);
+
+  const confirmacaoItem = (id) => {
+    setItemSelecionado(id);
+    setModalConfirmacaoItem(true);
+  }
 
   useEffect(() => {
     const buscarAlimentos = async () => {
@@ -97,6 +107,13 @@ export default function Refeicoes() {
 
   return (
     <div>
+      <ConfirmPopup
+        isOpen={modalConfirmacaoItem}
+        onClose={() => setModalConfirmacaoItem(false)}
+        onConfirm={() => removerRefeicao(itemSelecionado)}
+        msg={'Tem certeza que deseja excluir esse registro?\nEssa ação não poderá ser desfeita.'}
+        titulo={'Excluir Registro de Refeição'}
+      />
       <h2 className="page-title">Registro de Refeições</h2>
       
       <div className="card">
@@ -131,26 +148,17 @@ export default function Refeicoes() {
             {refeicoes.map(ref => (
               <li key={ref.id} className="history-item">
                 <div>
-                  {
-                  //<strong>{ref.desc}</strong>
-                  //<br/><small>{ref.hora} - {ref.carbs} Carbs</small>
-                  }
+                  
                   <strong>{ref.tipo}</strong>
                   <br/><small>{transformarHora(ref.data_hora)}</small>
                 </div>
-                <Trash2 onClick={() => removerRefeicao(ref.id)} size={18} color="red" style={{cursor: 'pointer'}} />
+                <Trash2 onClick={() => confirmacaoItem(ref.id)} size={18} color="red" style={{cursor: 'pointer'}} />
               </li>
             ))}
           </ul>
           :
           <p style={{color: '#999', fontStyle: 'italic'}}>Nenhuma refeição registrada.</p>
           }
-        </div>
-        
-        <div className="card">
-          <h3>Lembretes de Alimentação</h3>
-          <p style={{color: '#999', fontStyle: 'italic'}}>Nenhum lembrete ativo.</p>
-          <button className="btn btn-primary" style={{marginTop: '10px'}}>+ Novo Lembrete</button>
         </div>
       </div>
     </div>

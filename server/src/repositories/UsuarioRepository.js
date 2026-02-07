@@ -87,8 +87,9 @@ class UsuarioRepository {
           altura = $3,
           tipo_diabetes = $4,
           foto_perfil = $5,
+          data_nascimento = $6,
           updated_at = NOW()
-      WHERE id = $6
+      WHERE id = $7
       RETURNING *
       `,
       [
@@ -97,6 +98,7 @@ class UsuarioRepository {
         dados.altura,
         dados.tipo_diabetes,
         dados.foto_perfil,
+        dados.data_nascimento,
         id
       ]
     );

@@ -1,33 +1,44 @@
 import RefeicaoRepository from '../repositories/RefeicaoRepository.js';
 
-function agruparRefeicao(dados) {
+function agruparRefeicao(rows) {
 
-  if (!dados.length) return null;
+  if (!rows.length) return null;
 
-  return {
-    id: dados[0].id,
-    usuario_id: dados[0].usuario_id,
-    tipo: dados[0].tipo,
-    data_hora: dados[0].data_hora,
-
-    alimentos: dados.map(a => ({
-      id: a.alimento_id,
-      nome: a.nome,
-      kcal: a.kcal,
-      carboidratos: a.carboidratos,
-      proteinas: a.proteinas,
-      gorduras: a.gorduras,
-      quantidade: a.quantidade
-    }))
+  const refeicao = {
+    id: rows[0].id,
+    tipo: rows[0].tipo,
+    data_hora: rows[0].data_hora,
+    alimentos: []
   };
+
+  rows.forEach(r => {
+    if (r.alimento_id) {
+      refeicao.alimentos.push({
+        id: r.alimento_id,
+        nome: r.nome,
+        quantidade: r.quantidade,
+        kcal: r.kcal,
+        carboidratos: r.carboidratos,
+        proteinas: r.proteinas,
+        gorduras: r.gorduras
+      });
+    }
+  });
+
+  return refeicao;
 }
+
+
 
 
 class RefeicaoService {
   //Cria uma refeição
   async criar(dados){
     const rows = await RefeicaoRepository.criar(dados);
-    return agruparRefeicao(rows);
+    const resultado = agruparRefeicao(rows);
+
+    return resultado;
+    
   }
 
   //Listar refeições

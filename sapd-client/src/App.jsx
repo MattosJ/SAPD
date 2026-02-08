@@ -12,6 +12,7 @@ import Registro from './pages/Registro';
 import PlanosAlimentares from './pages/PlanosAlimentares';
 import './App.css';
 
+
 function App() {
   return (
       <Routes>

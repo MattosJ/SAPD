@@ -13,33 +13,35 @@ class ComparacaoRepository {
    * dentro de um intervalo de datas.
    *
    * @param {number} usuarioId - Identificador do usuário
-   * @param {string} dataInicio - Data inicial do período
-   * @param {string} dataFim - Data final do período
    * @returns {Object} Soma dos macronutrientes planejados
    */
-  async plano(usuarioId, dataInicio, dataFim) {
+async plano(usuarioId) {
 
-    const result = await db.query(
-      `
-      SELECT
-        SUM(a.kcal * pra.quantidade / 100) AS kcal,
-        SUM(a.carboidratos * pra.quantidade / 100) AS carboidratos,
-        SUM(a.proteinas * pra.quantidade / 100) AS proteinas,
-        SUM(a.gorduras * pra.quantidade / 100) AS gorduras
-      FROM planos_alimentares p
-      JOIN plano_refeicoes pr ON pr.plano_id = p.id
-      JOIN plano_refeicao_alimentos pra ON pra.plano_refeicao_id = pr.id
-      JOIN alimentos a ON a.id = pra.alimento_id
-      WHERE p.usuario_id = $1
-        AND p.data_inicio <= $3
-        AND p.data_fim >= $2
-      `,
-      [usuarioId, dataInicio, dataFim]
-    );
+  const result = await db.query(
+    `
+    SELECT
+      COALESCE(SUM(a.kcal * pra.quantidade / 100),0) AS kcal,
+      COALESCE(SUM(a.carboidratos * pra.quantidade / 100),0) AS carboidratos,
+      COALESCE(SUM(a.proteinas * pra.quantidade / 100),0) AS proteinas,
+      COALESCE(SUM(a.gorduras * pra.quantidade / 100),0) AS gorduras
+    FROM planos_alimentares p
+    JOIN plano_refeicoes pr ON pr.plano_id = p.id
+    JOIN plano_refeicao_alimentos pra ON pra.plano_refeicao_id = pr.id
+    JOIN alimentos a ON a.id = pra.alimento_id
+    WHERE p.usuario_id = $1
+    `,
+    [usuarioId]
+  );
 
-    // Retorna os valores nutricionais totais do plano alimentar
-    return result.rows[0];
-  }
+  const row = result.rows[0];
+
+  return {
+    kcal: Number(row.kcal),
+    carboidratos: Number(row.carboidratos),
+    proteinas: Number(row.proteinas),
+    gorduras: Number(row.gorduras)
+  };
+}
 
   /**
    * Calcula os valores nutricionais consumidos pelo usuário
@@ -50,27 +52,33 @@ class ComparacaoRepository {
    * @param {string} dataFim - Data final do período
    * @returns {Object} Soma dos macronutrientes consumidos
    */
-  async consumo(usuarioId, dataInicio, dataFim) {
+ async consumo(usuarioId) {
 
-    const result = await db.query(
-      `
-      SELECT
-        SUM(a.kcal * ra.quantidade / 100) AS kcal,
-        SUM(a.carboidratos * ra.quantidade / 100) AS carboidratos,
-        SUM(a.proteinas * ra.quantidade / 100) AS proteinas,
-        SUM(a.gorduras * ra.quantidade / 100) AS gorduras
-      FROM refeicoes r
-      JOIN refeicao_alimentos ra ON ra.refeicao_id = r.id
-      JOIN alimentos a ON a.id = ra.alimento_id
-      WHERE r.usuario_id = $1
-        AND r.data_hora BETWEEN $2 AND $3
-      `,
-      [usuarioId, dataInicio, dataFim]
-    );
+  const result = await db.query(
+    `
+    SELECT
+      COALESCE(SUM(a.kcal * ra.quantidade / 100),0) AS kcal,
+      COALESCE(SUM(a.carboidratos * ra.quantidade / 100),0) AS carboidratos,
+      COALESCE(SUM(a.proteinas * ra.quantidade / 100),0) AS proteinas,
+      COALESCE(SUM(a.gorduras * ra.quantidade / 100),0) AS gorduras
+    FROM refeicoes r
+    JOIN refeicao_alimentos ra ON ra.refeicao_id = r.id
+    JOIN alimentos a ON a.id = ra.alimento_id
+    WHERE r.usuario_id = $1
+    `,
+    [usuarioId]
+  );
 
-    // Retorna os valores nutricionais totais consumidos pelo usuário
-    return result.rows[0];
-  }
+  const row = result.rows[0];
+
+  return {
+    kcal: Number(row.kcal),
+    carboidratos: Number(row.carboidratos),
+    proteinas: Number(row.proteinas),
+    gorduras: Number(row.gorduras)
+  };
+}
+
 }
 
 export default new ComparacaoRepository();

@@ -25,6 +25,7 @@ class ComparacaoService {
         dataFim
       );
 
+      
     // Busca os valores nutricionais realmente consumidos pelo usuário
     const consumo =
       await ComparacaoRepository.consumo(

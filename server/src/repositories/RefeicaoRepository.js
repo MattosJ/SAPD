@@ -19,11 +19,11 @@ class RefeicaoRepository {
 async criar(dados) {
   const data = new Date();
 
-  // cria refeição
+  // 1️ cria refeição
   const refeicaoResult = await db.query(
     `
     INSERT INTO refeicoes (usuario_id, tipo, data_hora)
-    VALUES ($1,$2,$3)
+    VALUES ($1, $2, $3)
     RETURNING *
     `,
     [dados.usuario_id, dados.refeicao.tipo, data]
@@ -31,30 +31,62 @@ async criar(dados) {
 
   const refeicaoCriada = refeicaoResult.rows[0];
 
-  // se tiver alimentos -> salva
-  if (dados.refeicao.alimentos && dados.refeicao.alimentos.length > 0) {
 
-    for (const alimento of dados.refeicao.alimentos) {
+  if (dados.refeicao.alimentos && Object.keys(dados.refeicao.alimentos).length > 0) {
+
+    for (const [alimento_id, quantidade] of Object.entries(dados.refeicao.alimentos)) {
       await db.query(
         `
-        INSERT INTO refeicao_alimentos (refeicao_id, alimento_id, quantidade)
-        VALUES ($1,$2,$3)
+        INSERT INTO refeicao_alimentos
+        (refeicao_id, alimento_id, quantidade)
+        VALUES ($1, $2, $3)
         `,
-        [
-          refeicaoCriada.id,
-          alimento.alimento_id,
-          alimento.quantidade
-        ]
+        [refeicaoCriada.id, alimento_id, quantidade]
       );
     }
   }
 
-  // Buscar refeição completa com alimentos
-  const refeicaoCompleta = await db.query(
-    `
-    SELECT
+
+  // 🔥 BUSCA COMPLETA COM JOIN
+  const result = await db.query(`
+    SELECT 
       r.id,
-      r.usuario_id,
+      r.tipo,
+      r.data_hora,
+
+      a.id AS alimento_id,
+      a.nome,
+      ra.quantidade,
+      a.kcal,
+      a.carboidratos,
+      a.proteinas,
+      a.gorduras
+
+    FROM refeicoes r
+
+    LEFT JOIN refeicao_alimentos ra
+      ON ra.refeicao_id = r.id
+
+    LEFT JOIN alimentos a
+      ON a.id = ra.alimento_id
+
+    WHERE r.id = $1
+  `, [refeicaoCriada.id]);
+
+    
+  return result.rows;
+}
+
+
+  /**
+   * Lista todas as refeições de um usuário, ordenadas da mais recente para a mais antiga.
+   * @param {number} usuario_id - ID do usuário.
+   * @returns {Promise<Array<Object>>} Lista de refeições do usuário.
+   */
+async listarPorUsuario(usuario_id) {
+  const result = await db.query(`
+    SELECT
+      r.id AS refeicao_id,
       r.tipo,
       r.data_hora,
 
@@ -64,34 +96,46 @@ async criar(dados) {
       a.carboidratos,
       a.proteinas,
       a.gorduras,
+
       ra.quantidade
 
     FROM refeicoes r
-    LEFT JOIN refeicao_alimentos ra
-      ON ra.refeicao_id = r.id
-    LEFT JOIN alimentos a
-      ON a.id = ra.alimento_id
+    LEFT JOIN refeicao_alimentos ra ON ra.refeicao_id = r.id
+    LEFT JOIN alimentos a ON a.id = ra.alimento_id
+    WHERE r.usuario_id = $1
+    ORDER BY r.data_hora DESC
+  `, [usuario_id]);
 
-    WHERE r.id = $1
-    `,
-    [refeicaoCriada.id]
-  );
+  // 🔥 Agrupar refeições
+  const mapa = {};
 
-  return refeicaoCompleta.rows;
-}
+  for (const row of result.rows) {
 
-  /**
-   * Lista todas as refeições de um usuário, ordenadas da mais recente para a mais antiga.
-   * @param {number} usuario_id - ID do usuário.
-   * @returns {Promise<Array<Object>>} Lista de refeições do usuário.
-   */
-  async listarPorUsuario(usuario_id) {
-    const r = await db.query(
-      `SELECT * FROM refeicoes WHERE usuario_id=$1 ORDER BY data_hora DESC`,
-      [usuario_id]
-    );
-    return r.rows;
+    if (!mapa[row.refeicao_id]) {
+      mapa[row.refeicao_id] = {
+        id: row.refeicao_id,
+        tipo: row.tipo,
+        data_hora: row.data_hora,
+        alimentos: []
+      };
+    }
+
+    // se existir alimento
+    if (row.alimento_id) {
+      mapa[row.refeicao_id].alimentos.push({
+        id: row.alimento_id,
+        nome: row.nome,
+        quantidade: row.quantidade,
+        kcal: row.kcal,
+        carboidratos: row.carboidratos,
+        proteinas: row.proteinas,
+        gorduras: row.gorduras
+      });
+    }
   }
+
+  return Object.values(mapa);
+}
 
   /**
    * Exclui uma refeição de um usuário pelo ID.

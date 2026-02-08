@@ -129,7 +129,7 @@ export default function Relatorios() {
             </div>
 
             <div className="card">
-                <h3>Relatórios de medições</h3>
+                <h3>Relatórios de Peso</h3>
                 {relatorioPeso.length > 0 ?
                 <div className="number-badges">
                 {relatorioPeso.map((relatorio, i) => <div key={i} className="badge" onClick={() => abrirModalPeso(i)}>{relatorio.nome} - {i + 1}°</div>)}

@@ -388,8 +388,295 @@ const options = {
     type: 'array',
     items: {
       $ref: '#/components/schemas/InsulinaRegistro',
+    }},
+    RefeicaoAlimento: {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'integer',
+      example: 5
     },
-  },
+    refeicao_id: {
+      type: 'integer',
+      example: 2
+    },
+    alimento_nome: {
+      type: 'string',
+      example: 'Arroz'
+    },
+    quantidade: {
+      type: 'number',
+      example: 150
+    },
+    calorias: {
+      type: 'number',
+      example: 195
+    }
+  }
+},RefeicaoAlimentoInput: {
+  type: 'object',
+  required: ['alimento_nome', 'quantidade', 'calorias'],
+  properties: {
+    alimento_nome: {
+      type: 'string',
+      example: 'Arroz'
+    },
+    quantidade: {
+      type: 'number',
+      example: 150
+    },
+    calorias: {
+      type: 'number',
+      example: 195
+    }
+  }
+},PredicaoGlicemia: {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'integer',
+      example: 1
+    },
+    valor_previsto: {
+      type: 'number',
+      example: 135
+    },
+    data_prevista: {
+      type: 'string',
+      format: 'date-time',
+      example: '2026-02-10T08:00:00.000Z'
+    },
+    confirmado: {
+      type: 'boolean',
+      example: false
+    },
+    valor_real: {
+      type: 'number',
+      nullable: true,
+      example: 140
+    },
+    created_at: {
+      type: 'string',
+      format: 'date-time'
+    }
+  }
+},PredicaoInput: {
+  type: 'object',
+  properties: {
+    dataReferencia: {
+      type: 'string',
+      example: '2026-02-09'
+    }
+  }
+},ConfirmarPredicaoInput: {
+  type: 'object',
+  required: ['valor_real'],
+  properties: {
+    valor_real: {
+      type: 'number',
+      example: 142
+    }
+  }
+},PlanoAlimentar: {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'integer',
+      example: 1
+    },
+    nome: {
+      type: 'string',
+      example: 'Plano Semanal'
+    },
+    data_inicio: {
+      type: 'string',
+      example: '2026-02-01'
+    },
+    data_fim: {
+      type: 'string',
+      example: '2026-02-07'
+    },
+    created_at: {
+      type: 'string',
+      format: 'date-time'
+    }
+  }
+},PlanoAlimentarInput: {
+  type: 'object',
+  required: ['nome', 'data_inicio', 'data_fim'],
+  properties: {
+    nome: {
+      type: 'string',
+      example: 'Plano Semanal'
+    },
+    data_inicio: {
+      type: 'string',
+      example: '2026-02-01'
+    },
+    data_fim: {
+      type: 'string',
+      example: '2026-02-07'
+    }
+  }
+},Lembrete: {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'integer',
+      example: 1
+    },
+    titulo: {
+      type: 'string',
+      example: 'Aplicar insulina'
+    },
+    descricao: {
+      type: 'string',
+      example: 'Aplicar dose basal'
+    },
+    data: {
+      type: 'string',
+      example: '2026-02-10'
+    },
+    hora: {
+      type: 'string',
+      example: '08:00'
+    },
+    created_at: {
+      type: 'string',
+      format: 'date-time'
+    }
+  }
+},
+
+LembreteInput: {
+  type: 'object',
+  required: ['titulo', 'data', 'hora'],
+  properties: {
+    titulo: {
+      type: 'string',
+      example: 'Aplicar insulina'
+    },
+    descricao: {
+      type: 'string',
+      example: 'Aplicar dose basal'
+    },
+    data: {
+      type: 'string',
+      example: '2026-02-10'
+    },
+    hora: {
+      type: 'string',
+      example: '08:00'
+    }
+  }
+},ComparacaoPlanoConsumo: {
+  type: 'object',
+  properties: {
+    plano_calorias: {
+      type: 'number',
+      example: 2000
+    },
+    consumo_calorias: {
+      type: 'number',
+      example: 1850
+    },
+    diferenca_calorias: {
+      type: 'number',
+      example: -150
+    },
+    data: {
+      type: 'string',
+      example: '2026-02-07'
+    }
+  }
+},AuthLoginInput: {
+  type: 'object',
+  required: ['email', 'senha'],
+  properties: {
+    email: {
+      type: 'string',
+      example: 'ana@sapd.com'
+    },
+    senha: {
+      type: 'string',
+      example: '123456'
+    }
+  }
+},AuthLoginResponse: {
+  type: 'object',
+  properties: {
+    token: {
+      type: 'string',
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+    },
+    usuario: {
+      $ref: '#/components/schemas/Usuario'
+    }
+  }
+},Alimento: {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'integer',
+      example: 1
+    },
+    nome: {
+      type: 'string',
+      example: 'Arroz branco'
+    },
+    calorias: {
+      type: 'number',
+      example: 130
+    },
+    created_at: {
+      type: 'string',
+      format: 'date-time'
+    },
+    updated_at: {
+      type: 'string',
+      format: 'date-time'
+    }
+  }
+},AlimentoInput: {
+  type: 'object',
+  required: ['nome', 'calorias'],
+  properties: {
+    nome: {
+      type: 'string',
+      example: 'Arroz branco'
+    },
+    calorias: {
+      type: 'number',
+      example: 130
+    }
+  }
+},AlimentoUpdate: {
+  type: 'object',
+  properties: {
+    nome: {
+      type: 'string',
+      example: 'Arroz integral'
+    },
+    calorias: {
+      type: 'number',
+      example: 120
+    }
+  }
+},AlimentoLista: {
+  type: 'array',
+  items: {
+    $ref: '#/components/schemas/Alimento'
+  }
+},
+
+
+
+
+
+
+
+
+
 
 
 

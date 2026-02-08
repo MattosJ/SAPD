@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = () => {
-  // Simulação: Verifica se existe um item 'usuario_logado' no navegador
-  const isAuth = localStorage.getItem('token_usuario');
+  // Verifica token no localStorage OU sessionStorage
+  const token = localStorage.getItem('token_usuario') || sessionStorage.getItem('token_usuario');
 
-  // Se tiver logado, renderiza as rotas filhas (Outlet). Se não, joga pra Home (/)
-  return isAuth ? <Outlet /> : <Navigate to="/" />;
+  // Se não estiver autenticado, redireciona para login
+  return token ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

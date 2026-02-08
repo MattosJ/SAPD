@@ -25,7 +25,7 @@ export default function FormLogin() {
     try {
       setLoading(true);
 
-      const response = await api.post("/usuario/login", {
+      const response = await api.post("/login", {
         email,
         senha,
       });

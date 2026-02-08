@@ -16,37 +16,69 @@ class RefeicaoRepository {
    * @param {Object} [dados.refeicao.alimentos] - Objeto com pares alimento_id: quantidade.
    * @returns {Promise<Object>} Refeição recém-criada.
    */
-  async criar(dados) {
-    const data = new Date();
+async criar(dados) {
+  const data = new Date();
 
-    // cria refeição
-    const refeicao = await db.query(
-      `
-      INSERT INTO refeicoes (usuario_id, tipo, data_hora)
-      VALUES ($1,$2,$3)
-      RETURNING *
-      `,
-      [dados.usuario_id, dados.refeicao.tipo, data]
-    );
+  // cria refeição
+  const refeicaoResult = await db.query(
+    `
+    INSERT INTO refeicoes (usuario_id, tipo, data_hora)
+    VALUES ($1,$2,$3)
+    RETURNING *
+    `,
+    [dados.usuario_id, dados.refeicao.tipo, data]
+  );
 
-    const refeicaoCriada = refeicao.rows[0];
+  const refeicaoCriada = refeicaoResult.rows[0];
 
-    // adiciona alimentos, se fornecidos
-    if (dados.refeicao.alimentos && Object.keys(dados.refeicao.alimentos).length > 0) {
-      Object.entries(dados.refeicao.alimentos).forEach(async ([alimento_id, quantidade]) => {
-        await db.query(
-          `
-          INSERT INTO refeicao_alimentos
-          (refeicao_id, alimento_id, quantidade)
-          VALUES ($1,$2,$3)
-          `,
-          [refeicaoCriada.id, alimento_id, quantidade]
-        );
-      });
+  // se tiver alimentos -> salva
+  if (dados.refeicao.alimentos && dados.refeicao.alimentos.length > 0) {
+
+    for (const alimento of dados.refeicao.alimentos) {
+      await db.query(
+        `
+        INSERT INTO refeicao_alimentos (refeicao_id, alimento_id, quantidade)
+        VALUES ($1,$2,$3)
+        `,
+        [
+          refeicaoCriada.id,
+          alimento.alimento_id,
+          alimento.quantidade
+        ]
+      );
     }
-
-    return refeicaoCriada;
   }
+
+  // Buscar refeição completa com alimentos
+  const refeicaoCompleta = await db.query(
+    `
+    SELECT
+      r.id,
+      r.usuario_id,
+      r.tipo,
+      r.data_hora,
+
+      a.id AS alimento_id,
+      a.nome,
+      a.kcal,
+      a.carboidratos,
+      a.proteinas,
+      a.gorduras,
+      ra.quantidade
+
+    FROM refeicoes r
+    LEFT JOIN refeicao_alimentos ra
+      ON ra.refeicao_id = r.id
+    LEFT JOIN alimentos a
+      ON a.id = ra.alimento_id
+
+    WHERE r.id = $1
+    `,
+    [refeicaoCriada.id]
+  );
+
+  return refeicaoCompleta.rows;
+}
 
   /**
    * Lista todas as refeições de um usuário, ordenadas da mais recente para a mais antiga.

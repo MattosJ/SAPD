@@ -6,21 +6,15 @@ import ConfirmacaoRefeicaoPopup from '../components/refeicao/ConfirmacaoRefeicao
 import ConfirmPopup from '../components/layout/ConfirmPopup';
 
 export default function Refeicoes() {
-  const [refeicoes, setRefeicoes] = useState([
-    {id: 1, tipo: 'Café da Manhã', hora: '07:30', carbs: 45},
-    {id: 2, tipo: 'Almoço', hora: '12:30', carbs: 70},
-  ]);
 
+  const [refeicoes, setRefeicoes] = useState([]);
 
   const [modalConfirmacaoItem, setModalConfirmacaoItem] = useState(false);
   const [itemSelecionado, setItemSelecionado] = useState(null);
 
   const [novaRefeicao, setNovaRefeicao] = useState({tipo: '', alimentos: []});
 
-  const [alimentos, setAlimentos] = useState([
-    {id: 1, nome: 'Pão Integral', medida: '1 fatia', carboidratos: 12, proteinas: 3, gorduras: 1.5  , kcal: 70, tipo: 'Carboidrato' },
-    {id: 2, nome: 'Ovo Cozido', medida: '1 unidade', carboidratos: 1, proteinas: 6, gorduras: 5  , kcal: 78, tipo: 'Proteína' },
-  ]);
+  const [alimentos, setAlimentos] = useState([]);
 
   const [modalConfirmacao, setModalConfirmacao] = useState(false);
 
@@ -36,26 +30,48 @@ export default function Refeicoes() {
        
             const data = response.data;
             setAlimentos(data);
-            console.log(data);
+            console.log('Alimentos:', data);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error);
+            console.error('Erro ao buscar alimentos:', error);
         }
     };
 
-    const buscarRefeicoes = async () => {
+    const buscarRefeicoesComAlimentos = async () => {
         try {
-            const response = await api.get('/refeicoes');
+            // Buscar todas as refeições
+            const responseRefeicoes = await api.get('/refeicoes');
+            const refeicoesData = responseRefeicoes.data;
 
-            const data = response.data;
-            setRefeicoes(data);
-            console.log(data);
+            console.log('Refeições recebidas:', refeicoesData);
+
+            // Para cada refeição, buscar seus alimentos
+            const refeicoesComAlimentos = await Promise.all(
+                refeicoesData.map(async (refeicao) => {
+                    try {
+                        const responseAlimentos = await api.get(`/refeicaoAlimentos/${refeicao.id}`);
+                        console.log(`Alimentos da refeição ${refeicao.id}:`, responseAlimentos.data);
+                        return {
+                            ...refeicao,
+                            alimentos: responseAlimentos.data || []
+                        };
+                    } catch (error) {
+                        console.error(`Erro ao buscar alimentos da refeição ${refeicao.id}:`, error);
+                        return {
+                            ...refeicao,
+                            alimentos: []
+                        };
+                    }
+                })
+            );
+
+            console.log('Refeições com alimentos:', refeicoesComAlimentos);
+            setRefeicoes(refeicoesComAlimentos);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error);
+            console.error('Erro ao buscar refeições:', error);
         }
     };
 
-    buscarRefeicoes();
-
+    buscarRefeicoesComAlimentos();
     buscarAlimentos();
   }, [])
 
@@ -67,7 +83,32 @@ export default function Refeicoes() {
       });
 
       const novaRefeicaoReturn = response.data;
-      setRefeicoes(prev => [...prev, novaRefeicaoReturn]);
+      
+      // Buscar refeições novamente para atualizar a lista com alimentos
+      const responseRefeicoes = await api.get('/refeicoes');
+      const refeicoesData = responseRefeicoes.data;
+
+      const refeicoesComAlimentos = await Promise.all(
+          refeicoesData.map(async (refeicao) => {
+              try {
+                  const responseAlimentos = await api.get(`/refeicaoAlimentos/${refeicao.id}`);
+                  return {
+                      ...refeicao,
+                      alimentos: responseAlimentos.data || []
+                  };
+              } catch (error) {
+                  return {
+                      ...refeicao,
+                      alimentos: []
+                  };
+              }
+          })
+      );
+
+      setRefeicoes(refeicoesComAlimentos);
+      
+      // Limpar formulário
+      setNovaRefeicao({tipo: '', alimentos: []});
       
     } catch (error) {
       console.error('Erro ao adicionar refeição:', error.response);
@@ -79,6 +120,7 @@ export default function Refeicoes() {
       await api.delete(`/refeicoes/${id}`);
 
       setRefeicoes(refeicoes.filter(r => r.id !== id));
+      setModalConfirmacaoItem(false);
       
     } catch (error) {
       console.error('Erro ao remover refeição:', error.response);
@@ -90,7 +132,7 @@ export default function Refeicoes() {
   }
 
   const handleSalvarFinal = () => {
-    console.log(novaRefeicao);
+    console.log('Nova refeição:', novaRefeicao);
     setModalConfirmacao(false);
     adicionarRefeicao();
   };
@@ -119,16 +161,25 @@ export default function Refeicoes() {
       <div className="card">
         <div style={{display: 'flex', gap: '10px'}}>
           
-
           <div style={{width: '100%'}}>
-            <input className="input-field" type="text" placeholder="Descrição" style={{fontSize: '2rem', textAlign: 'center', margin: '20px 0'}} value={novaRefeicao.tipo} onChange={(e) => handleAlimentosChange(e.target.value, 'b')}/>
+            <input 
+              className="input-field" 
+              type="text" 
+              placeholder="Descrição" 
+              style={{fontSize: '2rem', textAlign: 'center', margin: '20px 0'}} 
+              value={novaRefeicao.tipo} 
+              onChange={(e) => handleAlimentosChange(e.target.value, 'b')}
+            />
 
             <Selector 
-            alimentos={alimentos}
-            onSelectionChange={(value) => handleAlimentosChange(value, 'a')} />
+              alimentos={alimentos}
+              onSelectionChange={(value) => handleAlimentosChange(value, 'a')} 
+            />
           </div>
 
-          <button className="btn btn-primary" onClick={() => setModalConfirmacao(true)}><Plus size={20}/></button>
+          <button className="btn btn-primary" onClick={() => setModalConfirmacao(true)}>
+            <Plus size={20}/>
+          </button>
 
           <ConfirmacaoRefeicaoPopup 
             isOpen={modalConfirmacao}
@@ -147,12 +198,36 @@ export default function Refeicoes() {
           <ul className="history-list">
             {refeicoes.map(ref => (
               <li key={ref.id} className="history-item">
-                <div>
+                <div style={{flex: 1}}>
+                  {/* TIPO DA REFEIÇÃO */}
+                  <strong>{ref.tipo || 'Sem descrição'}</strong>
+                  <br/>
+                  <small>{transformarHora(ref.data_hora)}</small>
                   
-                  <strong>{ref.tipo}</strong>
-                  <br/><small>{transformarHora(ref.data_hora)}</small>
+                  {/* EXIBIR OS ALIMENTOS */}
+                  {ref.alimentos && ref.alimentos.length > 0 && (
+                    <div style={{marginTop: '10px', paddingTop: '8px', borderTop: '1px solid #eee'}}>
+                      <small style={{color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '5px'}}>
+                        Alimentos ({ref.alimentos.length}):
+                      </small>
+                      {ref.alimentos.map((alimento, index) => (
+                        <div key={index} style={{fontSize: '0.85em', color: '#666', marginTop: '4px', paddingLeft: '10px'}}>
+                          • <strong>{alimento.nome}</strong> - {alimento.quantidade}g
+                          <br/>
+                          <span style={{marginLeft: '12px', color: '#999', fontSize: '0.9em'}}>
+                            {alimento.kcal} kcal | {alimento.carboidratos}g carb | {alimento.proteinas}g prot | {alimento.gorduras}g gord
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <Trash2 onClick={() => confirmacaoItem(ref.id)} size={18} color="red" style={{cursor: 'pointer'}} />
+                <Trash2 
+                  onClick={() => confirmacaoItem(ref.id)} 
+                  size={18} 
+                  color="red" 
+                  style={{cursor: 'pointer'}} 
+                />
               </li>
             ))}
           </ul>

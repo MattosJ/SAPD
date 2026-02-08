@@ -99,7 +99,7 @@ export default function Refeicoes() {
     const data = new Date(dataHora);
     const horas = data.getHours().toString().padStart(2, '0');
     const minutos = data.getMinutes().toString().padStart(2, '0');
-    const dia = data.getDay().toString().padStart(2, '0');
+    const dia = data.getDate().toString().padStart(2, '0');
     const mes = (data.getMonth() + 1).toString().padStart(2, '0');
     const ano = data.getFullYear();
     return `${horas}:${minutos} - ${dia}/${mes}/${ano}`;
